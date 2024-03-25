@@ -11,15 +11,13 @@
     "@types/react": "^18.2.69",
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.3.1",
-    "@typescript-eslint/parser": "^5.62.0",
+    "@typescript-eslint/parser": "^7.3.1",
     "eslint": "^8.57.0",
-    "eslint-plugin": "^1.0.1",
     "eslint-plugin-react": "^7.34.1",
     "firebase": "^10.9.0",
-    "prettier": "^3.2.5",
-    "prettier-eslint": "^16.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router": "^6.22.3",
     "react-scripts": "5.0.1",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4",
@@ -59,5 +57,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint-config-react-app": "^7.0.1",
+    "eslint-plugin": "^1.0.1",
+    "prettier": "^3.2.5",
+    "prettier-eslint": "^16.3.0"
   }
 }
