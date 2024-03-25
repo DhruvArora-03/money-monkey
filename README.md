@@ -1,2 +1,2 @@
 # CostCamel
-A React Native application for tracking expenses. 
+A React PWA for tracking expenses.
