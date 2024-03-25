@@ -1,0 +1,10 @@
+.page {
+  display: flex;
+  justify-content: flex-end;
+  height: 100%;
+  background-color: cadetblue;
+}
+
+.button {
+  margin: 20px;
+}

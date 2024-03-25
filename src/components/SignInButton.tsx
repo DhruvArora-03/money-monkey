@@ -1,47 +1,31 @@
-import {
-  Auth,
-  getAdditionalUserInfo,
-  GoogleAuthProvider,
-  signInWithPopup,
-} from 'firebase/auth'
-import { useMemo } from 'react'
-import { redirect } from 'react-router-dom'
+import { GoogleLogin } from '@react-oauth/google'
+import { Auth, GoogleAuthProvider, signInWithCredential } from 'firebase/auth'
+import { useState } from 'react'
 
-export default function SignInButton({ auth }: { auth: Auth }) {
-  const provider = useMemo(() => new GoogleAuthProvider(), [])
-  const signInWithGoogle = () => {
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result)
-        const token = credential?.accessToken
-        // The signed-in user info.
-        const user = result.user
-        // IdP data available using getAdditionalUserInfo(result)
-        // ...
-        console.log(token)
-        console.log(user)
-        console.log(getAdditionalUserInfo(result))
-      })
-      .catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code
-        const errorMessage = error.message
-        // The email of the user's account used.
-        const email = error.customData.email
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error)
-        // ...
-        console.warn(errorCode)
-        console.warn(errorMessage)
-        console.warn(email)
-        console.warn(credential)
-      })
-      .then(() => redirect('/bruh'))
-  }
+type SignInButtonProps = {
+  auth: Auth
+  className: string | undefined
+}
+
+export default function SignInButton({ auth, className }: SignInButtonProps) {
+  const [showButton, setShowButton] = useState(false)
+
   return (
-    <button className="sign-in" onClick={signInWithGoogle}>
-      Sign in with Google
-    </button>
+    <div style={{ display: showButton ? '' : 'none' }} className={className}>
+      <GoogleLogin
+        onSuccess={(res) => {
+          signInWithCredential(
+            auth,
+            GoogleAuthProvider.credential(res.credential),
+          )
+        }}
+        onError={() => console.log('error in signIn button')}
+        promptMomentNotification={(promptMomentNotification) => {
+          setShowButton(!promptMomentNotification.isDisplayed())
+        }}
+        auto_select
+        useOneTap
+      />
+    </div>
   )
 }

@@ -1,7 +1,7 @@
 import HomePage from '@pages/Home'
 import LoginPage from '@pages/Login'
 import { initializeApp } from 'firebase/app'
-import { getAuth } from 'firebase/auth'
+import { getAuth, onAuthStateChanged, User } from 'firebase/auth'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
@@ -18,37 +18,41 @@ const firebaseConfig = {
 // Initialize Firebase
 initializeApp(firebaseConfig)
 
+type AuthWrapperProps = { user: User | null | undefined; children: JSX.Element }
+
+const Authed = (props: AuthWrapperProps) =>
+  props.user ? props.children : <Navigate replace to="/login" />
+
+const UnAuthed = (props: AuthWrapperProps) =>
+  props.user ? <Navigate replace to="/" /> : props.children
+
 function App() {
-  const auth = getAuth()
+  let auth = getAuth()
   const [user] = useAuthState(auth)
 
-  const Authed = (props: { children: JSX.Element }) =>
-    user ? props.children : <Navigate replace to="/login" />
-
-  const UnAuthed = (props: { children: JSX.Element }) =>
-    user ? <Navigate replace to="/" /> : props.children
+  onAuthStateChanged(auth, () => {
+    auth = getAuth()
+  })
 
   return (
-    <div className="App">
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <Authed>
-              <HomePage />
-            </Authed>
-          }
-        />
-        <Route
-          path="/login"
-          element={
-            <UnAuthed>
-              <LoginPage />
-            </UnAuthed>
-          }
-        />
-      </Routes>
-    </div>
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <Authed user={user}>
+            <HomePage />
+          </Authed>
+        }
+      />
+      <Route
+        path="/login"
+        element={
+          <UnAuthed user={user}>
+            <LoginPage />
+          </UnAuthed>
+        }
+      />
+    </Routes>
   )
 }
 
