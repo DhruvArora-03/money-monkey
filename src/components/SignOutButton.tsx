@@ -1,6 +1,11 @@
 import { Auth, signOut } from 'firebase/auth'
 
-export default function SignOutButton({ auth }: { auth: Auth }) {
+type SignOutButtonProps = {
+  auth: Auth
+  className: string | undefined
+}
+
+export default function SignOutButton({ auth, className }: SignOutButtonProps) {
   const signOutFn = () =>
     signOut(auth)
       .then(() => {
@@ -8,5 +13,9 @@ export default function SignOutButton({ auth }: { auth: Auth }) {
       })
       .catch(console.log)
 
-  return <button onClick={signOutFn}>Sign out</button>
+  return (
+    <button className={className} onClick={signOutFn}>
+      Sign out
+    </button>
+  )
 }
