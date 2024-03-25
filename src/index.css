@@ -4,3 +4,7 @@ body,
   margin: 0;
   height: 100%;
 }
+
+:root {
+  --background-color: rgb(250, 249, 177);
+}
