@@ -6,12 +6,13 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyD7ZV1Z3WWLjK9zjgnPbogZeIS9Bq6xJJI',
-  authDomain: 'costcamel-b6c02.firebaseapp.com',
-  projectId: 'costcamel-b6c02',
-  storageBucket: 'costcamel-b6c02.appspot.com',
-  messagingSenderId: '725109949838',
-  appId: '1:725109949838:web:432a3cce60d9c78fe8d0df',
+  apiKey: 'AIzaSyADet9ooqhq2lZuX0K9i8DDawu_kW9sZso',
+  authDomain: 'dhruv-budget-app.firebaseapp.com',
+  projectId: 'dhruv-budget-app',
+  storageBucket: 'dhruv-budget-app.appspot.com',
+  messagingSenderId: '616520665199',
+  appId: '1:616520665199:web:b1977d2a42d884f1a6e59a',
+  measurementId: 'G-4GPLMLQZ1J',
 }
 
 // Initialize Firebase
