@@ -7,14 +7,18 @@ import {
 } from 'firebase/auth'
 import { useState } from 'react'
 import styles from './signInButton.module.css'
+import { useNavigate } from 'react-router-dom'
 
 type SignInButtonProps = {
   className?: string
 }
 
 export default function SignInButton({ className }: SignInButtonProps) {
+  const navigate = useNavigate()
   const [showButton, setShowButton] = useState(false)
   const auth = getAuth()
+
+  console.log('sign innnnnn')
 
   return (
     <div className={clsx(!showButton && styles.hidden, className)}>
@@ -23,13 +27,12 @@ export default function SignInButton({ className }: SignInButtonProps) {
           signInWithCredential(
             auth,
             GoogleAuthProvider.credential(res.credential),
-          )
+          ).then(() => navigate('/'))
         }}
         onError={() => console.log('error in signIn button')}
         promptMomentNotification={(promptMomentNotification) => {
           setShowButton(!promptMomentNotification.isDisplayed())
         }}
-        auto_select
         useOneTap
       />
     </div>
