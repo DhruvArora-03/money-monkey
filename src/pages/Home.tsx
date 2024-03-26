@@ -1,13 +1,11 @@
-import { getAuth } from 'firebase/auth'
 import SignOutButton from 'src/components/SignOutButton'
+import styles from './home.module.css'
 
 export default function HomePage() {
-  const auth = getAuth()
-
   return (
-    <div>
-      this is the home page
-      <SignOutButton auth={auth} />
+    <div className={styles.page}>
+      <div>this is the home page</div>
+      <SignOutButton />
     </div>
   )
 }

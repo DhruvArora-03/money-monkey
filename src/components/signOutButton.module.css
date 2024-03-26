@@ -1,0 +1,7 @@
+.button {
+  height: fit-content;
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 20px;
+}

@@ -1,17 +1,23 @@
 import { GoogleLogin } from '@react-oauth/google'
-import { Auth, GoogleAuthProvider, signInWithCredential } from 'firebase/auth'
+import clsx from 'clsx'
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithCredential,
+} from 'firebase/auth'
 import { useState } from 'react'
+import styles from './signInButton.module.css'
 
 type SignInButtonProps = {
-  auth: Auth
-  className: string | undefined
+  className?: string
 }
 
-export default function SignInButton({ auth, className }: SignInButtonProps) {
+export default function SignInButton({ className }: SignInButtonProps) {
   const [showButton, setShowButton] = useState(false)
+  const auth = getAuth()
 
   return (
-    <div style={{ display: showButton ? '' : 'none' }} className={className}>
+    <div className={clsx(!showButton && styles.hidden, className)}>
       <GoogleLogin
         onSuccess={(res) => {
           signInWithCredential(
