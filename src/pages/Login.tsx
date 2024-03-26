@@ -1,4 +1,4 @@
-import SignInButton from 'src/components/SignInButton'
+import { SignInButton } from '@components'
 import styles from './login.module.css'
 
 export default function LoginPage() {
