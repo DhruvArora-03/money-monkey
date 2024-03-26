@@ -1,11 +1,12 @@
 import styles from './home.module.css'
-import { Cell, ExpenseList, SignOutButton } from '@components'
+import { CatagoryList, SignOutButton } from '@components'
 
 export default function HomePage() {
   return (
     <div className={styles.page}>
-      <ExpenseList />
-      <Cell label="Food" amountCents={31219} />
+      <div style={{ padding: '130px' }}></div>
+      {/* <ExpenseList /> */}
+      <CatagoryList />
       <SignOutButton />
     </div>
   )

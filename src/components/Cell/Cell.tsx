@@ -9,7 +9,7 @@ type CellProps = {
 export default function Cell(props: CellProps) {
   return (
     <div className={styles.cell}>
-      <div>{props.label}</div>
+      <div className={styles.label}>{props.label}</div>
       <div>{formatMoney(props.amountCents)}</div>
     </div>
   )
