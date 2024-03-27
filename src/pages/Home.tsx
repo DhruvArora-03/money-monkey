@@ -21,49 +21,15 @@ export default function HomePage() {
       </div>
       <div className={styles.list}>
         {catagories &&
-          Object.keys(catagories).map((k) => (
+          Object.keys(catagories).map((type) => (
             <Cell
-              key={k}
-              label={k}
-              amountCents={catagories[k as ExpenseTypes]}
+              key={type}
+              label={type}
+              amountCents={catagories[type as ExpenseTypes]}
             />
           ))}
-        <Cell label="Food" amountCents={31219} />
-        <Cell label="Rent" amountCents={120000} />
-        <Cell label="Utilities" amountCents={10514} />
-        <Cell label="Entertainment" amountCents={3750} />
-        <Cell label="Miscellanous" amountCents={6482} />
       </div>
       <SignOutButton />
     </div>
   )
-}
-{
-  /* <div className={clsx(props.className, styles.list)}>
-      <Cell label="Food" amountCents={31219} />
-      <Cell label="Rent" amountCents={120000} />
-      <Cell label="Utilities" amountCents={10514} />
-      <Cell label="Entertainment" amountCents={3750} />
-      <Cell label="Miscellanous" amountCents={6482} />
-      <Cell label="Food" amountCents={31219} />
-      <Cell label="Rent" amountCents={120000} />
-      <Cell label="Utilities" amountCents={10514} />
-      <Cell label="Entertainment" amountCents={3750} />
-      <Cell label="Miscellanous" amountCents={6482} />
-      <Cell label="Food" amountCents={31219} />
-      <Cell label="Rent" amountCents={120000} />
-      <Cell label="Utilities" amountCents={10514} />
-      <Cell label="Entertainment" amountCents={3750} />
-      <Cell label="Miscellanous" amountCents={6482} />
-      <Cell label="Food" amountCents={31219} />
-      <Cell label="Rent" amountCents={120000} />
-      <Cell label="Utilities" amountCents={10514} />
-      <Cell label="Entertainment" amountCents={3750} />
-      <Cell label="Miscellanous" amountCents={6482} />
-      <Cell label="Food" amountCents={31219} />
-      <Cell label="Rent" amountCents={120000} />
-      <Cell label="Utilities" amountCents={10514} />
-      <Cell label="Entertainment" amountCents={3750} />
-      <Cell label="Miscellanous" amountCents={6482} />
-    </div> */
 }

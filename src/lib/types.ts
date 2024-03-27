@@ -1,6 +1,6 @@
 import { Timestamp } from 'firebase/firestore'
 
-export type ExpenseTypes = 'HOUSING'
+export type ExpenseTypes = 'RENT' | 'FOOD' | 'FUN' | 'CLOTHES' | 'GROCERIES'
 
 export type ExpenseItem = {
   name: string
