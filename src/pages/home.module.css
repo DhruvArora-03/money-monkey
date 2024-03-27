@@ -5,21 +5,29 @@
 }
 
 h1,
-h2 {
+h2,
+h3 {
   margin: 0;
+}
+
+h3 {
+  font-weight: normal;
 }
 
 .mainDisplay {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 100px 0;
+  min-width: fit-content;
+  min-height: fit-content;
+  padding: 35px 0;
 }
 
 .totalSpend {
   font-size: xx-large;
   font-weight: bolder;
   width: fit-content;
+  position: absolute;
 }
 
 .list {

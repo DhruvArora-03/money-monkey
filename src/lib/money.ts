@@ -7,14 +7,14 @@ export function formatMoney(amountCents: number) {
 
 export async function getHomeScreenStats() {
   return {
-    totalCents: 164519,
+    totalCents: 210863,
     catagories: {
-      RENT: 120000,
-      FOOD: 5437,
-      FUN: 2346,
-      CLOTHES: 4508,
+      HOUSING: 132800,
+      FOOD: 15437,
+      FUN: 12346,
+      CLOTHES: 14508,
       GROCERIES: 26743,
-      MISCELLANEOUS: 2029,
+      MISCELLANEOUS: 9029,
     },
   }
   const db = getFirestore()
@@ -22,11 +22,12 @@ export async function getHomeScreenStats() {
 
   let totalCents = 0
   const catagories: Record<ExpenseTypes, number> = {
-    RENT: 0,
+    HOUSING: 0,
     FOOD: 0,
     FUN: 0,
     CLOTHES: 0,
     GROCERIES: 0,
+    MISCELLANEOUS: 0,
   }
 
   snapshot.docs
