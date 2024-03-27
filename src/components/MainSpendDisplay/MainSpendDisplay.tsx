@@ -1,3 +1,4 @@
+import { formatMoney } from 'src/lib/money'
 import { ExpenseTypes } from 'src/lib/types'
 
 export type CircleSection = {
@@ -5,7 +6,9 @@ export type CircleSection = {
   percentage: number
 }
 
-type CircleProps = {
+type MainSpendDisplayProps = {
+  className?: string
+  totalDisplayClassName?: string
   totalCents: number
   catagories: Record<ExpenseTypes, number> | undefined
   radius: number
@@ -20,14 +23,17 @@ const colors: Record<ExpenseTypes, string> = {
   MISCELLANEOUS: '#FFA600', // neon orange
 }
 
-export default function Cirle({ radius: r, ...props }: CircleProps) {
+export default function MainSpendDisplay({
+  radius: r,
+  ...props
+}: MainSpendDisplayProps) {
   let prev = 0
   const pad = 10
   const dim = (pad + r) * 2
 
   if (props.catagories == undefined) {
     return (
-      <svg width={dim} height={dim}>
+      <svg className={props.className} width={dim} height={dim}>
         <circle
           stroke="white"
           strokeWidth={4}
@@ -41,7 +47,20 @@ export default function Cirle({ radius: r, ...props }: CircleProps) {
   }
 
   return (
-    <svg width={dim} height={dim}>
+    <svg className={props.className} width={dim} height={dim + 300}>
+      <text x={0} y={dim + 100} fill="white">
+        bruh
+      </text>
+      <text
+        x={dim / 2}
+        y={dim / 2}
+        dominantBaseline="central"
+        textAnchor="middle"
+        className={props.totalDisplayClassName}
+        fill="white"
+      >
+        {formatMoney(props.totalCents)}
+      </text>
       {props.catagories &&
         Object.keys(props.catagories).map((type) => {
           const p = props.catagories

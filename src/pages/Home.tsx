@@ -1,6 +1,6 @@
-import { formatMoney, getHomeScreenStats } from 'src/lib/money'
+import { getHomeScreenStats } from 'src/lib/money'
 import styles from './home.module.css'
-import { Cell, Circle, SignOutButton } from '@components'
+import { Cell, MainSpendDisplay, SignOutButton } from '@components'
 import { useEffect, useState } from 'react'
 import { ExpenseTypes } from 'src/lib/types'
 
@@ -18,10 +18,14 @@ export default function HomePage() {
   return (
     <div className={styles.page}>
       <h1>Expenses</h1>
-      <h3>March 2024</h3>
+      <h2>March 2024</h2>
       <div className={styles.mainDisplay}>
-        <Circle totalCents={totalCents} catagories={catagories} radius={125} />
-        <h2 className={styles.totalSpend}>{formatMoney(totalCents)}</h2>
+        <MainSpendDisplay
+          totalCents={totalCents}
+          catagories={catagories}
+          radius={125}
+          totalDisplayClassName={styles.totalSpend}
+        />
       </div>
       <div className={styles.list}>
         {catagories &&

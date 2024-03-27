@@ -3,6 +3,13 @@ import SignOutButton from './LogButtons/SignOutButton'
 import Cell from './Cell/Cell'
 import ExpenseList from './ExpenseList/ExpenseList'
 import Expense from './Expense/Expense'
-import Circle from './Circle/Circle'
+import MainSpendDisplay from './MainSpendDisplay/MainSpendDisplay'
 
-export { SignInButton, SignOutButton, Cell, Expense, ExpenseList, Circle }
+export {
+  SignInButton,
+  SignOutButton,
+  Cell,
+  Expense,
+  ExpenseList,
+  MainSpendDisplay,
+}
