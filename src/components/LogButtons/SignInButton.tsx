@@ -5,7 +5,6 @@ import {
   GoogleAuthProvider,
   signInWithCredential,
 } from 'firebase/auth'
-// import { useState } from 'react'
 import styles from './signInButton.module.css'
 import { useNavigate } from 'react-router-dom'
 
@@ -15,13 +14,10 @@ type SignInButtonProps = {
 
 export default function SignInButton({ className }: SignInButtonProps) {
   const navigate = useNavigate()
-  // const [showButton, setShowButton] = useState(false)
   const auth = getAuth()
 
-  console.log('sign innnnnn')
-
   return (
-    <div className={clsx(false && styles.hidden, className)}>
+    <div className={clsx(styles.button, className)}>
       <GoogleLogin
         onSuccess={(res) => {
           signInWithCredential(
@@ -30,11 +26,6 @@ export default function SignInButton({ className }: SignInButtonProps) {
           ).then(() => navigate('/'))
         }}
         onError={() => console.log('error in signIn button')}
-        // promptMomentNotification={(promptMomentNotification) => {
-        // setShowButton(!promptMomentNotification.isDisplayed())
-        // }}
-        // useOneTap
-        // use_fedcm_for_prompt
       />
     </div>
   )

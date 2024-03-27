@@ -22,9 +22,6 @@ function App() {
   const auth = getAuth()
   const [user] = useAuthState(auth)
 
-  console.log(`user: ${user}`)
-  auth.onAuthStateChanged(console.log)
-
   return (
     <Routes>
       {user ? (
