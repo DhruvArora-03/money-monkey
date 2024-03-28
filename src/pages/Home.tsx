@@ -8,40 +8,38 @@ import {
   SignOutButton,
 } from '@components'
 import { useEffect, useState } from 'react'
-import { ExpenseTypes, HomePageStats, months, MonthsType } from '@lib/types'
+import { ExpenseTypes, HomePageStats, months, years } from '@lib/types'
 
 export default function HomePage() {
   const [stats, setStats] = useState<HomePageStats>()
-  const [month, setMonth] = useState<>(0)
-  const [year, setYear] = useState(2024)
+  const [month, setMonth] = useState(0)
+  const [year, setYear] = useState(0)
 
   useEffect(() => {
-    getHomeScreenStats(0, 2024).then(setStats)
+    getHomeScreenStats(month, years[year]).then(setStats)
   }, [])
 
   return (
     <div className={styles.page}>
       <h1>Expenses</h1>
-      <h2>March 2024</h2>
-      <Select options={months} value={month} onChange={setMonth} />
-      <Select options={} value={year} onChange={setYear} />
+      <Select options={months} value={month} setValue={setMonth} />
+      <Select options={years} value={year} setValue={setYear} />
       <div className={styles.mainDisplay}>
         <MainSpendDisplay
           totalDisplayClassName={styles.totalSpend}
           stats={stats}
           radius={125}
         />
-        <CatagoryDescriptionList radius={125} />s S
+        <CatagoryDescriptionList radius={125} />
       </div>
       <div className={styles.list}>
-        {stats &&
-          ExpenseTypes.map((type) => (
-            <Cell
-              key={type}
-              label={type}
-              amountCents={stats.catagories[type as ExpenseTypes]}
-            />
-          ))}
+        {ExpenseTypes.map((type) => (
+          <Cell
+            key={type}
+            label={type}
+            amountCents={stats ? stats.catagories[type as ExpenseTypes] : 0}
+          />
+        ))}
       </div>
       <SignOutButton />
     </div>

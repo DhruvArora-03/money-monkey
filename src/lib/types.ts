@@ -38,19 +38,11 @@ export const months = [
   'October',
   'November',
   'December',
-] as const
+]
 
-export type MonthsNumberType =
-  | 0
-  | 1
-  | 2
-  | 3
-  | 4
-  | 5
-  | 6
-  | 7
-  | 8
-  | 9
-  | 10
-  | 11
-  | 12
+const start_year = 2024
+export const years: number[] = new Array(
+  new Date().getFullYear() - start_year + 1,
+)
+  .fill(start_year)
+  .map((x, i) => x + i)
