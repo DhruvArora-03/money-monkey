@@ -29,8 +29,7 @@ function CatagoryDesc({ x, y, type }: CatagoryDescriptionProps) {
         dominantBaseline="hanging"
         fill={expenseColors[type]}
       >
-        <tspan>{type.charAt(0)}</tspan>
-        {type.slice(1)}
+        {type}
       </text>
     </>
   )
