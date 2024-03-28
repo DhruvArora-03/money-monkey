@@ -24,7 +24,6 @@ h1 {
   display: flex;
   gap: 6px;
   align-self: flex-start;
-  width: 50%;
 }
 
 .totalSpend {
