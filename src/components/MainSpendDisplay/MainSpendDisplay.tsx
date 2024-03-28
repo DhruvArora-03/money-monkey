@@ -1,39 +1,67 @@
+import { useMemo } from 'react'
+import { expenseColors } from 'src/lib/colors'
 import { formatMoney } from 'src/lib/money'
-import { ExpenseTypes } from 'src/lib/types'
+import { ExpenseTypes, HomePageStats } from 'src/lib/types'
 
-export type CircleSection = {
-  type: ExpenseTypes
+const MIN_THRESHOLD = 0.02
+
+type CircleSection = {
+  color: (typeof expenseColors)[ExpenseTypes]
   percentage: number
 }
 
 type MainSpendDisplayProps = {
-  className?: string
   totalDisplayClassName?: string
-  totalCents: number
-  catagories: Record<ExpenseTypes, number> | undefined
+  stats: HomePageStats | undefined
   radius: number
-}
-
-const colors: Record<ExpenseTypes, string> = {
-  HOUSING: '#39FF14', //neon green
-  FUN: '#FFFF33', // neon yellow
-  FOOD: '#1F51FF', // neon blue
-  CLOTHES: '#FF3131', // neon red
-  GROCERIES: '#BC13FE', // neon purple
-  MISCELLANEOUS: '#FFA600', // neon orange
 }
 
 export default function MainSpendDisplay({
   radius: r,
   ...props
 }: MainSpendDisplayProps) {
-  let prev = 0
   const pad = 10
   const dim = (pad + r) * 2
 
-  if (props.catagories == undefined) {
+  const values = useMemo(
+    () =>
+      ExpenseTypes.map((type) => {
+        const val = props.stats ? props.stats.catagories[type] : 0
+        return {
+          color: expenseColors[type as ExpenseTypes],
+          value:
+            props.stats &&
+            val > 0 &&
+            val / props.stats.totalCents < MIN_THRESHOLD
+              ? MIN_THRESHOLD * props.stats.totalCents
+              : val,
+        }
+      }).filter((x) => x.value > 0),
+    [props.stats],
+  )
+  const total = useMemo(
+    () =>
+      values.reduce((x, y) => ({ ...x, value: x.value + y.value }), {
+        color: '',
+        value: 0,
+      }).value,
+    [values],
+  )
+  const sections: CircleSection[] = useMemo(
+    () =>
+      values.map(
+        ({ color, value }) =>
+          ({
+            color: color,
+            percentage: value / total,
+          }) as CircleSection,
+      ),
+    [values, total],
+  )
+
+  if (props.stats == undefined) {
     return (
-      <svg className={props.className} width={dim} height={dim}>
+      <svg width={dim} height={dim}>
         <circle
           stroke="white"
           strokeWidth={4}
@@ -42,15 +70,62 @@ export default function MainSpendDisplay({
           cy={pad + r}
           r={r}
         />
+        <text
+          x={dim / 2}
+          y={dim / 2}
+          dominantBaseline="central"
+          textAnchor="middle"
+          className={props.totalDisplayClassName}
+          fill="white"
+        >
+          ...
+        </text>
       </svg>
     )
   }
 
+  function Section({ percentage: p, color, i }: CircleSection & { i: number }) {
+    if (p === 0) {
+      return <></>
+    }
+
+    const prev = sections
+      .slice(0, i)
+      .map(({ percentage: pp }) => pp)
+      .reduce((x, y) => x + y, 0)
+
+    if (p === 1) {
+      return (
+        <circle
+          cx={pad + r}
+          cy={pad + r}
+          r={r}
+          stroke={color}
+          strokeWidth={4}
+          fill="none"
+        />
+      )
+    }
+
+    const start = (prev + 0.008) * (2 * Math.PI)
+    const end = (prev + p) * (2 * Math.PI)
+
+    return (
+      <path
+        d={`M ${pad + r + r * Math.cos(start)} ${pad + r + r * Math.sin(start)}
+            A ${r} ${r} 0 ${p > 0.5 ? 1 : 0} 1
+            ${pad + r + r * Math.cos(end)}
+            ${pad + r + r * Math.sin(end)}
+            `}
+        stroke={color}
+        strokeWidth={4}
+        fill="none"
+      />
+    )
+  }
+
   return (
-    <svg className={props.className} width={dim} height={dim + 300}>
-      <text x={0} y={dim + 100} fill="white">
-        bruh
-      </text>
+    <svg width={dim} height={dim}>
       <text
         x={dim / 2}
         y={dim / 2}
@@ -59,46 +134,11 @@ export default function MainSpendDisplay({
         className={props.totalDisplayClassName}
         fill="white"
       >
-        {formatMoney(props.totalCents)}
+        {formatMoney(props.stats.totalCents)}
       </text>
-      {props.catagories &&
-        Object.keys(props.catagories).map((type) => {
-          const p = props.catagories
-            ? props.catagories[type as ExpenseTypes] / props.totalCents
-            : 0
-          const color = colors[type as ExpenseTypes]
-
-          if (p === 1) {
-            return (
-              <circle
-                key={type}
-                cx={pad + r}
-                cy={pad + r}
-                r={r}
-                stroke={color}
-                strokeWidth={4}
-                fill="none"
-              />
-            )
-          }
-
-          const start = (prev + 0.008) * (2 * Math.PI)
-          const end = (prev + p) * (2 * Math.PI)
-          prev += p
-          return (
-            <path
-              key={type}
-              d={`M ${pad + r + r * Math.cos(start)} ${pad + r + r * Math.sin(start)}
-                A ${r} ${r} 0 ${p > 0.5 ? 1 : 0} 1
-                ${pad + r + r * Math.cos(end)}
-                ${pad + r + r * Math.sin(end)}
-                `}
-              stroke={color}
-              strokeWidth={4}
-              fill="none"
-            />
-          )
-        })}
+      {sections.map((s: CircleSection, i) => (
+        <Section key={s.color} i={i} {...s} />
+      ))}
     </svg>
   )
 }

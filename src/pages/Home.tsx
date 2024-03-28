@@ -1,18 +1,21 @@
 import { getHomeScreenStats } from 'src/lib/money'
 import styles from './home.module.css'
-import { Cell, MainSpendDisplay, SignOutButton } from '@components'
+import {
+  CatagoryDescriptionList,
+  Cell,
+  MainSpendDisplay,
+  SignOutButton,
+} from '@components'
 import { useEffect, useState } from 'react'
-import { ExpenseTypes } from 'src/lib/types'
+import { ExpenseTypes, HomePageStats } from 'src/lib/types'
 
 export default function HomePage() {
-  const [totalCents, setTotalCents] = useState(0)
-  const [catagories, setCatagories] = useState<Record<ExpenseTypes, number>>()
+  // const [totalCents, setTotalCents] = useState(0)
+  // const [catagories, setCatagories] = useState<Record<ExpenseTypes, number>>()
+  const [stats, setStats] = useState<HomePageStats>()
 
   useEffect(() => {
-    getHomeScreenStats().then(({ totalCents, catagories }) => {
-      setTotalCents(totalCents)
-      setCatagories(catagories)
-    })
+    getHomeScreenStats(0, 2024).then(setStats)
   }, [])
 
   return (
@@ -21,19 +24,22 @@ export default function HomePage() {
       <h2>March 2024</h2>
       <div className={styles.mainDisplay}>
         <MainSpendDisplay
-          totalCents={totalCents}
-          catagories={catagories}
-          radius={125}
           totalDisplayClassName={styles.totalSpend}
+          stats={stats}
+          radius={125}
+        />
+        <CatagoryDescriptionList
+          catagoryTextClassName={styles.catagory}
+          radius={125}
         />
       </div>
       <div className={styles.list}>
-        {catagories &&
-          Object.keys(catagories).map((type) => (
+        {stats &&
+          ExpenseTypes.map((type) => (
             <Cell
               key={type}
               label={type}
-              amountCents={catagories[type as ExpenseTypes]}
+              amountCents={stats.catagories[type as ExpenseTypes]}
             />
           ))}
       </div>

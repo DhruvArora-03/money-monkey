@@ -4,6 +4,7 @@ import Cell from './Cell/Cell'
 import ExpenseList from './ExpenseList/ExpenseList'
 import Expense from './Expense/Expense'
 import MainSpendDisplay from './MainSpendDisplay/MainSpendDisplay'
+import CatagoryDescriptionList from './CatagoryDescriptionList/CatagoryDescriptionList'
 
 export {
   SignInButton,
@@ -12,4 +13,5 @@ export {
   Expense,
   ExpenseList,
   MainSpendDisplay,
+  CatagoryDescriptionList,
 }

@@ -51,7 +51,7 @@ export default App
 //   const sections: CircleSection[] = [
 //     { type: 'HOUSING', percentage: 40 },
 //     { type: 'FOOD', percentage: 15 },
-//     { type: 'FUN', percentage: 10 },
+//     { type: 'ENTERTAINMENT', percentage: 10 },
 //     { type: 'CLOTHES', percentage: 10 },
 //     { type: 'GROCERIES', percentage: 25 },
 //   ]

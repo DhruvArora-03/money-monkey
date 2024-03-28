@@ -8,5 +8,10 @@
 }
 
 .label {
+  text-transform: lowercase;
   font-weight: bold;
+}
+
+.label::first-letter {
+  text-transform: capitalize;
 }
