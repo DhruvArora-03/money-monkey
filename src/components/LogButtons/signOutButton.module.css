@@ -4,4 +4,10 @@
   right: 0;
   top: 0;
   margin: 20px;
+  background-color: var(--secondary-background-color);
+  color: white;
+  padding: 10px;
+  border-radius: 6px;
+  box-shadow: none;
+  border: thin solid white;
 }

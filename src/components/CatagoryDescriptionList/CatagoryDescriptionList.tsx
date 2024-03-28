@@ -42,12 +42,12 @@ export default function CatagoryDescriptionList(
   const pad = 10
   const dim = (pad + props.radius) * 2
   return (
-    <svg width={dim} height={pad + 21 * Math.ceil(ExpenseTypes.length / 2)}>
+    <svg width={dim} height={21 * Math.ceil(ExpenseTypes.length / 2)}>
       {ExpenseTypes.map((type, i) => (
         <CatagoryDesc
           key={type}
           x={i < Math.ceil(ExpenseTypes.length / 2) ? 0 : dim / 2}
-          y={10 + 21 * Math.floor(i % (ExpenseTypes.length / 2))}
+          y={21 * Math.floor(i % (ExpenseTypes.length / 2))}
           type={type as ExpenseTypes}
         />
       ))}

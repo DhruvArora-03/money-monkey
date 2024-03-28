@@ -21,10 +21,12 @@ export default function HomePage() {
 
   return (
     <div className={styles.page}>
-      <h1>Expenses</h1>
-      <Select options={months} value={month} setValue={setMonth} />
-      <Select options={years} value={year} setValue={setYear} />
+      <h1>Total Expenditures</h1>
       <div className={styles.mainDisplay}>
+        <div className={styles.datePicker}>
+          <Select options={months} value={month} setValue={setMonth} />
+          <Select options={years} value={year} setValue={setYear} />
+        </div>
         <MainSpendDisplay
           totalDisplayClassName={styles.totalSpend}
           stats={stats}

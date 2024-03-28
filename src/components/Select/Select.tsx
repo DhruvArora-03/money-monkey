@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react'
+import styles from './select.module.css'
 
 type SelectProps = {
   options: (string | number)[]
@@ -7,14 +8,19 @@ type SelectProps = {
 }
 
 export default function Select(props: SelectProps) {
-  console.log(props)
   return (
     <select
+      className={styles.select}
       value={props.value}
       onChange={(e) => props.setValue(+e.target.value)}
     >
       {props.options.map((label, i) => (
-        <option key={label} value={i} onChange={(e) => console.log(e)}>
+        <option
+          key={label}
+          className={styles.option}
+          value={i}
+          onChange={(e) => console.log(e)}
+        >
           {label}
         </option>
       ))}
