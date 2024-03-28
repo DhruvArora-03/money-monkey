@@ -1,4 +1,4 @@
-import { formatMoney } from 'src/lib/money'
+import { formatMoney } from '@lib/money'
 import styles from './cell.module.css'
 
 type CellProps = {

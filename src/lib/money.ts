@@ -16,13 +16,13 @@ export async function getHomeScreenStats(month: number, year: number) {
   return {
     totalCents: 195867,
     catagories: {
-      HOUSING: 132800,
-      FOOD: 15437,
-      ENTERTAINMENT: 12346,
-      CLOTHES: 14508,
-      GROCERIES: 26743,
-      NECESSITIES: 2004,
-      MISCELLANEOUS: 2029,
+      Housing: 132800,
+      Food: 15437,
+      Entertainment: 12346,
+      Clothes: 14508,
+      Groceries: 26743,
+      Necessities: 2004,
+      Miscellaneous: 2029,
     },
   } satisfies HomePageStats
   const start = new Date(year, Math.max(0, month - 1), 1)
@@ -41,13 +41,13 @@ export async function getHomeScreenStats(month: number, year: number) {
 
   let totalCents = 0
   const catagories: Record<ExpenseTypes, number> = {
-    HOUSING: 0,
-    FOOD: 0,
-    ENTERTAINMENT: 0,
-    CLOTHES: 0,
-    GROCERIES: 0,
-    NECESSITIES: 0,
-    MISCELLANEOUS: 0,
+    Housing: 0,
+    Food: 0,
+    Entertainment: 0,
+    Clothes: 0,
+    Groceries: 0,
+    Necessities: 0,
+    Miscellaneous: 0,
   }
 
   snapshot.docs

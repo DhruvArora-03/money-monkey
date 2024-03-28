@@ -29,14 +29,6 @@ h2 {
   font-weight: 600;
 }
 
-.catagory {
-  text-transform: lowercase;
-}
-
-.catagory > tspan {
-  text-transform: capitalize;
-}
-
 .list {
   display: flex;
   flex-direction: column;

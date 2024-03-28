@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
-import { expenseColors } from 'src/lib/colors'
-import { formatMoney } from 'src/lib/money'
-import { ExpenseTypes, HomePageStats } from 'src/lib/types'
+import { expenseColors } from '@lib/colors'
+import { formatMoney } from '@lib/money'
+import { ExpenseTypes, HomePageStats } from '@lib/types'
 
 const MIN_THRESHOLD = 0.02
 

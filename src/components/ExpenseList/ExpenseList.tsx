@@ -1,6 +1,6 @@
 import { collection, getDocs, getFirestore } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
-import { ExpenseItem } from 'src/lib/types'
+import { ExpenseItem } from '@lib/types'
 import Expense from '../Expense/Expense'
 
 type ExpenseListProps = {

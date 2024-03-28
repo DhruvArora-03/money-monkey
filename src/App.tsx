@@ -49,11 +49,11 @@ export default App
 // // Usage example
 // const App: React.FC = () => {
 //   const sections: CircleSection[] = [
-//     { type: 'HOUSING', percentage: 40 },
-//     { type: 'FOOD', percentage: 15 },
-//     { type: 'ENTERTAINMENT', percentage: 10 },
-//     { type: 'CLOTHES', percentage: 10 },
-//     { type: 'GROCERIES', percentage: 25 },
+//     { type: 'Housing', percentage: 40 },
+//     { type: 'Food', percentage: 15 },
+//     { type: 'Entertainment', percentage: 10 },
+//     { type: 'Clothes', percentage: 10 },
+//     { type: 'Groceries', percentage: 25 },
 //   ]
 
 //   return (

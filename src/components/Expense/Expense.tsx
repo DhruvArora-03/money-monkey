@@ -1,5 +1,5 @@
-import { formatMoney } from 'src/lib/money'
-import { ExpenseItem } from 'src/lib/types'
+import { formatMoney } from '@lib/money'
+import { ExpenseItem } from '@lib/types'
 
 export default function Expense(props: ExpenseItem) {
   console.log(props)
