@@ -1,7 +1,7 @@
 .button {
   height: fit-content;
   position: absolute;
-  right: 0;
-  top: 0;
-  margin: 20px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
