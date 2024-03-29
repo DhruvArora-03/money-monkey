@@ -5,7 +5,7 @@
   background-color: var(--secondary-background-color);
   border-radius: 8px;
   height: 25px;
-  transition: ease-out 0.25s;
+  transition: height ease-out 0.25s;
 }
 
 .expanded {
@@ -24,11 +24,18 @@
 }
 
 .details {
-  /* display: none; */
+  opacity: 0;
   margin-top: 16px;
+  height: 0;
+  overflow: hidden;
+  transition:
+    opacity ease-out 0.25s,
+    height ease-out 0.25s;
 }
 
 .expanded .details {
+  height: 400px;
+  opacity: 100;
   display: flex;
   flex-direction: column;
   gap: 4px;
