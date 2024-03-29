@@ -6,6 +6,7 @@ import Expense from './Expense/Expense'
 import MainSpendDisplay from './MainSpendDisplay/MainSpendDisplay'
 import CatagoryDescriptionList from './CatagoryDescriptionList/CatagoryDescriptionList'
 import Select from './Select/Select'
+import CatagoryView from './CatagoryView/CatagoryView'
 
 export {
   SignInButton,
@@ -16,4 +17,5 @@ export {
   MainSpendDisplay,
   CatagoryDescriptionList,
   Select,
+  CatagoryView,
 }

@@ -1,12 +1,35 @@
 .cell {
-  padding: 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  font-size: 16px;
+  padding: 12px;
+  padding-top: 20px;
   background-color: var(--secondary-background-color);
   border-radius: 8px;
+  height: 25px;
+  transition: ease-out 0.25s;
+}
+
+.expanded {
+  height: 400px;
+}
+
+.main {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .label {
   font-weight: bold;
+}
+
+.details {
+  /* display: none; */
+  margin-top: 16px;
+}
+
+.expanded .details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }

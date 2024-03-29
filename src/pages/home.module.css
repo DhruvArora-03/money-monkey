@@ -1,5 +1,6 @@
 .page {
   background-color: var(--background-color);
+  height: fit-content;
   min-height: 100%;
   padding: 20px;
 }

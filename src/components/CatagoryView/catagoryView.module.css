@@ -1,0 +1,12 @@
+.view {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80%;
+  height: 80%;
+  transform: translate(-50%, -50%);
+  border-radius: 6px;
+  border: thin solid white;
+  background-color: var(--secondary-background-color);
+  z-index: 9999;
+}

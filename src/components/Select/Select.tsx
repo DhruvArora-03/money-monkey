@@ -15,12 +15,7 @@ export default function Select(props: SelectProps) {
       onChange={(e) => props.setValue(+e.target.value)}
     >
       {props.options.map((label, i) => (
-        <option
-          key={label}
-          className={styles.option}
-          value={i}
-          onChange={(e) => console.log(e)}
-        >
+        <option key={label} value={i} onChange={(e) => console.log(e)}>
           {label}
         </option>
       ))}
