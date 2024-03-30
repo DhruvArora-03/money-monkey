@@ -1,0 +1,35 @@
+.navbar {
+  background-color: var(--background-color);
+  height: 10%;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  left: 0;
+}
+
+.normalButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  border: none;
+  background-color: var(--background-color);
+  color: white;
+}
+
+.addButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0210d8;
+  color: white;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  border: none;
+}

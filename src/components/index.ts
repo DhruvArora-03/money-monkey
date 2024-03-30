@@ -7,6 +7,7 @@ import MainSpendDisplay from './MainSpendDisplay/MainSpendDisplay'
 import CatagoryDescriptionList from './CatagoryDescriptionList/CatagoryDescriptionList'
 import Select from './Select/Select'
 import CatagoryView from './CatagoryView/CatagoryView'
+import NavBar from './NavBar/NavBar'
 
 export {
   SignInButton,
@@ -18,4 +19,5 @@ export {
   CatagoryDescriptionList,
   Select,
   CatagoryView,
+  NavBar,
 }

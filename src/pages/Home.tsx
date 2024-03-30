@@ -5,6 +5,7 @@ import {
   // CatagoryView,
   Cell,
   MainSpendDisplay,
+  NavBar,
   Select,
   SignOutButton,
 } from '@components'
@@ -54,6 +55,7 @@ export default function HomePage() {
         ))}
       </div>
       <SignOutButton />
+      <NavBar />
     </div>
   )
 }
