@@ -1,5 +1,6 @@
 import HomePage from '@pages/Home'
 import LoginPage from '@pages/Login'
+import SettingsPage from '@pages/Settings'
 import { initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 import { useAuthState } from 'react-firebase-hooks/auth'
@@ -28,6 +29,7 @@ function App() {
         // authed routes:
         <>
           <Route path="/" element={<HomePage />} />
+          <Route path="/settings" element={<SettingsPage />} />
           <Route path="/login" element={<Navigate to="/" />} />
           <Route path="*" element={<div>error</div>} />
         </>
@@ -43,34 +45,3 @@ function App() {
 }
 
 export default App
-// import React from 'react'
-// import Circle, { CircleSection } from './components/Circle/Circle'
-
-// // Usage example
-// const App: React.FC = () => {
-//   const sections: CircleSection[] = [
-//     { type: 'Housing', percentage: 40 },
-//     { type: 'Food', percentage: 15 },
-//     { type: 'Entertainment', percentage: 10 },
-//     { type: 'Clothes', percentage: 10 },
-//     { type: 'Groceries', percentage: 25 },
-//   ]
-
-//   return (
-//     <div
-//       style={{
-//         backgroundColor: '#202031',
-//         color: 'black',
-//         display: 'flex',
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//         // width: 'fit-content',
-//         padding: 10,
-//       }}
-//     >
-//       <Circle sections={sections} radius={300} />
-//     </div>
-//   )
-// }
-
-// export default App
