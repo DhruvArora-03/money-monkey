@@ -23,22 +23,20 @@ export default function Cell(props: CellProps) {
         <div className={styles.label}>{props.type}</div>
         <div>{formatMoney(props.amountCents)}</div>
       </div>
-      {
-        <div className={styles.details}>
-          <div>extra content</div>
-          <div>extra content</div>
-          <div>extra content</div>
-          <div>extra content</div>
-          <div>extra content</div>
-          <div>extra content</div>
-          <div>extra content</div>
-          <div>extra content</div>
-          <div>extra content</div>
-          <div>extra content</div>
-          <div>extra content</div>
-          <div>extra content</div>
-        </div>
-      }
+      <div className={styles.details}>
+        <div>extra content</div>
+        <div>extra content</div>
+        <div>extra content</div>
+        <div>extra content</div>
+        <div>extra content</div>
+        <div>extra content</div>
+        <div>extra content</div>
+        <div>extra content</div>
+        <div>extra content</div>
+        <div>extra content</div>
+        <div>extra content</div>
+        <div>extra content</div>
+      </div>
     </div>
   )
 }
