@@ -8,6 +8,7 @@ import CatagoryDescriptionList from './CatagoryDescriptionList/CatagoryDescripti
 import Select from './Select/Select'
 import CatagoryView from './CatagoryView/CatagoryView'
 import NavBar from './NavBar/NavBar'
+import CreateExpensePopup from './CreateExpensePopup/CreateExpensePopup'
 
 export {
   SignInButton,
@@ -20,4 +21,5 @@ export {
   Select,
   CatagoryView,
   NavBar,
+  CreateExpensePopup
 }

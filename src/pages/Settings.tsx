@@ -1,4 +1,4 @@
-import { NavBar } from '@components'
+import { CreateExpensePopup, NavBar } from '@components'
 import styles from './settings.module.css'
 
 export default function SettingsPage() {
@@ -6,6 +6,7 @@ export default function SettingsPage() {
     <div className={styles.page}>
       <h1>Settings</h1>
       <NavBar />
+      <CreateExpensePopup />
     </div>
   )
 }

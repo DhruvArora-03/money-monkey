@@ -4,6 +4,7 @@ import {
   CatagoryDescriptionList,
   // CatagoryView,
   Cell,
+  CreateExpensePopup,
   MainSpendDisplay,
   NavBar,
   Select,
@@ -56,6 +57,7 @@ export default function HomePage() {
       </div>
       <SignOutButton />
       <NavBar />
+      <CreateExpensePopup />
     </div>
   )
 }
