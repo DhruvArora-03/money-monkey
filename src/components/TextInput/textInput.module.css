@@ -1,3 +1,8 @@
+.inputGroup {
+  display: flex;
+  justify-content: space-between;
+}
+
 .label {
   margin-right: 4px;
 }

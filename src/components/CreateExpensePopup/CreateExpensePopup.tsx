@@ -9,6 +9,7 @@ type CreateExpensePopupProps = {
 
 export default function CreateExpensePopup(props: CreateExpensePopupProps) {
   const [name, setName] = useState('')
+  const [amount, setAmount] = useState('')
 
   return (
     <div className={styles.popup}>
@@ -16,7 +17,11 @@ export default function CreateExpensePopup(props: CreateExpensePopupProps) {
       <button className={styles.closeButton} onClick={props.onClose}>
         <MdClose size={20} />
       </button>
-      <TextInput label={'Name'} value={name} setValue={setName} />
+      <div className={styles.inputs}>
+        <TextInput label='Name' value={name} setValue={setName} />
+        <TextInput label='Amount' value={amount} setValue={setAmount} />
+      </div>
     </div>
+
   )
 }

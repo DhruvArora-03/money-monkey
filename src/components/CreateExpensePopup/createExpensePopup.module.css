@@ -13,7 +13,7 @@
 .closeButton {
   position: absolute;
   top: 5px;
-  right: 0;
+  right: 1px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -21,4 +21,14 @@
   border: none;
   background-color: var(--secondary-background-color);
   color: white;
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.inputs input {
+  width: 60%;
 }

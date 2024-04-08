@@ -8,7 +8,7 @@ type TextInputProps = {
 
 export default function TextInput(props: TextInputProps) {
   return (
-    <div>
+    <div className={styles.inputGroup}>
       <label className={styles.label} htmlFor={props.label}>
         {props.label}:
       </label>
