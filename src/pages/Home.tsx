@@ -38,12 +38,6 @@ export default function HomePage() {
         />
         <CatagoryDescriptionList radius={125} />
       </div>
-      {/* {stats && currentCatagory && (
-        <CatagoryView
-          type={currentCatagory}
-          catagoryAmountCents={stats.catagories[currentCatagory]}
-        />
-      )} */}
       <div className={styles.list}>
         {ExpenseTypes.map((type) => (
           <Cell

@@ -9,6 +9,7 @@ import Select from './Select/Select'
 import CatagoryView from './CatagoryView/CatagoryView'
 import NavBar from './NavBar/NavBar'
 import CreateExpensePopup from './CreateExpensePopup/CreateExpensePopup'
+import TextInput from './TextInput/TextInput'
 
 export {
   SignInButton,
@@ -21,5 +22,6 @@ export {
   Select,
   CatagoryView,
   NavBar,
-  CreateExpensePopup
+  CreateExpensePopup,
+  TextInput,
 }

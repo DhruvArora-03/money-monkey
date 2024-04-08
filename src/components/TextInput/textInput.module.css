@@ -1,0 +1,10 @@
+.label {
+  margin-right: 4px;
+}
+
+.input {
+  background-color: var(--secondary-background-color);
+  color: white;
+  border: thin solid white;
+  border-radius: 4px;
+}
