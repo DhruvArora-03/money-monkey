@@ -8,9 +8,11 @@ import {
 import { ExpenseItem, ExpenseTypes, HomePageStats } from './types'
 import { getAuth } from 'firebase/auth'
 
-export function formatMoney(amountCents: number) {
+export function formatMoney(amountCents: number): string {
   return `$${(amountCents / 100).toFixed(2)}`
 }
+
+// export function unformatMoney()
 
 export async function getHomeScreenStats(month: number, year: number) {
   return {

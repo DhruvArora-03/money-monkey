@@ -11,6 +11,7 @@ import NavBar from './NavBar/NavBar'
 import CreateExpensePopup from './CreateExpensePopup/CreateExpensePopup'
 import TextInput from './TextInput/TextInput'
 import PageWrapper from './PageWrapper/PageWrapper'
+import MoneyInput from './MoneyInput/MoneyInput'
 
 export {
   SignInButton,
@@ -25,5 +26,6 @@ export {
   NavBar,
   CreateExpensePopup,
   TextInput,
-  PageWrapper
+  PageWrapper,
+  MoneyInput
 }
