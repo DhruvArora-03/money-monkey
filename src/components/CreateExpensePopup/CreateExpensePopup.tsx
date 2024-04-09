@@ -4,7 +4,7 @@ import { MdClose } from 'react-icons/md'
 import { useState } from 'react'
 
 type CreateExpensePopupProps = {
-  onClose?: React.MouseEventHandler<HTMLButtonElement>
+  onClose?: React.MouseEventHandler<HTMLButtonElement | HTMLDivElement>
 }
 
 export default function CreateExpensePopup(props: CreateExpensePopupProps) {
@@ -12,16 +12,18 @@ export default function CreateExpensePopup(props: CreateExpensePopupProps) {
   const [amount, setAmount] = useState('')
 
   return (
-    <div className={styles.popup}>
-      <h3>Create Expense</h3>
-      <button className={styles.closeButton} onClick={props.onClose}>
-        <MdClose size={20} />
-      </button>
-      <div className={styles.inputs}>
-        <TextInput label='Name' value={name} setValue={setName} />
-        <TextInput label='Amount' value={amount} setValue={setAmount} />
+    <div>
+      <div className={styles.background} onClick={props.onClose}></div>
+      <div className={styles.popup}>
+        <h3>Create Expense</h3>
+        <button className={styles.closeButton} onClick={props.onClose}>
+          <MdClose size={20} />
+        </button>
+        <div className={styles.inputs}>
+          <TextInput label='Name' value={name} setValue={setName} />
+          <TextInput label='Amount' value={amount} setValue={setAmount} />
+        </div>
       </div>
     </div>
-
   )
 }
