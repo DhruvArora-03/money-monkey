@@ -2,7 +2,11 @@ import { useNavigate } from 'react-router-dom'
 import styles from './navBar.module.css'
 import { MdAdd, MdBlock, MdHome, MdSettings } from 'react-icons/md'
 
-export default function NavBar() {
+type NavBarProps = {
+  onAddClick: React.MouseEventHandler<HTMLButtonElement>
+}
+
+export default function NavBar(props: NavBarProps) {
   const navigate = useNavigate()
 
   return (
@@ -13,7 +17,7 @@ export default function NavBar() {
       <button className={styles.normalButton}>
         <MdBlock size={20} />
       </button>
-      <button className={styles.addButton} onClick={() => alert('bruh')}>
+      <button className={styles.addButton} onClick={props.onAddClick}>
         <MdAdd size={20} />
       </button>
       <button className={styles.normalButton}>

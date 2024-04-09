@@ -2,11 +2,9 @@ import { getHomeScreenStats } from '@lib/money'
 import styles from './home.module.css'
 import {
   CatagoryDescriptionList,
-  // CatagoryView,
   Cell,
-  CreateExpensePopup,
   MainSpendDisplay,
-  NavBar,
+  PageWrapper,
   Select,
   SignOutButton,
 } from '@components'
@@ -24,7 +22,7 @@ export default function HomePage() {
   }, [])
 
   return (
-    <div className={styles.page}>
+    <PageWrapper className={styles.page}>
       <h1>Total Expenditures</h1>
       <div className={styles.mainDisplay}>
         <div className={styles.datePicker}>
@@ -50,8 +48,6 @@ export default function HomePage() {
         ))}
       </div>
       <SignOutButton />
-      <NavBar />
-      <CreateExpensePopup />
-    </div>
+    </PageWrapper>
   )
 }
