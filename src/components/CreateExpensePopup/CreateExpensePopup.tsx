@@ -1,4 +1,4 @@
-import { MoneyInput, TextInput } from '@components'
+import { DateInput, MoneyInput, TextInput } from '@components'
 import styles from './createExpensePopup.module.css'
 import { MdClose } from 'react-icons/md'
 import { useState } from 'react'
@@ -10,10 +10,11 @@ type CreateExpensePopupProps = {
 export default function CreateExpensePopup(props: CreateExpensePopupProps) {
   const [name, setName] = useState('')
   const [amount, setAmount] = useState('')
+  const [date, setDate] = useState('')
 
   return (
     <div>
-      <div className={styles.background} onClick={() => { }}></div>
+      <div className={styles.background} onClick={props.onClose}></div>
       <div className={styles.popup}>
         <h3>Create Expense</h3>
         <button className={styles.closeButton} onClick={props.onClose}>
@@ -22,6 +23,8 @@ export default function CreateExpensePopup(props: CreateExpensePopupProps) {
         <div className={styles.inputs}>
           <TextInput label='Name' value={name} setValue={setName} />
           <MoneyInput label='Amount' value={amount} setValue={setAmount} />
+          <DateInput label='Date' value={date} setValue={setDate} />
+
         </div>
       </div>
     </div>

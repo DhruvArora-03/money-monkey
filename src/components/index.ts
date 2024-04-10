@@ -12,6 +12,7 @@ import CreateExpensePopup from './CreateExpensePopup/CreateExpensePopup'
 import TextInput from './TextInput/TextInput'
 import PageWrapper from './PageWrapper/PageWrapper'
 import MoneyInput from './MoneyInput/MoneyInput'
+import DateInput from './DateInput/DateInput'
 
 export {
   SignInButton,
@@ -27,5 +28,6 @@ export {
   CreateExpensePopup,
   TextInput,
   PageWrapper,
-  MoneyInput
+  MoneyInput,
+  DateInput
 }

@@ -11,6 +11,8 @@ type MoneyInputProps = {
 export default function MoneyInput(props: MoneyInputProps) {
   const [focused, setFocused] = useState(false)
 
+  console.log(props)
+
   return (
     <div className={styles.inputGroup}>
       <label className={styles.label} htmlFor={props.label}>
