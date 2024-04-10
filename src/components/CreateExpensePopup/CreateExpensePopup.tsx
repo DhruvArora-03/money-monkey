@@ -6,6 +6,7 @@ import { ExpenseTypes } from '@lib/types'
 
 type InputWrapperProps = {
   label: string
+  htmlFor?: string
   children: React.ReactNode
 }
 
@@ -16,7 +17,7 @@ type CreateExpensePopupProps = {
 function InputWrapper(props: InputWrapperProps) {
   return (
     <div className={styles.inputGroup}>
-      <label className={styles.label} htmlFor={props.label}>
+      <label className={styles.label} htmlFor={props.htmlFor ?? props.label}>
         {props.label}:
       </label>
       {props.children}
@@ -46,9 +47,9 @@ export default function CreateExpensePopup(props: CreateExpensePopupProps) {
         </button>
         <form onSubmit={() => {}}>
           <div className={styles.inputs}>
-            <InputWrapper label="Name">
+            <InputWrapper label="Name" htmlFor="ExpenseName">
               <TextInput
-                id="Name"
+                id="Expense Name"
                 className={styles.input}
                 value={name}
                 setValue={setName}

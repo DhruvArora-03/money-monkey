@@ -9,9 +9,23 @@ type PageWrapperProps = {
 export default function PageWrapper(props: PageWrapperProps) {
   const [visible, setVisible] = useState(false)
 
-  return <div className={props.className}>
-    {props.children}
-    <NavBar onAddClick={() => setVisible(true)} />
-    {visible && <CreateExpensePopup onClose={() => setVisible(false)} />
-    }  </div>
+  return (
+    <div className={props.className}>
+      {props.children}
+      <NavBar
+        onAddClick={() => {
+          setVisible(true)
+          document.getElementsByTagName('body')[0].style.overflow = 'hidden' // disables scrolling
+        }}
+      />
+      {visible && (
+        <CreateExpensePopup
+          onClose={() => {
+            setVisible(false)
+            document.getElementsByTagName('body')[0].style.overflow = 'unset'
+          }}
+        />
+      )}{' '}
+    </div>
+  )
 }
