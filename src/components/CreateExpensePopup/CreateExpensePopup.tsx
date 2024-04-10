@@ -1,7 +1,8 @@
-import { DateInput, MoneyInput, TextInput } from '@components'
+import { DateInput, MoneyInput, Select, TextInput } from '@components'
 import styles from './createExpensePopup.module.css'
 import { MdClose } from 'react-icons/md'
 import { useState } from 'react'
+import { ExpenseTypes } from '@lib/types'
 
 type CreateExpensePopupProps = {
   onClose?: React.MouseEventHandler<HTMLButtonElement | HTMLDivElement>
@@ -11,6 +12,7 @@ export default function CreateExpensePopup(props: CreateExpensePopupProps) {
   const [name, setName] = useState('')
   const [amount, setAmount] = useState('')
   const [date, setDate] = useState('')
+  const [type, setType] = useState<number>()
 
   return (
     <div>
@@ -24,7 +26,7 @@ export default function CreateExpensePopup(props: CreateExpensePopupProps) {
           <TextInput label='Name' value={name} setValue={setName} />
           <MoneyInput label='Amount' value={amount} setValue={setAmount} />
           <DateInput label='Date' value={date} setValue={setDate} />
-
+          <Select options={ExpenseTypes} value={type} setValue={setType} />
         </div>
       </div>
     </div>

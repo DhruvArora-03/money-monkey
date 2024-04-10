@@ -3,8 +3,8 @@ import styles from './select.module.css'
 
 type SelectProps = {
   options: (string | number)[]
-  value: number
-  setValue: Dispatch<SetStateAction<number>>
+  value: number | undefined
+  setValue: Dispatch<SetStateAction<number>> | Dispatch<SetStateAction<number | undefined>>
 }
 
 export default function Select(props: SelectProps) {
@@ -15,7 +15,7 @@ export default function Select(props: SelectProps) {
       onChange={(e) => props.setValue(+e.target.value)}
     >
       {props.options.map((label, i) => (
-        <option key={label} value={i} onChange={(e) => console.log(e)}>
+        <option key={label} value={i}>
           {label}
         </option>
       ))}

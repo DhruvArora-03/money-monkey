@@ -8,7 +8,7 @@ export const ExpenseTypes = [
   'Clothes',
   'Necessities',
   'Miscellaneous',
-] as const
+]
 
 export type ExpenseTypes = (typeof ExpenseTypes)[number]
 
