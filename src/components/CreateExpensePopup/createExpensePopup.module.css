@@ -1,3 +1,12 @@
+.inputGroup {
+  display: flex;
+  justify-content: space-between;
+}
+
+.label {
+  margin-right: 4px;
+}
+
 .background {
   position: fixed;
   left: 0;
@@ -40,6 +49,16 @@
   gap: 6px;
 }
 
-.inputs input {
+.input {
   width: 60%;
+}
+
+.createButton {
+  width: 100%;
+  margin-top: 20px;
+  background-color: var(--blue-button-color);
+  color: white;
+  border: thin solid white;
+  padding: 6px 0;
+  border-radius: 6px;
 }

@@ -4,8 +4,24 @@ import { MdClose } from 'react-icons/md'
 import { useState } from 'react'
 import { ExpenseTypes } from '@lib/types'
 
+type InputWrapperProps = {
+  label: string
+  children: React.ReactNode
+}
+
 type CreateExpensePopupProps = {
   onClose?: React.MouseEventHandler<HTMLButtonElement | HTMLDivElement>
+}
+
+function InputWrapper(props: InputWrapperProps) {
+  return (
+    <div className={styles.inputGroup}>
+      <label className={styles.label} htmlFor={props.label}>
+        {props.label}:
+      </label>
+      {props.children}
+    </div>
+  )
 }
 
 export default function CreateExpensePopup(props: CreateExpensePopupProps) {
@@ -16,18 +32,56 @@ export default function CreateExpensePopup(props: CreateExpensePopupProps) {
 
   return (
     <div>
-      <div className={styles.background} onClick={props.onClose}></div>
+      <div
+        className={styles.background}
+        onClick={() => {}}
+        onScroll={() => {}}
+        onScrollCapture={() => {}}
+        onWheelCapture={() => {}}
+      ></div>
       <div className={styles.popup}>
         <h3>Create Expense</h3>
         <button className={styles.closeButton} onClick={props.onClose}>
           <MdClose size={20} />
         </button>
-        <div className={styles.inputs}>
-          <TextInput label='Name' value={name} setValue={setName} />
-          <MoneyInput label='Amount' value={amount} setValue={setAmount} />
-          <DateInput label='Date' value={date} setValue={setDate} />
-          <Select options={ExpenseTypes} value={type} setValue={setType} />
-        </div>
+        <form onSubmit={() => {}}>
+          <div className={styles.inputs}>
+            <InputWrapper label="Name">
+              <TextInput
+                id="Name"
+                className={styles.input}
+                value={name}
+                setValue={setName}
+              />
+            </InputWrapper>
+            <InputWrapper label="Amount">
+              <MoneyInput
+                id="Amount"
+                className={styles.input}
+                value={amount}
+                setValue={setAmount}
+              />
+            </InputWrapper>
+            <InputWrapper label="Date">
+              <DateInput
+                id="Date"
+                className={styles.input}
+                value={date}
+                setValue={setDate}
+              />
+            </InputWrapper>
+            <InputWrapper label="Amount">
+              <Select
+                id="Amount"
+                className={styles.input}
+                options={ExpenseTypes}
+                value={type}
+                setValue={setType}
+              />
+            </InputWrapper>
+          </div>
+          <button className={styles.createButton}>Create</button>
+        </form>
       </div>
     </div>
   )
