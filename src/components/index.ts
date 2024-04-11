@@ -9,10 +9,10 @@ import Select from './Select/Select'
 import CatagoryView from './CatagoryView/CatagoryView'
 import NavBar from './NavBar/NavBar'
 import CreateExpensePopup from './CreateExpensePopup/CreateExpensePopup'
-import TextInput from './TextInput/TextInput'
+import TextField from './FormFields/TextField/TextField'
 import PageWrapper from './PageWrapper/PageWrapper'
-import MoneyInput from './MoneyInput/MoneyInput'
-import DateInput from './DateInput/DateInput'
+import MoneyInput from './FormFields/MoneyInput/MoneyInput'
+import DateInput from './FormFields/DateInput/DateInput'
 
 export {
   SignInButton,
@@ -26,8 +26,8 @@ export {
   CatagoryView,
   NavBar,
   CreateExpensePopup,
-  TextInput,
+  TextField as TextInput,
   PageWrapper,
   MoneyInput,
-  DateInput
+  DateInput,
 }

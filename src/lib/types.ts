@@ -12,6 +12,8 @@ export const ExpenseTypes = [
 
 export type ExpenseTypes = (typeof ExpenseTypes)[number]
 
+export const ExpenseTypeOptions = ['', ...ExpenseTypes]
+
 export type ExpenseItem = {
   name: string
   date: Timestamp

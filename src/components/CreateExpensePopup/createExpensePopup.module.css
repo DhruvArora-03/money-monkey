@@ -53,12 +53,21 @@
   width: 60%;
 }
 
-.createButton {
+.buttons {
+  display: flex;
   width: 100%;
   margin-top: 20px;
-  background-color: var(--blue-button-color);
-  color: white;
-  border: thin solid white;
+  gap: 6px;
+}
+
+.buttons > button {
+  width: 100%;
   padding: 6px 0;
   border-radius: 6px;
+  border: thin solid white;
+}
+
+.createButton {
+  background-color: var(--blue-button-color);
+  color: white;
 }

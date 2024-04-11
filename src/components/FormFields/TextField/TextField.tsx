@@ -1,14 +1,14 @@
 import clsx from 'clsx'
 import styles from './textInput.module.css'
 
-type TextInputProps = {
+type TextFieldProps = {
   id: string
   className?: string
   value: string
   setValue: (newValue: string) => void
 }
 
-export default function TextInput(props: TextInputProps) {
+export default function TextField(props: TextFieldProps) {
   return (
     <input
       id={props.id}

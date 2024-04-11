@@ -1,4 +1,4 @@
-import { getHomeScreenStats } from '@lib/money'
+import { getHomeScreenStats } from '@lib/firebase'
 import styles from './home.module.css'
 import {
   CatagoryDescriptionList,
@@ -19,7 +19,7 @@ export default function HomePage() {
 
   useEffect(() => {
     getHomeScreenStats(month, years[year]).then(setStats)
-  }, [])
+  }, [month, year])
 
   return (
     <PageWrapper className={styles.page}>

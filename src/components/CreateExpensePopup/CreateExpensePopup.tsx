@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { DateInput, MoneyInput, Select, TextInput } from '@components'
 import styles from './createExpensePopup.module.css'
 import { MdClose } from 'react-icons/md'
 import { useState } from 'react'
-import { ExpenseTypes } from '@lib/types'
+import { ExpenseItem, ExpenseTypeOptions, ExpenseTypes } from '@lib/types'
+import { Field, Form, Formik } from 'formik'
+import { Timestamp } from 'firebase/firestore'
 
 type InputWrapperProps = {
   label: string
@@ -26,10 +29,10 @@ function InputWrapper(props: InputWrapperProps) {
 }
 
 export default function CreateExpensePopup(props: CreateExpensePopupProps) {
-  const [name, setName] = useState('')
-  const [amount, setAmount] = useState('')
-  const [date, setDate] = useState('')
-  const [type, setType] = useState<number>()
+  // const [name, setName] = useState('')
+  // const [amount, setAmount] = useState('')
+  // const [date, setDate] = useState('')
+  // const [type, setType] = useState<number>()
 
   return (
     <div>
@@ -45,44 +48,63 @@ export default function CreateExpensePopup(props: CreateExpensePopupProps) {
         <button className={styles.closeButton} onClick={props.onClose}>
           <MdClose size={20} />
         </button>
-        <form onSubmit={() => {}}>
-          <div className={styles.inputs}>
-            <InputWrapper label="Name" htmlFor="ExpenseName">
-              <TextInput
-                id="Expense Name"
-                className={styles.input}
-                value={name}
-                setValue={setName}
-              />
-            </InputWrapper>
-            <InputWrapper label="Amount">
-              <MoneyInput
-                id="Amount"
-                className={styles.input}
-                value={amount}
-                setValue={setAmount}
-              />
-            </InputWrapper>
-            <InputWrapper label="Date">
-              <DateInput
-                id="Date"
-                className={styles.input}
-                value={date}
-                setValue={setDate}
-              />
-            </InputWrapper>
-            <InputWrapper label="Amount">
-              <Select
-                id="Amount"
-                className={styles.input}
-                options={ExpenseTypes}
-                value={type}
-                setValue={setType}
-              />
-            </InputWrapper>
-          </div>
-          <button className={styles.createButton}>Create</button>
-        </form>
+        <Formik
+          initialValues={{ name: '', amount: '', date: '', type: 0 }}
+          onSubmit={(values) => {
+            console.log({
+              name: '',
+              date: new Timestamp(new Date(values.date).getTime(), 0),
+              amountCents: +values.amount * 100,
+              type: ExpenseTypes[values.type - 1],
+            } satisfies ExpenseItem)
+          }}
+        >
+          {() => (
+            <Form>
+              <div className={styles.inputs}>
+                <InputWrapper label="Name" htmlFor="name">
+                  <Field
+                    id="name"
+                    className={styles.input}
+                    component={TextInput}
+                  />
+                  {/* <TextInput id="name" className={styles.input} /> */}
+                </InputWrapper>
+                {/* <InputWrapper label="Amount" htmlFor="ExpenseAmount">
+                  <MoneyInput
+                    id="Amount"
+                    className={styles.input}
+                    value={amount}
+                    setValue={setAmount}
+                  />
+                </InputWrapper>
+                <InputWrapper label="Date">
+                  <DateInput
+                    id="Date"
+                    className={styles.input}
+                    value={date}
+                    setValue={setDate}
+                  />
+                </InputWrapper>
+                <InputWrapper label="Amount">
+                  <Select
+                    id="Amount"
+                    className={styles.input}
+                    options={ExpenseTypeOptions}
+                    value={type}
+                    setValue={setType}
+                  /> */}
+                {/* </InputWrapper> */}
+              </div>
+              <div className={styles.buttons}>
+                <button onClick={props.onClose}>Cancel</button>
+                <button className={styles.createButton} type="submit">
+                  Create
+                </button>
+              </div>
+            </Form>
+          )}
+        </Formik>
       </div>
     </div>
   )
