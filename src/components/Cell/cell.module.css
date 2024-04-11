@@ -4,12 +4,6 @@
   background-color: var(--secondary-background-color);
   border-radius: 8px;
   overflow: hidden;
-  max-height: 20px;
-  transition: max-height 0.5s ease-in-out;
-}
-
-.expanded {
-  max-height: 9999px;
 }
 
 .main {
@@ -24,13 +18,8 @@
 }
 
 .details {
-  margin-top: 16px;
-  height: fit-content;
-  display: none;
-}
-
-.expanded .details {
+  gap: 4px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  margin-top: 16px;
 }
