@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { DateInput, MoneyInput, Select, TextInput } from '@components'
 import styles from './createExpensePopup.module.css'
 import { MdClose } from 'react-icons/md'
-import { useState } from 'react'
-import { ExpenseItem, ExpenseTypeOptions, ExpenseTypes } from '@lib/types'
-import { Field, Form, Formik } from 'formik'
+import { ExpenseItem, ExpenseTypes } from '@lib/types'
+import { Field, FieldProps, Form, Formik } from 'formik'
 import { Timestamp } from 'firebase/firestore'
+import { MoneyInput } from '@components'
 
 type InputWrapperProps = {
   label: string
@@ -29,20 +27,9 @@ function InputWrapper(props: InputWrapperProps) {
 }
 
 export default function CreateExpensePopup(props: CreateExpensePopupProps) {
-  // const [name, setName] = useState('')
-  // const [amount, setAmount] = useState('')
-  // const [date, setDate] = useState('')
-  // const [type, setType] = useState<number>()
-
   return (
     <div>
-      <div
-        className={styles.background}
-        onClick={() => {}}
-        onScroll={() => {}}
-        onScrollCapture={() => {}}
-        onWheelCapture={() => {}}
-      ></div>
+      <div className={styles.background} onClick={() => {}}></div>
       <div className={styles.popup}>
         <h3>Create Expense</h3>
         <button className={styles.closeButton} onClick={props.onClose}>
@@ -62,23 +49,25 @@ export default function CreateExpensePopup(props: CreateExpensePopupProps) {
           {() => (
             <Form>
               <div className={styles.inputs}>
-                <InputWrapper label="Name" htmlFor="name">
+                <InputWrapper label="Name" htmlFor="expense-name">
                   <Field
-                    id="name"
+                    id="expense-name"
+                    name="name"
                     className={styles.input}
-                    component={TextInput}
-                  />
-                  {/* <TextInput id="name" className={styles.input} /> */}
-                </InputWrapper>
-                {/* <InputWrapper label="Amount" htmlFor="ExpenseAmount">
-                  <MoneyInput
-                    id="Amount"
-                    className={styles.input}
-                    value={amount}
-                    setValue={setAmount}
                   />
                 </InputWrapper>
-                <InputWrapper label="Date">
+                <InputWrapper label="Amount" htmlFor="expense-amount">
+                  <Field name="amount">
+                    {({ field }: FieldProps) => (
+                      <MoneyInput
+                        id="expense-amount"
+                        className={styles.input}
+                        field={field}
+                      />
+                    )}
+                  </Field>
+                </InputWrapper>
+                {/* <InputWrapper label="Date">
                   <DateInput
                     id="Date"
                     className={styles.input}
@@ -93,8 +82,8 @@ export default function CreateExpensePopup(props: CreateExpensePopupProps) {
                     options={ExpenseTypeOptions}
                     value={type}
                     setValue={setType}
-                  /> */}
-                {/* </InputWrapper> */}
+                  />
+                </InputWrapper> */}
               </div>
               <div className={styles.buttons}>
                 <button onClick={props.onClose}>Cancel</button>
