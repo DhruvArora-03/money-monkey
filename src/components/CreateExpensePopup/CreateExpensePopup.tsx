@@ -1,9 +1,10 @@
 import styles from './createExpensePopup.module.css'
 import { MdClose } from 'react-icons/md'
-import { ExpenseItem, ExpenseTypes } from '@lib/types'
-import { Field, FieldProps, Form, Formik } from 'formik'
-import { Timestamp } from 'firebase/firestore'
-import { MoneyInput } from '@components'
+import { ExpenseItem, ExpenseTypeOptions, ExpenseTypes } from '@lib/types'
+import { Field, Form, Formik } from 'formik'
+import { MoneyField } from '@components'
+import { addNewExpense } from '@lib/firebase'
+import { Timestamp } from '@firebase/firestore'
 
 type InputWrapperProps = {
   label: string
@@ -33,17 +34,19 @@ export default function CreateExpensePopup(props: CreateExpensePopupProps) {
       <div className={styles.popup}>
         <h3>Create Expense</h3>
         <button className={styles.closeButton} onClick={props.onClose}>
-          <MdClose size={20} />
+          <MdClose size={23} />
         </button>
         <Formik
           initialValues={{ name: '', amount: '', date: '', type: 0 }}
-          onSubmit={(values) => {
-            console.log({
-              name: '',
-              date: new Timestamp(new Date(values.date).getTime(), 0),
+          onSubmit={async (values) => {
+            const date = values.date.split('-', 3).map((x) => +x)
+            await addNewExpense({
+              name: values.name,
+              date: Timestamp.fromDate(new Date(date[0], date[1] - 1, date[2])),
               amountCents: +values.amount * 100,
               type: ExpenseTypes[values.type - 1],
             } satisfies ExpenseItem)
+            document.getElementById('cancel-button')?.click()
           }}
         >
           {() => (
@@ -57,36 +60,40 @@ export default function CreateExpensePopup(props: CreateExpensePopupProps) {
                   />
                 </InputWrapper>
                 <InputWrapper label="Amount" htmlFor="expense-amount">
-                  <Field name="amount">
-                    {({ field }: FieldProps) => (
-                      <MoneyInput
-                        id="expense-amount"
-                        className={styles.input}
-                        field={field}
-                      />
-                    )}
+                  <Field
+                    name="amount"
+                    id="expense-amount"
+                    className={styles.input}
+                    component={MoneyField}
+                  />
+                </InputWrapper>
+                <InputWrapper label="Date" htmlFor="expense-date">
+                  <Field
+                    name="date"
+                    id="expense-date"
+                    type="date"
+                    className={styles.input}
+                  />
+                </InputWrapper>
+                <InputWrapper label="Type" htmlFor="expense-type">
+                  <Field
+                    name="type"
+                    id="expense-type"
+                    className={styles.input}
+                    as="select"
+                  >
+                    {ExpenseTypeOptions.map((label, i) => (
+                      <option key={label} value={i}>
+                        {label}
+                      </option>
+                    ))}
                   </Field>
                 </InputWrapper>
-                {/* <InputWrapper label="Date">
-                  <DateInput
-                    id="Date"
-                    className={styles.input}
-                    value={date}
-                    setValue={setDate}
-                  />
-                </InputWrapper>
-                <InputWrapper label="Amount">
-                  <Select
-                    id="Amount"
-                    className={styles.input}
-                    options={ExpenseTypeOptions}
-                    value={type}
-                    setValue={setType}
-                  />
-                </InputWrapper> */}
               </div>
               <div className={styles.buttons}>
-                <button onClick={props.onClose}>Cancel</button>
+                <button id="cancel-button" onClick={props.onClose}>
+                  Cancel
+                </button>
                 <button className={styles.createButton} type="submit">
                   Create
                 </button>

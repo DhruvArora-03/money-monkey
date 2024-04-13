@@ -18,6 +18,7 @@ export default function HomePage() {
   const [currentCatagory, setCurrentCatagory] = useState<ExpenseTypes>()
 
   useEffect(() => {
+    setStats(undefined)
     getHomeScreenStats(month, years[year]).then(setStats)
   }, [month, year])
 

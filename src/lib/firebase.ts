@@ -1,4 +1,5 @@
 import {
+  addDoc,
   collection,
   getDocs,
   getFirestore,
@@ -9,16 +10,19 @@ import { ExpenseItem, ExpenseTypes, HomePageStats } from './types'
 import { getAuth } from 'firebase/auth'
 
 export async function getHomeScreenStats(month: number, year: number) {
+  const random = new Array(7)
+    .fill(0)
+    .map(() => Math.floor(100_00 - Math.random() * 200_00))
   return {
-    totalCents: 195867,
+    totalCents: 195867 + random.reduce((x, y) => x + y),
     catagories: {
-      Housing: 132800,
-      Food: 15437,
-      Entertainment: 12346,
-      Clothes: 14508,
-      Groceries: 26743,
-      Necessities: 2004,
-      Miscellaneous: 2029,
+      Housing: 132800 + random[0],
+      Food: 15437 + random[1],
+      Entertainment: 12346 + random[2],
+      Clothes: 14508 + random[3],
+      Groceries: 26743 + random[4],
+      Necessities: 2004 + random[5],
+      Miscellaneous: 2029 + random[6],
     },
   } satisfies HomePageStats
   const start = new Date(year, Math.max(0, month - 1), 1)
@@ -61,4 +65,7 @@ export async function getHomeScreenStats(month: number, year: number) {
 
 export async function addNewExpense(expense: ExpenseItem) {
   console.log(expense)
+  const auth = getAuth()
+  const expenses = collection(getFirestore(), 'expenses')
+  await addDoc(expenses, { uid: auth.currentUser?.uid, ...expense })
 }

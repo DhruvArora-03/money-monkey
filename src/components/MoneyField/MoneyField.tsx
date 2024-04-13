@@ -1,32 +1,25 @@
 import { formatMoney } from '@lib/money'
 import { useState } from 'react'
-import styles from './moneyInput.module.css'
+import styles from './moneyField.module.css'
 import clsx from 'clsx'
 import { FieldProps } from 'formik'
 
-type MoneyInputProps = FieldProps & {
-  id: string
+type MoneyFieldProps = FieldProps & {
+  id?: string
   className?: string
 }
 
-export default function MoneyInput({
-  field: { onBlur: formikOnBlur, ...field },
+export default function MoneyField({
+  field: { onBlur: formikOnBlur, value: formikValue, ...field },
   ...props
-}: MoneyInputProps) {
+}: MoneyFieldProps) {
   const [focused, setFocused] = useState(false)
 
   return (
     <input
       id={props.id}
       className={clsx(styles.input, props.className)}
-      value={
-        !props.value
-          ? ''
-          : focused
-            ? props.value
-            : formatMoney(+props.value * 100)
-      }
-      // onChange={(e) => props.setValue(e.target.value)}
+      value={focused ? formikValue : formatMoney(+formikValue * 100)}
       onFocus={() => setFocused(true)}
       onBlur={() => {
         setFocused(false)
