@@ -20,12 +20,13 @@ export default function PageWrapper(props: PageWrapperProps) {
       />
       {visible && (
         <CreateExpensePopup
-          onClose={() => {
+          onClose={(e) => {
+            e.preventDefault()
             setVisible(false)
             document.getElementsByTagName('body')[0].style.overflow = 'unset'
           }}
         />
-      )}{' '}
+      )}
     </div>
   )
 }
