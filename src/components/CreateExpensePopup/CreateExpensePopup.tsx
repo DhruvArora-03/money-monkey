@@ -1,6 +1,11 @@
 import styles from './createExpensePopup.module.css'
 import { MdClose } from 'react-icons/md'
-import { ExpenseItem, ExpenseTypeOptions, ExpenseTypes } from '@lib/types'
+import {
+  ExpenseItem,
+  ExpenseTypeOptions,
+  ExpenseTypes,
+  NewExpenseSchema,
+} from '@lib/types'
 import { Field, Form, Formik } from 'formik'
 import { MoneyField } from '@components'
 import { addNewExpense } from '@lib/firebase'
@@ -10,6 +15,7 @@ type InputWrapperProps = {
   label: string
   htmlFor?: string
   children: React.ReactNode
+  error?: string | undefined
 }
 
 type CreateExpensePopupProps = {
@@ -18,11 +24,14 @@ type CreateExpensePopupProps = {
 
 function InputWrapper(props: InputWrapperProps) {
   return (
-    <div className={styles.inputGroup}>
-      <label className={styles.label} htmlFor={props.htmlFor ?? props.label}>
-        {props.label}:
-      </label>
-      {props.children}
+    <div>
+      <div className={styles.inputGroup}>
+        <label className={styles.label} htmlFor={props.htmlFor ?? props.label}>
+          {props.label}:
+        </label>
+        {props.children}
+      </div>
+      {props.error && <small className={styles.error}>{props.error}</small>}
     </div>
   )
 }
@@ -38,47 +47,70 @@ export default function CreateExpensePopup(props: CreateExpensePopupProps) {
         </button>
         <Formik
           initialValues={{ name: '', amount: '', date: '', type: 0 }}
+          validationSchema={NewExpenseSchema}
+          validateOnChange
           onSubmit={async (values) => {
+            console.log(values)
             const date = values.date.split('-', 3).map((x) => +x)
             await addNewExpense({
               name: values.name,
               date: Timestamp.fromDate(new Date(date[0], date[1] - 1, date[2])),
-              amountCents: +values.amount * 100,
+              amountCents: Math.floor(+values.amount * 100),
               type: ExpenseTypes[values.type - 1],
             } satisfies ExpenseItem)
             document.getElementById('cancel-button')?.click()
           }}
         >
-          {() => (
-            <Form>
+          {({ touched, errors }) => (
+            <Form autoComplete="off">
               <div className={styles.inputs}>
-                <InputWrapper label="Name" htmlFor="expense-name">
+                <InputWrapper
+                  label="Name"
+                  htmlFor="expense-name"
+                  error={touched.name ? errors.name : ''}
+                >
                   <Field
                     id="expense-name"
                     name="name"
+                    autoComplete="off"
                     className={styles.input}
                   />
                 </InputWrapper>
-                <InputWrapper label="Amount" htmlFor="expense-amount">
+                <InputWrapper
+                  label="Amount"
+                  htmlFor="expense-amount"
+                  error={touched.amount ? errors.amount : ''}
+                >
                   <Field
                     name="amount"
                     id="expense-amount"
+                    autoComplete="off"
                     className={styles.input}
                     component={MoneyField}
                   />
                 </InputWrapper>
-                <InputWrapper label="Date" htmlFor="expense-date">
+                <InputWrapper
+                  label="Date"
+                  htmlFor="expense-date"
+                  error={touched.date ? errors.date : ''}
+                >
                   <Field
                     name="date"
                     id="expense-date"
                     type="date"
+                    autoComplete="off"
                     className={styles.input}
                   />
                 </InputWrapper>
-                <InputWrapper label="Type" htmlFor="expense-type">
+                <InputWrapper
+                  label="Type"
+                  htmlFor="expense-type"
+                  error={touched.type ? errors.type : ''}
+                >
                   <Field
                     name="type"
                     id="expense-type"
+                    autoComplete="off"
                     className={styles.input}
                     as="select"
                   >
@@ -94,7 +126,23 @@ export default function CreateExpensePopup(props: CreateExpensePopupProps) {
                 <button id="cancel-button" onClick={props.onClose}>
                   Cancel
                 </button>
-                <button className={styles.createButton} type="submit">
+                <button
+                  name="submit-button"
+                  className={styles.createButton}
+                  type="submit"
+                  disabled={
+                    (errors.name ||
+                      errors.amount ||
+                      errors.date ||
+                      errors.type) !== undefined ||
+                    !(
+                      touched.name &&
+                      touched.amount &&
+                      touched.date &&
+                      touched.type
+                    )
+                  }
+                >
                   Create
                 </button>
               </div>

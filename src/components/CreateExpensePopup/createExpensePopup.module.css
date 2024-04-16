@@ -7,6 +7,13 @@
   margin-right: 4px;
 }
 
+.error {
+  color: lightskyblue;
+  text-align: right;
+  width: 100%;
+  display: inline-block;
+}
+
 .background {
   position: fixed;
   left: 0;
@@ -25,7 +32,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  min-width: 200px;
+  min-width: 250px;
   border: thin solid white;
   border-radius: 8px;
 }
@@ -46,7 +53,7 @@
 .inputs {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 10px;
 }
 
 .input {
@@ -75,4 +82,8 @@
 .createButton {
   background-color: var(--blue-button-color);
   color: white;
+}
+
+.createButton:disabled {
+  background-color: gray;
 }
