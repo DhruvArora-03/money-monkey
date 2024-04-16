@@ -64,7 +64,6 @@ export async function getHomeScreenStats(month: number, year: number) {
 }
 
 export async function addNewExpense(expense: ExpenseItem) {
-  console.log(expense)
   const auth = getAuth()
   const expenses = collection(getFirestore(), 'expenses')
   await addDoc(expenses, { uid: auth.currentUser?.uid, ...expense })
