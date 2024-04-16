@@ -21,9 +21,9 @@ export default function MoneyField({
       className={clsx(styles.input, props.className)}
       value={focused ? formikValue : formatMoney(+formikValue * 100)}
       onFocus={() => setFocused(true)}
-      onBlur={() => {
+      onBlur={(e) => {
         setFocused(false)
-        formikOnBlur
+        formikOnBlur(e)
       }}
       {...field}
     />
