@@ -10,7 +10,7 @@ import CatagoryView from './CatagoryView/CatagoryView'
 import NavBar from './NavBar/NavBar'
 import CreateExpensePopup from './CreateExpensePopup/CreateExpensePopup'
 import PageWrapper from './PageWrapper/PageWrapper'
-import MoneyInput from './MoneyField/MoneyField'
+import MoneyField from './MoneyField/MoneyField'
 
 export {
   SignInButton,
@@ -25,5 +25,5 @@ export {
   NavBar,
   CreateExpensePopup,
   PageWrapper,
-  MoneyInput as MoneyField,
+  MoneyField,
 }

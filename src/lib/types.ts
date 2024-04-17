@@ -16,18 +16,21 @@ export type ExpenseTypes = (typeof ExpenseTypes)[number]
 export const ExpenseTypeOptions = ['', ...ExpenseTypes]
 
 export type ExpenseItem = {
+  id: string
   name: string
   date: Timestamp
   amountCents: number
   type: ExpenseTypes
 }
 
+export type ExpenseItemWithoutID = Omit<ExpenseItem, 'id'>
+
 export type HomePageStats = {
   totalCents: number
   catagories: Record<ExpenseTypes, number>
 }
 
-export const months = [
+export const MONTHS = [
   'All Months',
   'January',
   'February',
@@ -43,15 +46,18 @@ export const months = [
   'December',
 ]
 
-const start_year = 2024
-export const years: number[] = new Array(
-  new Date().getFullYear() - start_year + 1,
+export const START_YEAR = 2024
+export const YEARS: number[] = new Array(
+  new Date().getFullYear() - START_YEAR + 1,
 )
-  .fill(start_year)
+  .fill(START_YEAR)
   .map((x, i) => x + i)
 
 export const NewExpenseSchema = Yup.object().shape({
-  name: Yup.string().required('Required!').min(1, 'Too short!').max(50, 'Too long!'),
+  name: Yup.string()
+    .required('Required!')
+    .min(1, 'Too short!')
+    .max(50, 'Too long!'),
   amount: Yup.string()
     .required('Required!')
     .matches(RegExp(/^\d+(.\d{0,2})?$/), 'Numbers and decimal only')

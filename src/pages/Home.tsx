@@ -9,7 +9,7 @@ import {
   SignOutButton,
 } from '@components'
 import { useEffect, useState } from 'react'
-import { ExpenseTypes, HomePageStats, months, years } from '@lib/types'
+import { ExpenseTypes, HomePageStats, MONTHS, YEARS } from '@lib/types'
 
 export default function HomePage() {
   const [stats, setStats] = useState<HomePageStats>()
@@ -19,7 +19,7 @@ export default function HomePage() {
 
   useEffect(() => {
     setStats(undefined)
-    getHomeScreenStats(month, years[year]).then(setStats)
+    getHomeScreenStats(month, year).then(setStats)
   }, [month, year])
 
   return (
@@ -27,8 +27,8 @@ export default function HomePage() {
       <h1>Total Expenditures</h1>
       <div className={styles.mainDisplay}>
         <div className={styles.datePicker}>
-          <Select options={months} value={month} setValue={setMonth} />
-          <Select options={years} value={year} setValue={setYear} />
+          <Select options={MONTHS} value={month} setValue={setMonth} />
+          <Select options={YEARS} value={year} setValue={setYear} />
         </div>
         <MainSpendDisplay
           totalDisplayClassName={styles.totalSpend}
@@ -45,6 +45,8 @@ export default function HomePage() {
             amountCents={stats ? stats.catagories[type as ExpenseTypes] : 0}
             expanded={type === currentCatagory}
             setCurrentCatagory={setCurrentCatagory}
+            month={month}
+            year={year}
           />
         ))}
       </div>
