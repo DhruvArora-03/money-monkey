@@ -4,6 +4,7 @@ import {
   getDocs,
   getFirestore,
   query,
+  setDoc,
   where,
 } from 'firebase/firestore'
 import {
@@ -46,8 +47,6 @@ export async function getHomeScreenStats(month: number, year: number) {
   //     Miscellaneous: 2029 + random[6],
   //   },
   // } satisfies HomePageStats
-  // const start = new Date(year, Math.max(0, month - 1), 1)
-  // const end = new Date(month === 0 ? year + 1 : year, month, 1)
 
   const auth = getAuth()
   const catagoriesRef = collection(getFirestore(), 'catagories')
@@ -92,8 +91,42 @@ export async function getHomeScreenStats(month: number, year: number) {
 
 export async function addNewExpense(expense: ExpenseItemWithoutID) {
   const auth = getAuth()
-  const expenses = collection(getFirestore(), 'expenses')
-  await addDoc(expenses, { uid: auth.currentUser?.uid, ...expense })
+
+  if (!auth.currentUser) {
+    return
+  }
+  const expensesRef = collection(getFirestore(), 'expenses')
+  await addDoc(expensesRef, { uid: auth.currentUser.uid, ...expense })
+
+  const month = MONTHS[new Date().getMonth() + 1]
+  const year = new Date().getFullYear()
+  console.log(`${month}, ${year}`)
+  const catagoriesRef = collection(getFirestore(), 'catagories')
+  const snapshot = await getDocs(
+    query(
+      catagoriesRef,
+      where('uid', '==', auth.currentUser.uid),
+      where('month', '==', month),
+      where('year', '==', year),
+      where('type', '==', expense.type),
+    ),
+  )
+
+  if (snapshot.docs.length === 0) {
+    addDoc(catagoriesRef, {
+      uid: auth.currentUser.uid,
+      amountCents: expense.amountCents,
+      type: expense.type,
+      month: month,
+      year: year,
+    })
+  } else {
+    const { amountCents: oldAmountCents, ...doc } = snapshot.docs[0].data()
+    setDoc(snapshot.docs[0].ref, {
+      amountCents: oldAmountCents + expense.amountCents,
+      ...doc,
+    })
+  }
 }
 
 export async function getCatagoryExpenses(
@@ -105,10 +138,10 @@ export async function getCatagoryExpenses(
   const end = new Date(month === 0 ? YEARS[year] + 1 : YEARS[year], month, 1)
 
   const auth = getAuth()
-  const expenses = collection(getFirestore(), 'expenses')
+  const expensesRef = collection(getFirestore(), 'expenses')
   const snapshot = await getDocs(
     query(
-      expenses,
+      expensesRef,
       where('uid', '==', auth.currentUser?.uid),
       where('date', '>=', start),
       where('date', '<=', end),
