@@ -1,11 +1,6 @@
 import styles from './createExpensePopup.module.css'
 import { MdClose } from 'react-icons/md'
-import {
-  ExpenseItem,
-  ExpenseTypeOptions,
-  ExpenseTypes,
-  NewExpenseSchema,
-} from '@lib/types'
+import { ExpenseTypeOptions, ExpenseTypes, NewExpenseSchema } from '@lib/types'
 import { Field, Form, Formik } from 'formik'
 import { MoneyField } from '@components'
 import { addNewExpense } from '@lib/firebase'
@@ -57,7 +52,7 @@ export default function CreateExpensePopup(props: CreateExpensePopupProps) {
               date: Timestamp.fromDate(new Date(date[0], date[1] - 1, date[2])),
               amountCents: Math.floor(+values.amount * 100),
               type: ExpenseTypes[values.type - 1],
-            } satisfies ExpenseItem)
+            })
             document.getElementById('cancel-button')?.click()
           }}
         >

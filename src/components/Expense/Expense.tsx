@@ -1,18 +1,13 @@
+import styles from './expense.module.css'
 import { formatMoney } from '@lib/money'
-import { ExpenseItem } from '@lib/types'
+import { ExpenseItemWithoutID } from '@lib/types'
 
-export default function Expense(props: ExpenseItem) {
-  console.log(props)
+export default function Expense(props: ExpenseItemWithoutID) {
   return (
-    <div>
-      {props.name}
-      <br />
-      {props.date && props.date.toDate().toDateString()}
-      <br />
-      {formatMoney(props.amountCents)}
-      <br />
-      {props.type}
-      <br />
+    <div className={styles.expense}>
+      <div>{props.name}</div>
+      <div>{props.date && props.date.toDate().toDateString()}</div>
+      <div>{formatMoney(props.amountCents)}</div>
     </div>
   )
 }
