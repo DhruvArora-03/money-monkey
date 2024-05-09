@@ -51,7 +51,10 @@ export const years: number[] = new Array(
   .map((x, i) => x + i)
 
 export const NewExpenseSchema = Yup.object().shape({
-  name: Yup.string().required('Required!').min(1, 'Too short!').max(50, 'Too long!'),
+  name: Yup.string()
+    .required('Required!')
+    .min(1, 'Too short!')
+    .max(50, 'Too long!'),
   amount: Yup.string()
     .required('Required!')
     .matches(RegExp(/^\d+(.\d{0,2})?$/), 'Numbers and decimal only')
