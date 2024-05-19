@@ -1,7 +1,6 @@
 import { ExpenseTypes } from './Types'
 
-const tintColorLight = '#2f95dc';
-const tintColorDark = '#fff';
+const tintColor = '#2f95dc';
 
 export default {
   expenses: { 
@@ -13,19 +12,12 @@ export default {
     Necessities: '#FF10F0', // neon pink
     Miscellaneous: '#FFA600', // neon orange
   } satisfies  Record<ExpenseTypes, string>,
-  light: {
+  theme: {
     text: '#000',
     background: '#fff',
-    tint: tintColorLight,
+    tint: tintColor,
     tabIconDefault: '#ccc',
-    tabIconSelected: tintColorLight,
-  },
-  dark: {
-    text: '#fff',
-    background: '#000',
-    tint: tintColorDark,
-    tabIconDefault: '#ccc',
-    tabIconSelected: tintColorDark,
+    tabIconSelected: tintColor,
   },
 };
 
