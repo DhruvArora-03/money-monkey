@@ -1,7 +1,9 @@
 import { useMemo } from 'react'
 import colors from '@/lib/Colors'
 import { formatMoney } from '@/lib/Money'
+import { StyleSheet } from 'react-native'
 import { ExpenseTypes, HomePageStats } from '@/lib/Types'
+  import {Text, Svg, Path, Circle} from 'react-native-svg'
 
 const MIN_THRESHOLD = 0.02
 
@@ -11,7 +13,6 @@ type CircleSection = {
 }
 
 type MainSpendDisplayProps = {
-  totalDisplayClassName?: string
   stats: HomePageStats | undefined
   radius: number
 }
@@ -61,8 +62,8 @@ export default function MainSpendDisplay({
 
   if (props.stats == undefined) {
     return (
-      <svg width={dim} height={dim}>
-        <circle
+      <Svg width={dim} height={dim}>
+        <Circle
           stroke="white"
           strokeWidth={4}
           fill="none"
@@ -70,17 +71,17 @@ export default function MainSpendDisplay({
           cy={pad + r}
           r={r}
         />
-        <text
+        <Text
           x={dim / 2}
           y={dim / 2}
-          dominantBaseline="central"
           textAnchor="middle"
-          className={props.totalDisplayClassName}
+          fontSize={36}
+          fontWeight={600}
           fill="white"
         >
           ...
-        </text>
-      </svg>
+        </Text>
+      </Svg>
     )
   }
 
@@ -96,7 +97,7 @@ export default function MainSpendDisplay({
 
     if (p === 1) {
       return (
-        <circle
+        <Circle
           cx={pad + r}
           cy={pad + r}
           r={r}
@@ -111,7 +112,7 @@ export default function MainSpendDisplay({
     const end = (prev + p) * (2 * Math.PI)
 
     return (
-      <path
+      <Path
         d={`M ${pad + r + r * Math.cos(start)} ${pad + r + r * Math.sin(start)}
             A ${r} ${r} 0 ${p > 0.5 ? 1 : 0} 1
             ${pad + r + r * Math.cos(end)}
@@ -125,20 +126,20 @@ export default function MainSpendDisplay({
   }
 
   return (
-    <svg width={dim} height={dim}>
-      <text
+    <Svg width={dim} height={dim}>
+      <Text
         x={dim / 2}
         y={dim / 2}
-        dominantBaseline="central"
         textAnchor="middle"
-        className={props.totalDisplayClassName}
+        fontSize={36}
+        fontWeight={600}
         fill="white"
       >
         {formatMoney(props.stats.totalCents)}
-      </text>
+      </Text>
       {sections.map((s: CircleSection, i) => (
         <Section key={s.type} i={i} {...s} />
       ))}
-    </svg>
+    </Svg>
   )
 }
