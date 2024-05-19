@@ -1,63 +1,47 @@
-import { useMemo } from 'react'
-import colors from '@/lib/Colors'
-import { formatMoney } from '@/lib/Money'
-import { ExpenseTypes, HomePageStats } from '@/lib/Types'
-import {Text, Svg, Path, Circle} from 'react-native-svg'
+import { useMemo } from 'react';
+import colors from '@/lib/Colors';
+import { formatMoney } from '@/lib/Money';
+import { ExpenseTypes } from '@/lib/Types';
+import { Text, Svg, Path, Circle } from 'react-native-svg';
+import { MainSpendDisplayProps, MIN_THRESHOLD, CircleSection } from './MainSpendDisplay';
 
-const MIN_THRESHOLD = 0.02
-
-type CircleSection = {
-  type: ExpenseTypes
-  percentage: number
-}
-
-type MainSpendDisplayProps = {
-  stats: HomePageStats | undefined
-  radius: number
-}
 
 export default function MainSpendDisplay({
-  radius: r,
-  ...props
+  radius: r, ...props
 }: MainSpendDisplayProps) {
-  const pad = 10
-  const dim = (pad + r) * 2
+  const pad = 10;
+  const dim = (pad + r) * 2;
 
   const values = useMemo(
-    () =>
-      ExpenseTypes.map((type) => {
-        const val = props.stats ? props.stats.catagories[type] : 0
-        return {
-          type,
-          value:
-            props.stats &&
-            val > 0 &&
-            val / props.stats.totalCents < MIN_THRESHOLD
-              ? MIN_THRESHOLD * props.stats.totalCents
-              : val,
-        }
-      }).filter((x) => x.value > 0),
-    [props.stats],
-  )
+    () => ExpenseTypes.map((type) => {
+      const val = props.stats ? props.stats.catagories[type] : 0;
+      return {
+        type,
+        value: props.stats &&
+          val > 0 &&
+          val / props.stats.totalCents < MIN_THRESHOLD
+          ? MIN_THRESHOLD * props.stats.totalCents
+          : val,
+      };
+    }).filter((x) => x.value > 0),
+    [props.stats]
+  );
   const total = useMemo(
-    () =>
-      values.reduce((x, y) => ({ ...x, value: x.value + y.value }), {
-        type: '',
-        value: 0,
-      }).value,
-    [values],
-  )
+    () => values.reduce((x, y) => ({ ...x, value: x.value + y.value }), {
+      type: '',
+      value: 0,
+    }).value,
+    [values]
+  );
   const sections: CircleSection[] = useMemo(
-    () =>
-      values.map(
-        ({ type, value }) =>
-          ({
-            type,
-            percentage: value / total,
-          } satisfies CircleSection),
-      ),
-    [values, total],
-  )
+    () => values.map(
+      ({ type, value }) => ({
+        type,
+        percentage: value / total,
+      } satisfies CircleSection)
+    ),
+    [values, total]
+  );
 
   if (props.stats == undefined) {
     return (
@@ -68,8 +52,7 @@ export default function MainSpendDisplay({
           fill="none"
           cx={pad + r}
           cy={pad + r}
-          r={r}
-        />
+          r={r} />
         <Text
           x={dim / 2}
           y={dim / 2}
@@ -81,18 +64,18 @@ export default function MainSpendDisplay({
           ...
         </Text>
       </Svg>
-    )
+    );
   }
 
-  function Section({ percentage: p, type, i }: CircleSection & { i: number }) {
+  function Section({ percentage: p, type, i }: CircleSection & { i: number; }) {
     if (p === 0) {
-      return null
+      return null;
     }
 
     const prev = sections
       .slice(0, i)
       .map(({ percentage }) => percentage)
-      .reduce((x, y) => x + y, 0)
+      .reduce((x, y) => x + y, 0);
 
     if (p === 1) {
       return (
@@ -102,14 +85,13 @@ export default function MainSpendDisplay({
           r={r}
           stroke={colors.expenses[type]}
           strokeWidth={4}
-          fill="none"
-        />
-      )
+          fill="none" />
+      );
     }
 
     // magic number for spacing between
-    const start = (prev + 0.008) * (2 * Math.PI)
-    const end = (prev + p) * (2 * Math.PI)
+    const start = (prev + 0.008) * (2 * Math.PI);
+    const end = (prev + p) * (2 * Math.PI);
 
     return (
       <Path
@@ -117,9 +99,8 @@ export default function MainSpendDisplay({
             A ${r} ${r} 0 ${p > 0.5 ? 1 : 0} 1 ${pad + r + r * Math.cos(end)} ${pad + r + r * Math.sin(end)}`}
         stroke={colors.expenses[type]}
         strokeWidth={4}
-        fill="none"
-      />
-    )
+        fill="none" />
+    );
   }
 
   return (
@@ -139,5 +120,5 @@ export default function MainSpendDisplay({
         <Section key={s.type} i={i} {...s} />
       ))}
     </Svg>
-  )
+  );
 }

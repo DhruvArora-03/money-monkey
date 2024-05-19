@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-import MainSpendDisplay from '@/components/MainSpendDisplay';
+import MainSpendDisplay from '@/components/MainSpendDisplay.1';
 import { HomePageStats } from '@/lib/Types';
 
 export default function TabOneScreen() {
