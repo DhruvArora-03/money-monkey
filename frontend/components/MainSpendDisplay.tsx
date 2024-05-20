@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
-import colors from '@/lib/Colors'
-import { formatMoney } from '@/lib/Money'
-import { ExpenseTypes, HomePageStats } from '@/lib/Types'
+import { StyleSheet } from 'react-native'
+import colors from '@lib/Colors'
+import { formatMoney } from '@lib/Money'
+import { ExpenseTypes, HomePageStats } from '@lib/Types'
 import {Text, Svg, Path, Circle} from 'react-native-svg'
 
 const MIN_THRESHOLD = 0.02
@@ -61,7 +62,7 @@ export default function MainSpendDisplay({
 
   if (props.stats == undefined) {
     return (
-      <Svg width={dim} height={dim}>
+      <Svg style={styles.display} width={dim} height={dim}>
         <Circle
           stroke="black"
           strokeWidth={4}
@@ -74,6 +75,7 @@ export default function MainSpendDisplay({
           x={dim / 2}
           y={dim / 2}
           textAnchor="middle"
+          alignmentBaseline='middle'
           fontSize={36}
           fontWeight={600}
           fill="black"
@@ -108,7 +110,7 @@ export default function MainSpendDisplay({
     }
 
     // magic number for spacing between
-    const start = (prev + 0.008) * (2 * Math.PI)
+    const start = (prev + 0.015) * (2 * Math.PI)
     const end = (prev + p) * (2 * Math.PI)
 
     return (
@@ -117,13 +119,14 @@ export default function MainSpendDisplay({
             A ${r} ${r} 0 ${p > 0.5 ? 1 : 0} 1 ${pad + r + r * Math.cos(end)} ${pad + r + r * Math.sin(end)}`}
         stroke={colors.expenses[type]}
         strokeWidth={4}
+        strokeLinecap='round'
         fill="none"
       />
     )
   }
 
   return (
-    <Svg width={dim} height={dim}>
+    <Svg style={styles.display} width={dim} height={dim}>
       <Text
         x={dim / 2}
         y={dim / 2}
@@ -141,3 +144,9 @@ export default function MainSpendDisplay({
     </Svg>
   )
 }
+
+const styles = StyleSheet.create({
+  display: {
+    margin: 10,
+  }
+});

@@ -1,7 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 import MainSpendDisplay from '@/components/MainSpendDisplay';
-import { HomePageStats } from '@/lib/Types';
+import { HomePageStats } from '@lib/Types';
+import CatagoryDescriptionList from '@/components/CatagoryDescriptionList';
 
 export default function TabOneScreen() {
   const random = new Array(7)
@@ -21,12 +22,13 @@ export default function TabOneScreen() {
   } satisfies HomePageStats 
   return (
     <View style={styles.container}>
-      {/* <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} /> */}
       <MainSpendDisplay
         radius={125} 
         stats={stats}
-      />  
+        />  
+      <CatagoryDescriptionList
+        radius={125} 
+      />
       </View>
   );
 }
@@ -36,14 +38,5 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     // justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
   },
 });
