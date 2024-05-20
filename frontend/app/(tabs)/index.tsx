@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, ScrollView, View } from 'react-native';
 
 import MainSpendDisplay from '@/components/MainSpendDisplay';
 import { HomePageStats } from '@lib/Types';
@@ -21,7 +21,7 @@ export default function TabOneScreen() {
     },
   } satisfies HomePageStats 
   return (
-  <View style={styles.page}>
+  <ScrollView contentContainerStyle={styles.page} overScrollMode="never">
     <View style={styles.container}>
       <MainSpendDisplay
         radius={145} 
@@ -30,8 +30,32 @@ export default function TabOneScreen() {
       <CatagoryDescriptionList
         radius={125} 
       />
+    </View><View style={styles.container}>
+      <MainSpendDisplay
+        radius={145} 
+        stats={stats}
+        />  
+      <CatagoryDescriptionList
+        radius={125} 
+      />
+    </View><View style={styles.container}>
+      <MainSpendDisplay
+        radius={145} 
+        stats={stats}
+        />  
+      <CatagoryDescriptionList
+        radius={125} 
+      />
+    </View><View style={styles.container}>
+      <MainSpendDisplay
+        radius={145} 
+        stats={stats}
+        />  
+      <CatagoryDescriptionList
+        radius={125} 
+      />
     </View>
-  </View>
+  </ScrollView>
   );
 }
 
@@ -40,17 +64,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   container: {
+    margin: 10,
+    padding: 10,
     alignItems: 'center',
     backgroundColor: '#FFF',
     width: 350,
-    margin: 10,
     borderRadius: 8,
-    borderColor: 'gray',
+    borderColor: 'lightgray',
     borderWidth: 1,
-    shadowColor: 'yellow',
-    shadowRadius: 100,
-    shadowOffset: {width: 10, height: 10},
-    shadowOpacity: 1
-     
   },
 });
