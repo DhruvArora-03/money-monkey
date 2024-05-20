@@ -21,22 +21,36 @@ export default function TabOneScreen() {
     },
   } satisfies HomePageStats 
   return (
+  <View style={styles.page}>
     <View style={styles.container}>
       <MainSpendDisplay
-        radius={125} 
+        radius={145} 
         stats={stats}
         />  
       <CatagoryDescriptionList
         radius={125} 
       />
-      </View>
+    </View>
+  </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  page: {
     alignItems: 'center',
-    // justifyContent: 'center',
+  },
+  container: {
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+    width: 350,
+    margin: 10,
+    borderRadius: 8,
+    borderColor: 'gray',
+    borderWidth: 1,
+    shadowColor: 'yellow',
+    shadowRadius: 100,
+    shadowOffset: {width: 10, height: 10},
+    shadowOpacity: 1
+     
   },
 });
