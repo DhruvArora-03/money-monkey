@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-import MainSpendDisplay from '@/components/MainSpendDisplay.1';
+import MainSpendDisplay from '@/components/MainSpendDisplay';
 import { HomePageStats } from '@/lib/Types';
 
 export default function TabOneScreen() {
@@ -19,13 +19,10 @@ export default function TabOneScreen() {
       Miscellaneous: 20_29 + random[6],
     },
   } satisfies HomePageStats 
-  const r = 125
-const pad = 10
-  const dim = (pad + r) * 2
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} />
+      {/* <Text style={styles.title}>Tab One</Text>
+      <View style={styles.separator} /> */}
       <MainSpendDisplay
         radius={125} 
         stats={stats}
@@ -38,7 +35,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    // justifyContent: 'center',
   },
   title: {
     fontSize: 20,
