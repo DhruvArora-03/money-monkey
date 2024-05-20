@@ -4,8 +4,8 @@ const tintColor = '#2f95dc';
 
 export default {
   expenses: { 
-    Housing: '#39FF14', //neon green
-    Entertainment: '#FFDF00', // neon yellow
+    Housing: '#00C014', // green
+    Entertainment: '#00B0FF', // lighter blue
     Food: '#1F51FF', // neon blue
     Clothes: '#FF3131', // neon red
     Groceries: '#BC13FE', // neon purple
