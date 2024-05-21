@@ -20,13 +20,15 @@ function CatagoryDesc({ x, y, type }: CatagoryDescriptionProps) {
         y={y}
         rx="4"
         ry="4"
-        width="15"
-        height="15"
+        width="16"
+        height="16"
         fill={colors.expenses[type]}
       />
       <Text
         x={x + 20}
-        y={y + 2}
+        y={y + 1}
+        fontSize={16}
+        fontWeight='bold'
         alignmentBaseline="hanging"
         fill={colors.expenses[type]}
       >
@@ -47,7 +49,7 @@ export default function CatagoryDescriptionList(
         <CatagoryDesc
           key={type}
           x={i < Math.ceil(ExpenseTypes.length / 2) ? 0 : dim / 2}
-          y={21 * Math.floor(i % (ExpenseTypes.length / 2))}
+          y={20 * Math.floor(i % (ExpenseTypes.length / 2))}
           type={type as ExpenseTypes}
         />
       ))}
