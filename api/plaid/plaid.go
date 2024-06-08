@@ -77,7 +77,7 @@ func NewRouter() http.Handler {
 
 		w.Write([]byte("Success!"))
 	})
-	router.HandleFunc("GET /plaid/create-link-token", createLinkToken)
+	router.HandleFunc("POST /plaid/create-link-token", createLinkToken)
 	router.HandleFunc("POST /plaid/generate-access-token", generateAccessToken)
 
 	return router
