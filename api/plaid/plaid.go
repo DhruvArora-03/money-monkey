@@ -29,7 +29,7 @@ func Init() {
 	// load env vars from .env file
 	err := godotenv.Load()
 	if err != nil {
-		fmt.Println("Error when loading environment variables from .env file %w", err)
+		fmt.Printf("Error when loading environment variables from .env file %v", err)
 	}
 
 	// set constants from env
@@ -71,60 +71,59 @@ func NewRouter() http.Handler {
 
 	router.HandleFunc("GET /plaid/test", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("plaid")
-		fmt.Println(client.GetConfig().Host)	
-		fmt.Println(client.GetConfig())	
-		fmt.Println(client.GetConfig().UserAgent)	
+		fmt.Println(client.GetConfig().Host)
+		fmt.Println(client.GetConfig())
+		fmt.Println(client.GetConfig().UserAgent)
 
 		w.Write([]byte("Success!"))
 	})
 	router.HandleFunc("GET /plaid/create-link-token", createLinkToken)
-	router.HandleFunc("POST /plaid/generate-access-token", getAccessToken)
-	
+	router.HandleFunc("POST /plaid/generate-access-token", generateAccessToken)
+
 	return router
 }
 
 func createLinkToken(w http.ResponseWriter, r *http.Request) {
-  // // Get the client_user_id by searching for the current user
-  // user, _ := usermodels.Find(...)
-  // clientUserId := user.ID.String()
+	// // Get the client_user_id by searching for the current user
+	// user, _ := usermodels.Find(...)
+	// clientUserId := user.ID.String()
 	clientUserId := "12345"
 
-
-  // Create a link_token for the given user
-  request := plaid.NewLinkTokenCreateRequest("Plaid Test App", "en", []plaid.CountryCode{plaid.COUNTRYCODE_US}, *plaid.NewLinkTokenCreateRequestUser(clientUserId))
-  request.SetProducts([]plaid.Products{plaid.PRODUCTS_AUTH})
+	// Create a link_token for the given user
+	request := plaid.NewLinkTokenCreateRequest("Plaid Test App", "en", []plaid.CountryCode{plaid.COUNTRYCODE_US}, *plaid.NewLinkTokenCreateRequestUser(clientUserId))
+	request.SetProducts([]plaid.Products{plaid.PRODUCTS_AUTH})
 
 	resp, _, err := client.PlaidApi.LinkTokenCreate(context.Background()).LinkTokenCreateRequest(*request).Execute()
 	if err != nil {
-		fmt.Println("plaid failed")
+		fmt.Println("plaid failed to create link token")
 		fmt.Println(err.Error())
 		http.Error(w, "Plaid could not generate link token." + err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-  // Send the data to the client
+	// Send the data to the client
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(struct{
+	json.NewEncoder(w).Encode(struct {
 		Link_token string `json:"link_token"`
-		}{
-  	Link_token: resp.GetLinkToken(),
+	}{
+		Link_token: resp.GetLinkToken(),
 	})
 }
 
-func getAccessToken(w http.ResponseWriter, r *http.Request) {
-  ctx := context.Background()
-  // publicToken := c.PostForm("public_token")
+func generateAccessToken(w http.ResponseWriter, r *http.Request) {
+	ctx := context.Background()
+	// publicToken := c.PostForm("public_token")
 	publicToken := ""
 
-  // exchange the public_token for an access_token
+	// exchange the public_token for an access_token
 	exchangePublicTokenResp, _, err := client.PlaidApi.ItemPublicTokenExchange(ctx).ItemPublicTokenExchangeRequest(
 		*plaid.NewItemPublicTokenExchangeRequest(publicToken),
 	).Execute()
 	if err != nil {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(struct{
+		json.NewEncoder(w).Encode(struct {
 			ErrorMessage string `json:"error_message"`
 		}{
 			ErrorMessage: err.Error(),
@@ -132,10 +131,10 @@ func getAccessToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-  // These values should be saved to a persistent database and
-  // associated with the currently signed-in user
-  accessToken := exchangePublicTokenResp.GetAccessToken()
-  itemID := exchangePublicTokenResp.GetItemId()
+	// These values should be saved to a persistent database and
+	// associated with the currently signed-in user
+	accessToken := exchangePublicTokenResp.GetAccessToken()
+	itemID := exchangePublicTokenResp.GetItemId()
 
 	w.Header().Set("Content-Type", "text/plain")
 	w.WriteHeader(http.StatusOK)

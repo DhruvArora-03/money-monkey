@@ -1,8 +1,9 @@
 package main
 
 import (
-	"money-monkey/api/plaid"
+	"fmt"
 	"money-monkey/api/middleware"
+	"money-monkey/api/plaid"
 	"net/http"
 )
 
@@ -10,13 +11,12 @@ import (
 func main() {
 	router := http.NewServeMux()
 
-	router.HandleFunc("GET /hello-world", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello World!\n"))
-	})
+	router.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) { })
 
 	plaid.Init()
 	plaidRouter := plaid.NewRouter()
 	router.Handle("/plaid/", plaidRouter)
 
+	fmt.Println("API Initialization Successful! Hosting on port 8080");
 	http.ListenAndServe(":8080", middleware.Logging(router))
 }
