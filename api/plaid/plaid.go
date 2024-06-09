@@ -96,8 +96,7 @@ func createLinkToken(w http.ResponseWriter, r *http.Request) {
 	resp, _, err := client.PlaidApi.LinkTokenCreate(context.Background()).LinkTokenCreateRequest(*request).Execute()
 	if err != nil {
 		fmt.Println("plaid failed to create link token")
-		fmt.Println(err.Error())
-		http.Error(w, "Plaid could not generate link token." + err.Error(), http.StatusInternalServerError)
+		http.Error(w, "Plaid could not generate link token.", http.StatusInternalServerError)
 		return
 	}
 
