@@ -3,7 +3,7 @@ package auth
 import (
 	"encoding/json"
 	"fmt"
-	"money-monkey/api/models"
+	"money-monkey/api/models/dto"
 	"net/http"
 )
 
@@ -17,7 +17,7 @@ func NewRouter() http.Handler {
 }
 
 func login(w http.ResponseWriter, r *http.Request) {
-	var request models.LoginRequest
+	var request dto.LoginRequest
 
 	err := json.NewDecoder(r.Body).Decode(&request)
 	if err != nil {
@@ -40,7 +40,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response := models.LoginResponse{
+	response := dto.LoginResponse{
 		Token: token,
 	}
 
