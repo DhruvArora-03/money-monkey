@@ -40,7 +40,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response := dto.LoginResponse{
+	response := dto.AuthResponse{
 		Token: token,
 	}
 
