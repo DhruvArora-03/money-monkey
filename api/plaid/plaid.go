@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/joho/godotenv"
 	"github.com/plaid/plaid-go/v21/plaid"
 )
 
@@ -25,13 +24,7 @@ var (
 	client              *plaid.APIClient = nil
 )
 
-func Init() {
-	// load env vars from .env file
-	err := godotenv.Load()
-	if err != nil {
-		fmt.Printf("Error when loading environment variables from .env file %v", err)
-	}
-
+func Initialize() {
 	// set constants from env
 	client_id := os.Getenv("PLAID_CLIENT_ID")
 	secret := os.Getenv("PLAID_SECRET")

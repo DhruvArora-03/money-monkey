@@ -1,22 +1,35 @@
 package main
 
 import (
-	"fmt"
+	"log"
+	"money-monkey/api/auth"
+	"money-monkey/api/db"
 	"money-monkey/api/middleware"
 	"money-monkey/api/plaid"
 	"net/http"
+
+	"github.com/joho/godotenv"
 )
 
-
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatalf("Error when loading environment variables from .env file %v", err)
+	}
+
+	dbpool := db.StartConnectionPool()
+	defer dbpool.Close()
+
+	plaid.Initialize()
+	auth.Initialize()
+
 	router := http.NewServeMux()
 
-	router.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) { })
+	router.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {})
 
-	plaid.Init()
-	plaidRouter := plaid.NewRouter()
-	router.Handle("/plaid/", plaidRouter)
+	router.Handle("/plaid/", plaid.NewRouter())
+	router.Handle("/auth/", auth.NewRouter())
 
-	fmt.Println("API Initialization Successful! Hosting on port 8080");
+	log.Println("API Initialization Successful! Hosting on port 8080")
 	http.ListenAndServe(":8080", middleware.Logging(router))
 }
