@@ -8,3 +8,10 @@ type LoginRequest struct {
 type LoginResponse struct {
 	Token     string `json:"token"`
 }
+
+type RegisterRequest struct {
+    FirstName string    `json:"first_name"`
+    LastName  string    `json:"last_name"`
+    Username  string    `json:"username"`
+    Password  string    `json:"password"`
+}
