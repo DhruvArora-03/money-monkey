@@ -27,7 +27,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 	userId, err := checkPassword(request.Username, request.Password)
 	if err != nil {
-		http.Error(w, "internal issue", http.StatusInternalServerError)
+		http.Error(w, "Unable to verify password", http.StatusInternalServerError)
 		return
 	} else if userId < 0 {
 		http.Error(w, "Invalid username or password", http.StatusUnauthorized)
