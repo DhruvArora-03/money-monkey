@@ -2,9 +2,13 @@ package auth
 
 import (
 	"encoding/json"
+	"fmt"
 	"money-monkey/api/db"
 	"money-monkey/api/models/dto"
+
 	"net/http"
+
+	"github.com/go-playground/validator/v10"
 )
 
 func NewRouter() http.Handler {
@@ -21,21 +25,31 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&request)
 	if err != nil {
+		http.Error(w, "Broken request body", http.StatusBadRequest)
+		return
+	}
+
+	validate := validator.New()
+	err = validate.Struct(request)
+	if err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
 	}
 
-	userId, err := checkPassword(request.Username, request.Password)
+	id, err := checkPassword(request.Username, request.Password)
 	if err != nil {
+		fmt.Println(err.Error())
 		http.Error(w, "Unable to verify password", http.StatusInternalServerError)
 		return
-	} else if userId < 0 {
+	} else if id < 0 {
 		http.Error(w, "Invalid username or password", http.StatusUnauthorized)
 		return
 	}
 
-	token, err := generateJWT(userId)
+	token, err := generateJWT(id)
 	if err != nil {
+		fmt.Println(id)
+		fmt.Println(err.Error())
 		http.Error(w, "Error generating token", http.StatusInternalServerError)
 		return
 	}
@@ -58,26 +72,35 @@ func register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	validate := validator.New()
+	err = validate.Struct(request)
+	if err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
 	salt, err := generateSalt()
 	if err != nil {
 		http.Error(w, "Unable to generate new password salt", http.StatusInternalServerError)
 		return
 	}
 
-	hashed, err := hashPassword(request.Password, salt)
+	pass, err := hashPassword(request.Password, salt)
 	if err != nil {
 		http.Error(w, "Unable to hash password with salt", http.StatusInternalServerError)
 		return
 	}
 
-	userId, err := db.AddNewUser(request.FirstName, request.LastName, request.Username, hashed, salt)
+	id, err := db.AddNewUser(request.FirstName, request.LastName, request.Username, pass, salt)
 	if err != nil {
 		http.Error(w, "Unable to register user", http.StatusInternalServerError)
 		return
 	}
 
-	token, err := generateJWT(userId)
+	token, err := generateJWT(id)
 	if err != nil {
+		fmt.Println(id)
+		fmt.Println(err.Error())
 		http.Error(w, "Error generating token", http.StatusInternalServerError)
 		return
 	}

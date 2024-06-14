@@ -3,49 +3,54 @@ package auth
 import (
 	"crypto/rand"
 	"encoding/hex"
+	"log"
 	"money-monkey/api/db"
 	"os"
 	"time"
 
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
 
-var secretKey string
+var jwtKey []byte
 
 func Initialize() {
-	secretKey = os.Getenv("JWT_KEY")
+	key := os.Getenv("JWT_KEY")
+	if key == "" {
+		log.Fatal("JWT_KEY is not set.")
+	}
+	jwtKey = []byte(key)
 }
 
 func checkPassword(username string, password string) (int, error) {
-	authData, err := db.GetAuthData(username)
+	user, err := db.GetUserAuth(username)
 	if err != nil {
 		return -1, err
 	}
 
-	decoded, err := hex.DecodeString(password + authData.Salt)
+	decoded, err := hex.DecodeString(password + user.Salt)
 	if err != nil {
 		return -1, err
 	}
 
-	if bcrypt.CompareHashAndPassword([]byte(authData.Password), decoded) == nil {
-		return authData.Id, nil
+	if bcrypt.CompareHashAndPassword([]byte(user.Password), decoded) != nil {
+		return -1, nil
 	}
 
-	return -1, nil
+	return user.Id, nil
 }
 
 func generateJWT(userId int) (string, error) {
-	expirationTime := time.Now().Add(15 * time.Minute)
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, &claims{
-		UserId: userId,
-		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: expirationTime.Unix(),
+	claims := &claims{
+		userId,
+		jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
+			IssuedAt:  jwt.NewNumericDate(time.Now()),
+			NotBefore: jwt.NewNumericDate(time.Now()),
 		},
-	})
-
-	return token.SignedString(secretKey)
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	return token.SignedString(jwtKey)
 }
 
 func generateSalt() (string, error) {

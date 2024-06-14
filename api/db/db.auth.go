@@ -21,13 +21,13 @@ func AddNewUser(firstName string, lastName string, username string, password str
 	return res.Id, err
 }
 
-func GetAuthData(username string) (dao.AuthInfo, error) {
+func GetUserAuth(username string) (dao.AuthInfo, error) {
 	var res dao.AuthInfo
 
 	err := pgxscan.Get(context.Background(), dbpool, &res, `
 		SELECT u.id, u.password, u.salt
-		FROM users
-		WHERE username = $1`,
+		FROM users u
+		WHERE u.username = $1`,
 		username)
 
 	return res, err
