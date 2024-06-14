@@ -2,7 +2,7 @@ package auth
 
 import (
 	"encoding/json"
-	"fmt"
+	"money-monkey/api/db"
 	"money-monkey/api/models/dto"
 	"net/http"
 )
@@ -50,5 +50,43 @@ func login(w http.ResponseWriter, r *http.Request) {
 }
 
 func register(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("TEST")
+	var request dto.RegisterRequest
+
+	err := json.NewDecoder(r.Body).Decode(&request)
+	if err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	salt, err := generateSalt()
+	if err != nil {
+		http.Error(w, "Unable to generate new password salt", http.StatusInternalServerError)
+		return
+	}
+
+	hashed, err := hashPassword(request.Password, salt)
+	if err != nil {
+		http.Error(w, "Unable to hash password with salt", http.StatusInternalServerError)
+		return
+	}
+
+	userId, err := db.AddNewUser(request.FirstName, request.LastName, request.Username, hashed, salt)
+	if err != nil {
+		http.Error(w, "Unable to register user", http.StatusInternalServerError)
+		return
+	}
+
+	token, err := generateJWT(userId)
+	if err != nil {
+		http.Error(w, "Error generating token", http.StatusInternalServerError)
+		return
+	}
+
+	response := dto.AuthResponse{
+		Token: token,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(response)
 }
