@@ -7,13 +7,18 @@ import (
 	"github.com/georgysavva/scany/v2/pgxscan"
 )
 
-func AddNewUser(firstName string, lastName string, username string, password string, salt string) error {
-	_, err := dbpool.Exec(context.Background(), `
+func AddNewUser(firstName string, lastName string, username string, password string, salt string) (int, error) {
+	var res struct {
+		Id int `db:"id"`
+	}
+
+	err := pgxscan.Get(context.Background(), dbpool, &res, `
 		INSERT INTO users (first_name, last_name, username, password, salt)
-		VALUES ($1, $2, $3, $4, $5)`,
+		VALUES ($1, $2, $3, $4, $5)
+		RETURNING id`,
 		firstName, lastName, username, password, salt)
 
-	return err
+	return res.Id, err
 }
 
 func GetAuthData(username string) (dao.AuthInfo, error) {
@@ -22,7 +27,8 @@ func GetAuthData(username string) (dao.AuthInfo, error) {
 	err := pgxscan.Get(context.Background(), dbpool, &res, `
 		SELECT u.id, u.password, u.salt
 		FROM users
-		WHERE username = $1`, username)
+		WHERE username = $1`,
+		username)
 
 	return res, err
 }
