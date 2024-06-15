@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"log"
 	"money-monkey/api/auth"
-	"money-monkey/api/types"
 	"net/http"
 	"os"
 
@@ -100,11 +99,7 @@ func generateAccessToken(w http.ResponseWriter, r *http.Request) {
 		*plaid.NewItemPublicTokenExchangeRequest(publicToken),
 	).Execute()
 	if err != nil {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(types.ErrorResponse{
-			ErrorMessage: err.Error(),
-		})
+		http.Error(w, "unable to exchange token: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
 

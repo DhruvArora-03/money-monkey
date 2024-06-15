@@ -4,10 +4,6 @@ type AuthResponse struct {
 	Token string `json:"token"`
 }
 
-type ErrorResponse struct {
-	ErrorMessage string `json:"error_message"`
-}
-
 type LoginRequest struct {
 	Username string `json:"username" validate:"required"`
 	Password string `json:"password" validate:"required"`
