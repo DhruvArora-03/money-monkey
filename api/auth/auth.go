@@ -3,9 +3,13 @@ package auth
 import (
 	"crypto/rand"
 	"encoding/hex"
+	"errors"
 	"log"
 	"money-monkey/api/db"
+	"money-monkey/api/types"
+	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -40,10 +44,36 @@ func checkPassword(username string, password string) (int, error) {
 	return user.Id, nil
 }
 
+func ExtractClaims(r *http.Request) (*types.Claims, error) {
+	authHeader := r.Header.Get("Authorization")
+
+	if authHeader == "" {
+		return nil, errors.New("authorization not found")
+	}
+
+	if !strings.HasPrefix(authHeader, "Bearer ") {
+		return nil, errors.New("invalid token format")
+	}
+
+	token, err := jwt.ParseWithClaims(strings.TrimPrefix(authHeader, "Bearer "), &types.Claims{}, func(token *jwt.Token) (interface{}, error) {
+		return jwtKey, nil
+	})
+	if err != nil {
+		return nil, errors.New("could not parse authorization token")
+	}
+
+	claims, ok := token.Claims.(*types.Claims)
+	if !ok || !token.Valid {
+		return nil, errors.New("invalid authorization token")
+	}
+
+	return claims, nil
+}
+
 func generateJWT(userId int) (string, error) {
-	claims := &claims{
-		userId,
-		jwt.RegisteredClaims{
+	claims := &types.Claims{
+		UserId: userId,
+		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 			NotBefore: jwt.NewNumericDate(time.Now()),
