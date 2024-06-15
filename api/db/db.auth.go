@@ -2,7 +2,7 @@ package db
 
 import (
 	"context"
-	"money-monkey/api/models/dao"
+	"money-monkey/api/types/dao"
 
 	"github.com/georgysavva/scany/v2/pgxscan"
 )

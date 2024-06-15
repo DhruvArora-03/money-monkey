@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"money-monkey/api/db"
-	"money-monkey/api/models/dto"
+	"money-monkey/api/types/dto"
 
 	"net/http"
 
