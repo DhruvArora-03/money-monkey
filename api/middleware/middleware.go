@@ -6,6 +6,8 @@ import (
 	"money-monkey/api/auth"
 	"net/http"
 	"time"
+
+	"github.com/davecgh/go-spew/spew"
 )
 
 type wrappedWriter struct {
@@ -38,6 +40,8 @@ func Auth(next http.HandlerFunc) http.HandlerFunc {
 			http.Error(w, err.Error(), http.StatusUnauthorized)
 			return
 		}
+
+		spew.Dump(claims)
 
 		ctx := context.WithValue(r.Context(), auth.UserIdKey, claims.UserId)
 		r = r.WithContext(ctx)
