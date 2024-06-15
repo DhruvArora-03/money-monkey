@@ -2,9 +2,8 @@ package auth
 
 import (
 	"encoding/json"
-	"fmt"
 	"money-monkey/api/db"
-	"money-monkey/api/types/dto"
+	"money-monkey/api/types"
 
 	"net/http"
 
@@ -21,7 +20,7 @@ func NewRouter() http.Handler {
 }
 
 func login(w http.ResponseWriter, r *http.Request) {
-	var request dto.LoginRequest
+	var request types.LoginRequest
 
 	err := json.NewDecoder(r.Body).Decode(&request)
 	if err != nil {
@@ -38,7 +37,6 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 	id, err := checkPassword(request.Username, request.Password)
 	if err != nil {
-		fmt.Println(err.Error())
 		http.Error(w, "Unable to verify password", http.StatusInternalServerError)
 		return
 	} else if id < 0 {
@@ -48,13 +46,11 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 	token, err := generateJWT(id)
 	if err != nil {
-		fmt.Println(id)
-		fmt.Println(err.Error())
 		http.Error(w, "Error generating token", http.StatusInternalServerError)
 		return
 	}
 
-	response := dto.AuthResponse{
+	response := types.AuthResponse{
 		Token: token,
 	}
 
@@ -64,7 +60,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 }
 
 func register(w http.ResponseWriter, r *http.Request) {
-	var request dto.RegisterRequest
+	var request types.RegisterRequest
 
 	err := json.NewDecoder(r.Body).Decode(&request)
 	if err != nil {
@@ -99,13 +95,12 @@ func register(w http.ResponseWriter, r *http.Request) {
 
 	token, err := generateJWT(id)
 	if err != nil {
-		fmt.Println(id)
-		fmt.Println(err.Error())
+
 		http.Error(w, "Error generating token", http.StatusInternalServerError)
 		return
 	}
 
-	response := dto.AuthResponse{
+	response := types.AuthResponse{
 		Token: token,
 	}
 

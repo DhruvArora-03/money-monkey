@@ -2,7 +2,7 @@ package db
 
 import (
 	"context"
-	"money-monkey/api/types/dao"
+	"money-monkey/api/model"
 
 	"github.com/georgysavva/scany/v2/pgxscan"
 )
@@ -21,8 +21,8 @@ func AddNewUser(firstName string, lastName string, username string, password str
 	return res.Id, err
 }
 
-func GetUserAuth(username string) (dao.AuthInfo, error) {
-	var res dao.AuthInfo
+func GetUserAuth(username string) (model.AuthInfo, error) {
+	var res model.AuthInfo
 
 	err := pgxscan.Get(context.Background(), dbpool, &res, `
 		SELECT u.id, u.password, u.salt

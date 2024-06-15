@@ -1,4 +1,4 @@
-package dao
+package model
 
 type AuthInfo struct {
 	Id       int

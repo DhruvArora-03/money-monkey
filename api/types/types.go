@@ -1,12 +1,21 @@
 package types
 
-import "github.com/golang-jwt/jwt/v5"
+type AuthResponse struct {
+	Token string `json:"token"`
+}
 
-type contextKey string
+type ErrorResponse struct {
+	ErrorMessage string `json:"error_message"`
+}
 
-const UserIdKey contextKey = "userId"
+type LoginRequest struct {
+	Username string `json:"username" validate:"required"`
+	Password string `json:"password" validate:"required"`
+}
 
-type Claims struct {
-	UserId int
-	jwt.RegisteredClaims
+type RegisterRequest struct {
+	FirstName string `json:"first_name" validate:"required"`
+	LastName  string `json:"last_name" validate:"required"`
+	Username  string `json:"username" validate:"required"`
+	Password  string `json:"password" validate:"required"`
 }

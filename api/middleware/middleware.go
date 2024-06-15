@@ -4,7 +4,6 @@ import (
 	"context"
 	"log"
 	"money-monkey/api/auth"
-	"money-monkey/api/types"
 	"net/http"
 	"time"
 )
@@ -40,7 +39,7 @@ func Auth(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		ctx := context.WithValue(r.Context(), types.UserIdKey, claims.UserId)
+		ctx := context.WithValue(r.Context(), auth.UserIdKey, claims.UserId)
 		r = r.WithContext(ctx)
 
 		next.ServeHTTP(w, r)

@@ -3,8 +3,9 @@ package plaid
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"log"
+	"money-monkey/api/auth"
+	"money-monkey/api/types"
 	"net/http"
 	"os"
 
@@ -62,14 +63,6 @@ func Initialize() {
 func NewRouter() http.Handler {
 	router := http.NewServeMux()
 
-	router.HandleFunc("GET /plaid/test", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("plaid")
-		fmt.Println(client.GetConfig().Host)
-		fmt.Println(client.GetConfig())
-		fmt.Println(client.GetConfig().UserAgent)
-
-		w.Write([]byte("Success!"))
-	})
 	router.HandleFunc("POST /plaid/create-link-token", createLinkToken)
 	router.HandleFunc("POST /plaid/generate-access-token", generateAccessToken)
 
@@ -77,47 +70,39 @@ func NewRouter() http.Handler {
 }
 
 func createLinkToken(w http.ResponseWriter, r *http.Request) {
-	// // Get the client_user_id by searching for the current user
-	// user, _ := usermodels.Find(...)
-	// clientUserId := user.ID.String()
-	clientUserId := "12345"
+	clientUserId, ok := r.Context().Value(auth.UserIdKey).(string)
+	if !ok {
+		http.Error(w, "Authentication issue, unable to read userId from request", http.StatusInternalServerError)
+	}
 
-	// Create a link_token for the given user
-	request := plaid.NewLinkTokenCreateRequest("Plaid Test App", "en", []plaid.CountryCode{plaid.COUNTRYCODE_US}, *plaid.NewLinkTokenCreateRequestUser(clientUserId))
+	request := plaid.NewLinkTokenCreateRequest("Money Monkey", "en", []plaid.CountryCode{plaid.COUNTRYCODE_US}, *plaid.NewLinkTokenCreateRequestUser(clientUserId))
 	request.SetProducts([]plaid.Products{plaid.PRODUCTS_AUTH})
 
 	resp, _, err := client.PlaidApi.LinkTokenCreate(context.Background()).LinkTokenCreateRequest(*request).Execute()
 	if err != nil {
-		fmt.Println("plaid failed to create link token")
 		http.Error(w, "Plaid could not generate link token.", http.StatusInternalServerError)
 		return
 	}
 
-	// Send the data to the client
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(struct {
-		Link_token string `json:"link_token"`
-	}{
+	json.NewEncoder(w).Encode(linkTokenResponse{
 		Link_token: resp.GetLinkToken(),
 	})
 }
 
 func generateAccessToken(w http.ResponseWriter, r *http.Request) {
-	ctx := context.Background()
 	// publicToken := c.PostForm("public_token")
 	publicToken := ""
 
 	// exchange the public_token for an access_token
-	exchangePublicTokenResp, _, err := client.PlaidApi.ItemPublicTokenExchange(ctx).ItemPublicTokenExchangeRequest(
+	exchangePublicTokenResp, _, err := client.PlaidApi.ItemPublicTokenExchange(context.Background()).ItemPublicTokenExchangeRequest(
 		*plaid.NewItemPublicTokenExchangeRequest(publicToken),
 	).Execute()
 	if err != nil {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(struct {
-			ErrorMessage string `json:"error_message"`
-		}{
+		json.NewEncoder(w).Encode(types.ErrorResponse{
 			ErrorMessage: err.Error(),
 		})
 		return

@@ -6,7 +6,6 @@ import (
 	"errors"
 	"log"
 	"money-monkey/api/db"
-	"money-monkey/api/types"
 	"net/http"
 	"os"
 	"strings"
@@ -15,6 +14,15 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
+
+type contextKey string
+
+type claims struct {
+	UserId int
+	jwt.RegisteredClaims
+}
+
+const UserIdKey contextKey = "userId"
 
 var jwtKey []byte
 
@@ -44,7 +52,7 @@ func checkPassword(username string, password string) (int, error) {
 	return user.Id, nil
 }
 
-func ExtractClaims(r *http.Request) (*types.Claims, error) {
+func ExtractClaims(r *http.Request) (*claims, error) {
 	authHeader := r.Header.Get("Authorization")
 
 	if authHeader == "" {
@@ -55,14 +63,14 @@ func ExtractClaims(r *http.Request) (*types.Claims, error) {
 		return nil, errors.New("invalid token format")
 	}
 
-	token, err := jwt.ParseWithClaims(strings.TrimPrefix(authHeader, "Bearer "), &types.Claims{}, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(strings.TrimPrefix(authHeader, "Bearer "), &claims{}, func(token *jwt.Token) (interface{}, error) {
 		return jwtKey, nil
 	})
 	if err != nil {
 		return nil, errors.New("could not parse authorization token")
 	}
 
-	claims, ok := token.Claims.(*types.Claims)
+	claims, ok := token.Claims.(*claims)
 	if !ok || !token.Valid {
 		return nil, errors.New("invalid authorization token")
 	}
@@ -71,7 +79,7 @@ func ExtractClaims(r *http.Request) (*types.Claims, error) {
 }
 
 func generateJWT(userId int) (string, error) {
-	claims := &types.Claims{
+	claims := &claims{
 		UserId: userId,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
