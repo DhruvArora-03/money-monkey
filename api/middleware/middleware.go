@@ -32,7 +32,7 @@ func Logging(next http.Handler) http.Handler {
 	})
 }
 
-func UserAuthentication(next http.HandlerFunc) http.HandlerFunc {
+func Auth(next http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		claims, err := auth.ExtractClaims(r)
 		if err != nil {
