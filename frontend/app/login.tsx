@@ -1,7 +1,8 @@
 import Button from "@components/Button";
-import { StyleSheet, Text, View, SafeAreaView, TextInput, } from "react-native";
+import { logIn } from "@lib/Api";
+import { StyleSheet, View, SafeAreaView, TextInput, } from "react-native";
 
-export default function LoginScreen(props: any) {
+export default function LoginScreen() {
     return (
         <SafeAreaView style={styles.page}>
             <View>
@@ -9,7 +10,7 @@ export default function LoginScreen(props: any) {
             </View>
             <View style={styles.buttons}>
                 <Button title="Log In" color="blue" onPress={() => {
-                    props.navigation.navigate("index")
+                    logIn('user', 'pass')
                 }} />
             </View>
         </SafeAreaView>
