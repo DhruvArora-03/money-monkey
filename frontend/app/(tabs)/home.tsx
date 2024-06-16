@@ -5,7 +5,7 @@ import CatagoryDescriptionList from '@components/CatagoryDescriptionList';
 import Cell from '@components/Cell';
 import { useState } from 'react';
 
-export default function TabOneScreen() {
+export default function HomeScreen() {
   const [currentCatagory, setCurrentCatagory] = useState<ExpenseTypes>()
   const { width } = useWindowDimensions()
   const radius = (width - 70 - 30) / 2

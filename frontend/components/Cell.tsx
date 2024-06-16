@@ -3,7 +3,7 @@ import { formatMoney } from '@lib/Money'
 import { ExpenseItem, ExpenseTypes } from '@lib/Types'
 import { Dispatch, SetStateAction } from 'react'
 import { StyleSheet, View, Text, Pressable } from 'react-native'
-import Colors from '@/lib/Colors'
+import Colors from '@lib/Colors'
 
 type CellProps = {
   type: ExpenseTypes
