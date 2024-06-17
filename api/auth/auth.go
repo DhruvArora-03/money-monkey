@@ -15,6 +15,9 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+var errUserNotFound = errors.New("user not found")
+var errIncorrectLogin = errors.New("incorrect username or password")
+
 type contextKey string
 
 type claims struct {
@@ -37,7 +40,7 @@ func Initialize() {
 func checkPassword(username string, password string) (int, error) {
 	user, err := db.GetUserAuth(username)
 	if err != nil {
-		return -1, err
+		return -1, errUserNotFound
 	}
 
 	decoded, err := hex.DecodeString(password + user.Salt)
@@ -46,7 +49,7 @@ func checkPassword(username string, password string) (int, error) {
 	}
 
 	if bcrypt.CompareHashAndPassword([]byte(user.Password), decoded) != nil {
-		return -1, nil
+		return -1, errIncorrectLogin
 	}
 
 	return user.Id, nil

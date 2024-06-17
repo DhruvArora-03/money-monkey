@@ -2,6 +2,7 @@ package auth
 
 import (
 	"encoding/json"
+	"log"
 	"money-monkey/api/db"
 	"money-monkey/api/types"
 
@@ -36,11 +37,17 @@ func login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	id, err := checkPassword(request.Username, request.Password)
-	if err != nil {
-		http.Error(w, "Unable to verify password", http.StatusInternalServerError)
+	if err == errIncorrectLogin {
+		log.Println(err.Error())
+		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
-	} else if id < 0 {
-		http.Error(w, "Invalid username or password", http.StatusUnauthorized)
+	} else if err == errUserNotFound {
+		log.Println(err.Error())
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	} else if err != nil {
+		log.Println(err.Error())
+		http.Error(w, "Unable to verify password", http.StatusInternalServerError)
 		return
 	}
 
