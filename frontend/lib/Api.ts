@@ -32,14 +32,13 @@ export async function logIn(username: string, password: string): Promise<LoginRe
             password: hashed
         }),
     })
-        .then((response) => {
-            if (!response.ok) {
-                return response.text().then((text) => {
-                    throw new Error(`response not ok, ${response.status}: ${text}`)
-                })
+        .then(async (response) => {
+            if (response.ok) {
+                return response.json()
             }
 
-            return response.json()
+            const text = await response.text();
+            throw new Error(`response not ok, ${response.status}: ${text}`);
         })
         .then(json => {
             console.log(json.token)
