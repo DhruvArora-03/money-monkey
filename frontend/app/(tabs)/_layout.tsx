@@ -17,7 +17,7 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   useEffect(() => {
-    checkAuth().then((ok) => !ok && router.replace('/') + "" != "bruh" && console.log('going to welcome page'))
+    checkAuth().then((ok) => !ok && router.replace('/'))
   }, [])
 
   return (
