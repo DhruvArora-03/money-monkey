@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function TabTwoScreen() {
+export default function ExpensesScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
+      <Text style={styles.title}>Expenses</Text>
       <View style={styles.separator} />
     </View>
   );
