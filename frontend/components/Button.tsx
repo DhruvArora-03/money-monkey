@@ -5,14 +5,29 @@ type ButtonProps = {
     color: string;
     outline?: boolean;
     onPress?: ((event: GestureResponderEvent) => void);
+    disabled?: boolean;
 }
 
 export default function Button(props: ButtonProps) {
     return (
-        <Pressable style={styles.container} onPress={props.onPress}>
+        <Pressable style={styles.container} onPress={props.onPress} disabled={props.disabled}>
             {({ pressed }) =>
-                <View style={[styles.button, { borderColor: props.color, backgroundColor: props.outline ? (pressed ? props.color : undefined) : (pressed ? 'dark' + props.color : props.color) },]}>
-                    <Text style={[styles.text, { color: !props.outline || pressed ? 'white' : props.color }]}>
+                <View
+                    style={[
+                        styles.button,
+                        {
+                            borderColor: props.color,
+                            backgroundColor: props.outline
+                                ? (pressed ? props.color : undefined)
+                                : (pressed ? 'dark' + props.color : props.color)
+                        }
+                    ]}
+                >
+                    <Text
+                        style={[
+                            styles.text,
+                            { color: !props.outline || pressed ? 'white' : props.color }
+                        ]}>
                         {props.title}
                     </Text>
                 </View>
@@ -24,7 +39,6 @@ export default function Button(props: ButtonProps) {
 
 const styles = StyleSheet.create({
     container: {
-        margin: 2,
         flex: 1
     },
     button: {

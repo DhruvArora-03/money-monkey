@@ -35,6 +35,6 @@ const styles = StyleSheet.create({
     buttons: {
         flexDirection: 'row',
         width: '80%',
-        gap: 4
+        gap: 8
     }
 })

@@ -10,12 +10,13 @@ export default function LoginScreen() {
             username: '',
             password: ''
         },
-        progressive: true
+        progressive: true,
+        mode: 'onTouched'
     })
 
     return (
         <SafeAreaView style={styles.page}>
-            <View>
+            <View style={styles.inputs}>
                 <TextInput
                     control={control}
                     placeholder="Username"
@@ -41,7 +42,8 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
     page: {
         alignItems: 'center',
-        justifyContent: 'space-around',
+        justifyContent: 'center',
+        gap: 50,
         height: '100%',
         width: '100%',
         backgroundColor: 'white'
@@ -50,9 +52,13 @@ const styles = StyleSheet.create({
         fontWeight: 'normal',
         fontSize: 45,
     },
+    inputs: {
+        width: '70%',
+        gap: 4,
+    },
     buttons: {
         flexDirection: 'row',
-        width: '80%',
+        width: '70%',
         gap: 4
     }
 })
