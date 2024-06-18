@@ -1,11 +1,12 @@
-import { Control, useController } from 'react-hook-form';
-import { View, StyleSheet, TextInput } from 'react-native'
+import { Control, FieldError, useController } from 'react-hook-form';
+import { Text, View, StyleSheet, TextInput } from 'react-native'
 
 type TextInputProps = {
     control: Control<any, any>;
     name: string;
     placeholder?: string;
     secureTextEntry?: boolean;
+    error?: FieldError;
 }
 
 export default function CustomTextInput(props: TextInputProps) {
@@ -23,6 +24,7 @@ export default function CustomTextInput(props: TextInputProps) {
                 placeholder={props.placeholder}
                 secureTextEntry={props.secureTextEntry}
             />
+            {props.error && <Text style={styles.error}>{props.error.message}</Text>}
         </View>
     )
 }
@@ -30,13 +32,17 @@ export default function CustomTextInput(props: TextInputProps) {
 
 const styles = StyleSheet.create({
     container: {
+
+    },
+    input: {
         padding: 10,
         borderWidth: 1,
         borderRadius: 8,
-        width: '100%'
-    },
-    input: {
-        fontSize: 16,
         width: '100%',
+        fontSize: 16,
+    },
+    error: {
+        color: 'red',
+        textTransform: 'capitalize'
     }
 })

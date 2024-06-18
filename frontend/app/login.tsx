@@ -2,7 +2,14 @@ import Button from "@components/Button";
 import TextInput from "@components/TextInput";
 import { logIn } from "@lib/Api";
 import { useForm } from "react-hook-form";
-import { StyleSheet, View, SafeAreaView } from "react-native";
+import { StyleSheet, View, SafeAreaView } from "react-native"
+import { yupResolver } from "@hookform/resolvers/yup"
+import * as yup from "yup";
+
+const schema = yup.object({
+    username: yup.string().required(),
+    password: yup.string().required()
+}).required()
 
 export default function LoginScreen() {
     const { control, handleSubmit, formState: { errors } } = useForm({
@@ -10,8 +17,11 @@ export default function LoginScreen() {
             username: '',
             password: ''
         },
-        progressive: true,
-        mode: 'onTouched'
+        progressive: true, // dont know what this does
+        mode: 'all',
+        reValidateMode: 'onChange',
+        shouldFocusError: true,
+        resolver: yupResolver(schema)
     })
 
     return (
@@ -21,13 +31,14 @@ export default function LoginScreen() {
                     control={control}
                     placeholder="Username"
                     name="username"
+                    error={errors.username}
                 />
-
                 <TextInput
                     control={control}
                     placeholder="Password"
                     name="password"
                     secureTextEntry
+                    error={errors.password}
                 />
             </View>
             <View style={styles.buttons}>
