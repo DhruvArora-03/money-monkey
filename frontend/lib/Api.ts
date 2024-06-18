@@ -2,6 +2,10 @@ import * as Crypto from 'expo-crypto';
 import * as SecureStore from 'expo-secure-store';
 
 const url = 'http://localhost:8080'
+const jsonHeaders = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+}
 
 function hashPassword(password: string) {
     const encoder = new TextEncoder();
@@ -23,10 +27,7 @@ export async function logIn(username: string, password: string): Promise<void> {
 
     return fetch(`${url}/auth/login`, {
         method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
+        headers: jsonHeaders,
         body: JSON.stringify({
             username: username.toLowerCase(),
             password: hashed
@@ -51,10 +52,7 @@ export async function register(firstName: string, lastName: string, username: st
 
     return fetch(`${url}/auth/register`, {
         method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-        },
+        headers: jsonHeaders,
         body: JSON.stringify({
             first_name: firstName.toLowerCase(),
             last_name: lastName.toLowerCase(),
@@ -82,8 +80,6 @@ export async function checkAuth(): Promise<boolean> {
     if (accessToken == null) {
         return false
     }
-
-    console.log(accessToken)
 
     return fetch(`${url}/auth/verify`, {
         method: 'GET',
