@@ -63,3 +63,8 @@ export async function checkAuth(): Promise<boolean> {
         }
     }).then((response) => response.ok).catch(() => false)
 }
+
+export async function logOut() {
+    await SecureStore.deleteItemAsync('accessToken')
+    await SecureStore.deleteItemAsync('refreshToken')
+}
