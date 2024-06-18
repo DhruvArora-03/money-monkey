@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import colors from '@lib/Colors'
 import { formatMoney } from '@lib/Money'
 import { ExpenseTypes, HomePageStats } from '@lib/Types'
-import {Text, Svg, Path, Circle} from 'react-native-svg'
+import { Text, Svg, Path, Circle } from 'react-native-svg'
 
 const MIN_THRESHOLD = 0.05
 
@@ -21,7 +21,6 @@ export default function MainSpendDisplay({
   radius: r,
   ...props
 }: MainSpendDisplayProps) {
-  
   const pad = 10
   const dim = (pad + r) * 2
 
@@ -33,8 +32,8 @@ export default function MainSpendDisplay({
           type,
           value:
             props.stats &&
-            val > 0 &&
-            val / props.stats.totalCents < MIN_THRESHOLD
+              val > 0 &&
+              val / props.stats.totalCents < MIN_THRESHOLD
               ? MIN_THRESHOLD * props.stats.totalCents
               : val,
         }
@@ -53,10 +52,10 @@ export default function MainSpendDisplay({
     () =>
       values.map(
         ({ type, value }) =>
-          ({
-            type,
-            percentage: value / total,
-          } satisfies CircleSection),
+        ({
+          type,
+          percentage: value / total,
+        } satisfies CircleSection),
       ),
     [values, total],
   )
@@ -95,7 +94,7 @@ export default function MainSpendDisplay({
     const prev = sections
       .slice(0, i)
       .map(({ percentage }) => percentage)
-      .reduce((x, y) => x + y, 0)
+      .reduce((x, y) => x + y, 0) + 0.75
 
     if (p === 1) {
       return (
@@ -117,7 +116,7 @@ export default function MainSpendDisplay({
     return (
       <Path
         d={`M ${pad + r + r * Math.cos(start)} ${pad + r + r * Math.sin(start)}
-            A ${r} ${r} 0 ${p > 0.5 ? 1 : 0} 1 ${pad + r + r * Math.cos(end)} ${pad + r + r * Math.sin(end)}`}
+            A ${r} ${r} 0 ${p > 0.51 ? 1 : 0} 1 ${pad + r + r * Math.cos(end)} ${pad + r + r * Math.sin(end)}`}
         stroke={colors.expenses[type]}
         strokeWidth={15}
         strokeLinecap='round'
@@ -128,11 +127,11 @@ export default function MainSpendDisplay({
 
   return (
     <View style={styles.display}>
-      <Svg 
+      <Svg
         width={'100%'}
         height={'100%'}
         viewBox={`0 0 ${dim} ${dim}`}
-       >
+      >
         <Text
           x={dim / 2}
           y={dim / 2}
@@ -144,7 +143,7 @@ export default function MainSpendDisplay({
         >
           {formatMoney(props.stats.totalCents)}
         </Text>
-        {sections.map((s: CircleSection, i) => (
+        {sections.sort((a, b) => b.percentage - a.percentage).map((s: CircleSection, i) => (
           <Section key={s.type} i={i} {...s} />
         ))}
       </Svg>

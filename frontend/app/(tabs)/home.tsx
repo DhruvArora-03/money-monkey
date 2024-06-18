@@ -14,7 +14,7 @@ export default function HomeScreen() {
     .fill(0)
     .map(() => Math.floor(100_00 - Math.random() * 200_00))
   const stats = {
-    totalCents: 1_958_67 + random.reduce((x, y) => x + y),
+    totalCents: 2_808_67 + random.reduce((x, y) => x + y),
     catagories: {
       Housing: 1_328_00 + random[0],
       Food: 254_37 + random[1],
