@@ -38,13 +38,8 @@ export async function logIn(username: string, password: string): Promise<LoginRe
             }
 
             const text = await response.text();
-            throw new Error(`response not ok, ${response.status}: ${text}`);
+            throw new Error(`fetch error /auth/login - ${response.status}: ${text}`);
         })
-        .then(json => {
-            console.log(json.token)
-            return {
-                token: json.token
-            } satisfies LoginResponse
-        })
+        .then(json => ({ token: json.token } satisfies LoginResponse))
 }
 
