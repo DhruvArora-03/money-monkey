@@ -1,5 +1,4 @@
 import * as Crypto from 'expo-crypto';
-import { LoginResponse } from './Types';
 import * as SecureStore from 'expo-secure-store';
 
 const url = 'http://localhost:8080'
@@ -59,7 +58,7 @@ export async function checkAuth(): Promise<boolean> {
     return fetch(`${url}/auth/verify`, {
         method: 'GET',
         headers: {
-            Authentication: `Bearer ${accessToken}`
+            Authorization: `Bearer ${accessToken}`
         }
     }).then((response) => response.ok).catch(() => false)
 }

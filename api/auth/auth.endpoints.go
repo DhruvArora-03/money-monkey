@@ -18,13 +18,14 @@ func NewRouter() http.Handler {
 	router.HandleFunc("POST /auth/register", register)
 	router.HandleFunc("POST /auth/login", login)
 
-	router.HandleFunc("POST /auth/verify", func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("GET /auth/verify", func(w http.ResponseWriter, r *http.Request) {
 		claims, err := ExtractClaims(r)
 		if err != nil {
 			status := http.StatusBadRequest
 			if err == ErrExpiredToken {
 				status = http.StatusUnauthorized
 			}
+			log.Println(err.Error())
 			http.Error(w, err.Error(), status)
 			return
 		}

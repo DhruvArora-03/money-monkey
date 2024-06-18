@@ -10,11 +10,6 @@ export const ExpenseTypes = [
   'Miscellaneous',
 ] as const
 
-export type LoginResponse = {
-  accessToken: string
-  refreshToken: string
-}
-
 export type ExpenseTypes = typeof ExpenseTypes[number]
 
 export const ExpenseTypeOptions = ['', ...ExpenseTypes]

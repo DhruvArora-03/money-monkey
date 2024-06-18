@@ -6,7 +6,7 @@ import { StyleSheet, Text, View, SafeAreaView, } from "react-native";
 
 export default function WelcomeScreen() {
     useMemo(() => {
-        checkAuth().then((ok) => router.replace('/home'))
+        checkAuth().then((ok) => ok && router.replace('/home')) 
     }, [])
 
     return (
