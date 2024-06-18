@@ -5,6 +5,7 @@ import (
 	"log"
 	"money-monkey/api/db"
 	"money-monkey/api/types"
+	"strconv"
 
 	"net/http"
 
@@ -16,6 +17,21 @@ func NewRouter() http.Handler {
 
 	router.HandleFunc("POST /auth/register", register)
 	router.HandleFunc("POST /auth/login", login)
+
+	router.HandleFunc("POST /auth/verify", func(w http.ResponseWriter, r *http.Request) {
+		claims, err := ExtractClaims(r)
+		if err != nil {
+			status := http.StatusBadRequest
+			if err == ErrExpiredToken {
+				status = http.StatusUnauthorized
+			}
+			http.Error(w, err.Error(), status)
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(strconv.Itoa(claims.UserId)))
+	})
 
 	return router
 }
@@ -47,19 +63,15 @@ func login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token, err := generateJWT(id)
+	tokens, err := generateTokens(id)
 	if err != nil {
-		http.Error(w, "Error generating token", http.StatusInternalServerError)
+		http.Error(w, "Error generating tokens", http.StatusInternalServerError)
 		return
-	}
-
-	response := types.AuthResponse{
-		Token: token,
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(response)
+	json.NewEncoder(w).Encode(tokens)
 }
 
 func register(w http.ResponseWriter, r *http.Request) {
@@ -96,18 +108,13 @@ func register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token, err := generateJWT(id)
+	tokens, err := generateTokens(id)
 	if err != nil {
-
-		http.Error(w, "Error generating token", http.StatusInternalServerError)
+		http.Error(w, "Error generating tokens", http.StatusInternalServerError)
 		return
-	}
-
-	response := types.AuthResponse{
-		Token: token,
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(response)
+	json.NewEncoder(w).Encode(tokens)
 }

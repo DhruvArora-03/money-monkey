@@ -6,6 +6,7 @@ import (
 	"errors"
 	"log"
 	"money-monkey/api/db"
+	"money-monkey/api/types"
 	"net/http"
 	"os"
 	"strings"
@@ -14,6 +15,11 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
+
+var ErrNoTokenFound = errors.New("authorization not found")
+var ErrInvalidTokenFormat = errors.New("invalid token format")
+var ErrBrokenToken = errors.New("could not parse authorization token")
+var ErrExpiredToken = errors.New("token expired or invalid")
 
 var errUserNotFound = errors.New("user not found")
 var errIncorrectLogin = errors.New("incorrect username or password")
@@ -59,39 +65,56 @@ func ExtractClaims(r *http.Request) (*claims, error) {
 	authHeader := r.Header.Get("Authorization")
 
 	if authHeader == "" {
-		return nil, errors.New("authorization not found")
+		return nil, ErrNoTokenFound
 	}
 
 	if !strings.HasPrefix(authHeader, "Bearer ") {
-		return nil, errors.New("invalid token format")
+		return nil, ErrInvalidTokenFormat
 	}
 
 	token, err := jwt.ParseWithClaims(strings.TrimPrefix(authHeader, "Bearer "), &claims{}, func(token *jwt.Token) (interface{}, error) {
 		return jwtKey, nil
 	})
 	if err != nil {
-		return nil, errors.New("could not parse authorization token")
+		return nil, ErrBrokenToken
 	}
 
 	claims, ok := token.Claims.(*claims)
 	if !ok || !token.Valid {
-		return nil, errors.New("invalid authorization token")
+		return nil, ErrExpiredToken
 	}
 
 	return claims, nil
 }
 
-func generateJWT(userId int) (string, error) {
+func generateJWT(userId int, duration time.Duration) (string, error) {
 	claims := &claims{
 		UserId: userId,
 		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(duration)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 			NotBefore: jwt.NewNumericDate(time.Now()),
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString(jwtKey)
+}
+
+func generateTokens(userId int) (types.AuthResponse, error) {
+	accessToken, err := generateJWT(userId, 24*time.Hour)
+	if err != nil {
+		return types.AuthResponse{}, err
+	}
+
+	refreshToken, err := generateJWT(userId, 7*24*time.Hour)
+	if err != nil {
+		return types.AuthResponse{}, err
+	}
+
+	return types.AuthResponse{
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
+	}, nil
 }
 
 func generateSalt() (string, error) {

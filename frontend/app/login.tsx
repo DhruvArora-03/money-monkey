@@ -6,7 +6,6 @@ import { StyleSheet, View, SafeAreaView } from "react-native"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup";
 import { router } from "expo-router";
-import * as SecureStore from 'expo-secure-store';
 
 const schema = yup.object({
     username: yup.string().required(),
@@ -44,13 +43,11 @@ export default function LoginScreen() {
                 />
             </View>
             <View style={styles.buttons}>
-                <Button title="Log In" color="blue" onPress={handleSubmit((form) =>
+                <Button title="Log In" color="green" onPress={handleSubmit((form) =>
                     logIn(form.username, form.password)
-                        .then((response) => SecureStore.setItemAsync('auth', response.token))
                         .then(() => router.replace('/home'))
                         .catch(console.log)
                 )} />
-                <Button title="temp" color="green" onPress={() => SecureStore.getItemAsync('auth').then(console.log)} />
             </View>
         </SafeAreaView>
     )

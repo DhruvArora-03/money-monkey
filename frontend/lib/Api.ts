@@ -1,5 +1,6 @@
 import * as Crypto from 'expo-crypto';
 import { LoginResponse } from './Types';
+import * as SecureStore from 'expo-secure-store';
 
 const url = 'http://localhost:8080'
 
@@ -18,10 +19,10 @@ function hashPassword(password: string) {
     );
 }
 
-export async function logIn(username: string, password: string): Promise<LoginResponse> {
-    var hashed = await hashPassword(password.toLowerCase())
+export async function logIn(username: string, password: string): Promise<void> {
+    var hashed = await hashPassword(password)
 
-    return fetch(url + '/auth/login', {
+    return fetch(`${url}/auth/login`, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -40,6 +41,25 @@ export async function logIn(username: string, password: string): Promise<LoginRe
             const text = await response.text();
             throw new Error(`fetch error /auth/login - ${response.status}: ${text}`);
         })
-        .then(json => ({ token: json.token } satisfies LoginResponse))
+        .then(async json => {
+            await SecureStore.setItemAsync('accessToken', json.access_token)
+            await SecureStore.setItemAsync('refreshToken', json.refresh_token)
+        })
 }
 
+export async function checkAuth(): Promise<boolean> {
+    var accessToken = await SecureStore.getItemAsync('accessToken')
+
+    if (accessToken == null) {
+        return false
+    }
+
+    console.log(accessToken)
+
+    return fetch(`${url}/auth/verify`, {
+        method: 'GET',
+        headers: {
+            Authentication: `Bearer ${accessToken}`
+        }
+    }).then((response) => response.ok).catch(() => false)
+}

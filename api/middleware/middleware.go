@@ -38,7 +38,11 @@ func Auth(next http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		claims, err := auth.ExtractClaims(r)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusUnauthorized)
+			status := http.StatusBadRequest
+			if err == auth.ErrExpiredToken {
+				status = http.StatusUnauthorized
+			}
+			http.Error(w, err.Error(), status)
 			return
 		}
 
