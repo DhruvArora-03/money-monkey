@@ -1,4 +1,5 @@
 import * as Crypto from 'expo-crypto';
+import { LoginResponse } from './Types';
 
 const url = 'http://localhost:8080'
 
@@ -17,8 +18,8 @@ function hashPassword(password: string) {
     );
 }
 
-export async function logIn(username: string, password: string) {
-    var hashed = await hashPassword(password)
+export async function logIn(username: string, password: string): Promise<LoginResponse> {
+    var hashed = await hashPassword(password.toLowerCase())
 
     return fetch(url + '/auth/login', {
         method: 'POST',
@@ -27,20 +28,24 @@ export async function logIn(username: string, password: string) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            username: username,
+            username: username.toLowerCase(),
             password: hashed
         }),
     })
-        .then(response => {
+        .then((response) => {
             if (!response.ok) {
-                throw new Error('response not ok, status code: ' + response.status)
+                return response.text().then((text) => {
+                    throw new Error(`response not ok, ${response.status}: ${text}`)
+                })
             }
 
             return response.json()
         })
         .then(json => {
             console.log(json.token)
-            return json
+            return {
+                token: json.token
+            } satisfies LoginResponse
         })
 }
 

@@ -37,13 +37,9 @@ func login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	id, err := checkPassword(request.Username, request.Password)
-	if err == errIncorrectLogin {
+	if err == errIncorrectLogin || err == errUserNotFound {
 		log.Println(err.Error())
 		http.Error(w, err.Error(), http.StatusUnauthorized)
-		return
-	} else if err == errUserNotFound {
-		log.Println(err.Error())
-		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	} else if err != nil {
 		log.Println(err.Error())

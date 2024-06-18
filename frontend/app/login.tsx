@@ -1,32 +1,38 @@
 import Button from "@components/Button";
+import TextInput from "@components/TextInput";
 import { logIn } from "@lib/Api";
-import { useState } from "react";
-import { StyleSheet, View, SafeAreaView, TextInput, } from "react-native";
+import { useForm } from "react-hook-form";
+import { StyleSheet, View, SafeAreaView } from "react-native";
 
 export default function LoginScreen() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const { control, handleSubmit, formState: { errors } } = useForm({
+        defaultValues: {
+            username: '',
+            password: ''
+        },
+        progressive: true
+    })
 
     return (
         <SafeAreaView style={styles.page}>
             <View>
                 <TextInput
+                    control={control}
                     placeholder="Username"
-                    value={username}
-                    onChangeText={setUsername}
+                    name="username"
                 />
+
                 <TextInput
+                    control={control}
                     placeholder="Password"
-                    value={password}
-                    onChangeText={setPassword}
+                    name="password"
                     secureTextEntry
                 />
             </View>
             <View style={styles.buttons}>
-                <Button title="Log In" color="blue" onPress={async () => {
-                    var { token } = await logIn('johndoe', 'password') as any
-                    console.log('token: ' + token)
-                }} />
+                <Button title="Log In" color="blue" onPress={handleSubmit((form) =>
+                    logIn(form.username, form.password).then((response) => console.log(response.token)).catch(console.log)
+                )} />
             </View>
         </SafeAreaView>
     )
