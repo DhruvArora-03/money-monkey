@@ -24,21 +24,21 @@ export default function HomeScreen() {
       Necessities: 220_04 + random[5],
       Miscellaneous: 220_29 + random[6],
     },
-  } satisfies HomePageStats 
+  } satisfies HomePageStats
   console.log(stats)
 
   return (
-  <ScrollView contentContainerStyle={styles.page} overScrollMode="never">
-    <View style={styles.container}>
-      <MainSpendDisplay
-        radius={radius} 
-        stats={stats}
-        />  
-      <CatagoryDescriptionList
-        radius={radius}
-      />
-    </View>
-    <View style={styles.list}>
+    <ScrollView contentContainerStyle={styles.page} overScrollMode="never">
+      <View style={styles.container}>
+        <MainSpendDisplay
+          radius={radius}
+          stats={stats}
+        />
+        <CatagoryDescriptionList
+          radius={radius}
+        />
+      </View>
+      <View style={styles.list}>
         {ExpenseTypes.map((type) => (
           <Cell
             key={type}
@@ -50,8 +50,8 @@ export default function HomeScreen() {
             year={2024}
           />
         ))}
-</View>
-  </ScrollView>
+      </View>
+    </ScrollView>
   );
 }
 
