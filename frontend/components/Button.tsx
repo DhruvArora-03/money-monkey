@@ -8,7 +8,7 @@ type ButtonProps = {
     disabled?: boolean;
 }
 
-export default function CustomButton(props: ButtonProps) {
+export default function Button(props: ButtonProps) {
     return (
         <Pressable style={styles.container} onPress={props.onPress} disabled={props.disabled}>
             {({ pressed }) =>
