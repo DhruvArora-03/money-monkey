@@ -29,22 +29,22 @@ export default function TabLayout() {
         // to prevent a hydration error in React Navigation v6.
         headerShown: useClientOnlyValue(false, true),
         tabBarShowLabel: false,
+        headerLeft: () => (
+          <View style={styles.headerLeft}>
+            <Button
+              style={styles.button}
+              title='Log Out'
+              color='red'
+              onPress={() => logOut().then(() => router.replace('/'))}
+            />
+          </View>
+        ),
       }}>
       <Tabs.Screen
         name="home"
         options={{
           title: 'Overview',
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
-          headerLeft: () => (
-            <View style={styles.headerLeft}>
-              <Button
-                style={styles.button}
-                title='Log Out'
-                color='red'
-                onPress={() => logOut().then(() => router.replace('/'))}
-              />
-            </View>
-          ),
           headerRight: () => (
             <Link href="/modal" asChild>
               <Pressable>
