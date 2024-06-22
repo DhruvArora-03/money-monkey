@@ -9,7 +9,6 @@ export default function ModalScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>Modal</Text>
       <Button title='Log Out' color='red' onPress={() => logOut().then(() => router.replace('/'))} />
-      <View style={styles.separator} />
 
       {/* Use a light status bar on iOS to account for the black space above the modal */}
       <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
@@ -26,10 +25,5 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
   },
 });
