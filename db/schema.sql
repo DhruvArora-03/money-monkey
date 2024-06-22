@@ -13,8 +13,8 @@ CREATE TABLE expense (
 CREATE TABLE plaid_connection (
     id SERIAL PRIMARY KEY, -- Added a primary key
     user_id INTEGER NOT NULL,
-    item_id TEXT NOT NULL,
     access_token TEXT NOT NULL,
+    item_id TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
