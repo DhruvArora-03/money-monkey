@@ -1,6 +1,9 @@
 import { View, Text, StyleSheet, Pressable, GestureResponderEvent } from 'react-native'
 
 type ButtonProps = {
+    style?: {
+        padding?: number,
+    };
     title: string;
     color: string;
     outline?: boolean;
@@ -10,12 +13,17 @@ type ButtonProps = {
 
 export default function Button(props: ButtonProps) {
     return (
-        <Pressable style={styles.container} onPress={props.onPress} disabled={props.disabled}>
+        <Pressable
+            style={styles.container}
+            onPress={props.onPress}
+            disabled={props.disabled}
+        >
             {({ pressed }) =>
                 <View
                     style={[
                         styles.button,
                         {
+                            padding: props.style?.padding ?? 10,
                             borderColor: props.color,
                             backgroundColor: props.outline
                                 ? (pressed ? props.color : undefined)
@@ -45,10 +53,9 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         borderWidth: 1,
         borderRadius: 8,
-        padding: 10,
     },
     text: {
-        fontSize: 16,
         fontWeight: 'bold',
+        fontSize: 16
     }
 })
