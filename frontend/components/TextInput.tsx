@@ -1,5 +1,5 @@
 import { Control, FieldError, useController } from 'react-hook-form';
-import { Text, View, StyleSheet, TextInput } from 'react-native'
+import { Text, View, StyleSheet, TextInput as NativeTextInput } from 'react-native'
 
 type TextInputProps = {
     control: Control<any, any>;
@@ -9,14 +9,14 @@ type TextInputProps = {
     error?: FieldError;
 }
 
-export default function CustomTextInput(props: TextInputProps) {
+export default function TextInput(props: TextInputProps) {
     const { field } = useController({
         control: props.control,
         name: props.name,
     })
     return (
         <View style={styles.container}>
-            <TextInput
+            <NativeTextInput
                 style={styles.input}
                 value={field.value}
                 onChangeText={field.onChange}
