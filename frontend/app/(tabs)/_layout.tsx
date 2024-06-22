@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, Tabs, router } from 'expo-router';
-import { Pressable } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 
 import Colors from '@lib/Colors';
 import { useClientOnlyValue } from '@components/useClientOnlyValue';
-import { checkAuth } from '@lib/Api';
+import { checkAuth, logOut } from '@lib/Api';
+import Button from '@components/Button';
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -34,6 +35,16 @@ export default function TabLayout() {
         options={{
           title: 'Overview',
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+          headerLeft: () => (
+            <View style={styles.headerLeft}>
+              <Button
+                style={styles.button}
+                title='Log Out'
+                color='red'
+                onPress={() => logOut().then(() => router.replace('/'))}
+              />
+            </View>
+          ),
           headerRight: () => (
             <Link href="/modal" asChild>
               <Pressable>
@@ -60,3 +71,12 @@ export default function TabLayout() {
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  headerLeft: {
+    marginLeft: 15,
+  },
+  button: {
+    padding: 5,
+  },
+});
