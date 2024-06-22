@@ -16,3 +16,11 @@ type RegisterRequest struct {
 	Username  string `json:"username" validate:"required"`
 	Password  string `json:"password" validate:"required"`
 }
+
+type GenerateAccessTokenRequest struct {
+	PublicToken string `json:"publicToken" validate:"required"`
+}
+
+type LinkTokenResponse struct {
+	LinkToken string `json:"link_token"`
+}
