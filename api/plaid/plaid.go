@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"log"
 	"money-monkey/api/auth"
+	"money-monkey/api/db"
 	"money-monkey/api/middleware"
 	"money-monkey/api/types"
 	"net/http"
@@ -107,7 +108,7 @@ func createLinkToken(w http.ResponseWriter, r *http.Request) {
 }
 
 func generateAccessToken(w http.ResponseWriter, r *http.Request) {
-	_, ok := r.Context().Value(auth.UserIdKey).(int)
+	userId, ok := r.Context().Value(auth.UserIdKey).(int)
 	if !ok {
 		http.Error(w, "Authentication issue, unable to read userId from request", http.StatusInternalServerError)
 		return
@@ -137,10 +138,14 @@ func generateAccessToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// These values should be saved to a persistent database and
-	// associated with the currently signed-in user
 	accessToken := exchangePublicTokenResp.GetAccessToken()
 	itemId := exchangePublicTokenResp.GetItemId()
+
+	_, err = db.AddPlaidConnection(userId, accessToken, itemId)
+	if err != nil {
+		http.Error(w, "Unable to register plaid connection", http.StatusInternalServerError)
+		return
+	}
 
 	log.Println(accessToken)
 	log.Println(itemId)
