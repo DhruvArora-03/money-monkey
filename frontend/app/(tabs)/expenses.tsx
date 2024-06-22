@@ -2,7 +2,7 @@ import Button from '@components/Button';
 import { exchangePublicToken, getLinkToken } from '@lib/Api';
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { LinkExit, LinkExitMetadataStatus, LinkLogLevel, LinkOpenProps, LinkSuccess, create, dismissLink, open } from 'react-native-plaid-link-sdk';
+import { LinkIOSPresentationStyle, create, open } from 'react-native-plaid-link-sdk';
 
 export default function ExpensesScreen() {
   const [readyToLink, setReadyToLink] = useState(false)
@@ -12,7 +12,7 @@ export default function ExpensesScreen() {
       getLinkToken()
         .then(({ linkToken }) => create({ token: linkToken }))
         .then(() => setReadyToLink(true))
-        .catch(console.log)
+        .catch((err) => console.log('error trying to create link token: %s', err))
     }
   }, [readyToLink])
 
@@ -20,26 +20,23 @@ export default function ExpensesScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>Expenses</Text>
       <Button
-        title="Open Link"
+        title='Open Link'
         color='blue'
         disabled={!readyToLink}
-        onPress={() => {
-          const openProps = {
-            onSuccess: (success: LinkSuccess) => {
-              console.log('success2')
-              console.log(success)
-              setReadyToLink(false)
-              exchangePublicToken(success.publicToken).then(() => console.log('done!')).catch(console.log)
-            },
-            onExit: (exit: LinkExit) => {
-              console.log('exit2')
-              console.log(exit)
-              setReadyToLink(false)
-            },
-            logLevel: LinkLogLevel.DEBUG,
-          } satisfies LinkOpenProps
-          open(openProps)
-        }}
+        onPress={() => open({
+          onSuccess: ({ publicToken }) => {
+            console.log('public token: %s', publicToken)
+            setReadyToLink(false)
+            exchangePublicToken(publicToken)
+              .then(() => console.log('successfully exchanged'))
+              .catch((err) => console.log('error trying to exchange public token: %s', err))
+          },
+          onExit: ({ error }) => {
+            console.log('error message: %s', error?.errorMessage ?? 'none')
+            setReadyToLink(false)
+          },
+          iOSPresentationStyle: LinkIOSPresentationStyle.MODAL,
+        })}
       />
     </View>
   );
