@@ -3,6 +3,7 @@ module money-monkey/api
 go 1.22.3
 
 require (
+	github.com/davecgh/go-spew v1.1.1
 	github.com/georgysavva/scany/v2 v2.1.3
 	github.com/joho/godotenv v1.5.1
 	github.com/plaid/plaid-go/v21 v21.0.0
