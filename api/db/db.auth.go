@@ -21,6 +21,19 @@ func AddNewUser(firstName string, lastName string, username string, password str
 	return res.Id, err
 }
 
+func CheckIfUserExists(username string) (bool, error) {
+	var exists bool
+
+	err := pgxscan.Get(context.Background(), dbpool, &exists, `
+		SELECT EXISTS (
+			SELECT 1
+			FROM users u
+			WHERE u.username = $1
+		)`, username)
+
+	return exists, err
+}
+
 func GetUserAuth(username string) (model.AuthInfo, error) {
 	var res model.AuthInfo
 
