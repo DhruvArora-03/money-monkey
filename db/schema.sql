@@ -1,4 +1,10 @@
--- Create tables with default current timestamps for created_at and updated_at
+CREATE TABLE applied_scripts (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
 CREATE TABLE expense (
     id SERIAL NOT NULL PRIMARY KEY,
     user_id INTEGER NOT NULL,
@@ -11,10 +17,11 @@ CREATE TABLE expense (
 );
 
 CREATE TABLE plaid_connection (
-    id SERIAL PRIMARY KEY, -- Added a primary key
+    id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL,
     access_token TEXT NOT NULL,
     item_id TEXT NOT NULL,
+    cursor TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
@@ -43,7 +50,11 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Triggers for update columns
+CREATE TRIGGER update_applied_scripts_updated_at 
+BEFORE UPDATE ON users
+FOR EACH ROW
+EXECUTE FUNCTION update_updated_at_column ();
+
 CREATE TRIGGER update_expense_updated_at
 BEFORE UPDATE ON expense
 FOR EACH ROW
