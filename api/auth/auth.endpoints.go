@@ -103,6 +103,14 @@ func register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	exists, err := db.CheckIfUserExists(request.Username)
+	if err != nil {
+		http.Error(w, "Could not check if username already exists", http.StatusInternalServerError)
+	} else if exists {
+		http.Error(w, "Username already exists", http.StatusBadRequest)
+		return
+	}
+
 	id, err := db.AddNewUser(request.FirstName, request.LastName, request.Username, pass, salt)
 	if err != nil {
 		http.Error(w, "Unable to register user", http.StatusInternalServerError)
