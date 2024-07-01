@@ -40,8 +40,8 @@ func GetUserAuth(ctx context.Context, username string) (model.AuthInfo, error) {
 	err := pgxscan.Get(ctx, dbpool, &res, `
 		SELECT u.id, u.password, u.salt
 		FROM users u
-		WHERE u.username = $1`,
-		username)
+		WHERE u.username = $1
+		`, username)
 
 	return res, err
 }
