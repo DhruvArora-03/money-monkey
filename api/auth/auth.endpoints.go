@@ -53,7 +53,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id, err := checkPassword(request.Username, request.Password)
+	id, err := checkPassword(r.Context(), request.Username, request.Password)
 	if err == errIncorrectLogin || err == errUserNotFound {
 		log.Println(err.Error())
 		http.Error(w, err.Error(), http.StatusUnauthorized)
@@ -103,7 +103,7 @@ func register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	exists, err := db.CheckIfUserExists(request.Username)
+	exists, err := db.CheckIfUserExists(r.Context(), request.Username)
 	if err != nil {
 		http.Error(w, "Could not check if username already exists", http.StatusInternalServerError)
 	} else if exists {
@@ -111,7 +111,7 @@ func register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id, err := db.AddNewUser(request.FirstName, request.LastName, request.Username, pass, salt)
+	id, err := db.AddNewUser(r.Context(), request.FirstName, request.LastName, request.Username, pass, salt)
 	if err != nil {
 		http.Error(w, "Unable to register user", http.StatusInternalServerError)
 		return

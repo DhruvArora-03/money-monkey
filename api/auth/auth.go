@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"context"
 	"crypto/rand"
 	"encoding/hex"
 	"errors"
@@ -43,8 +44,8 @@ func Initialize() {
 	jwtKey = []byte(key)
 }
 
-func checkPassword(username string, password string) (int, error) {
-	user, err := db.GetUserAuth(username)
+func checkPassword(ctx context.Context, username string, password string) (int, error) {
+	user, err := db.GetUserAuth(ctx, username)
 	if err != nil {
 		return -1, errUserNotFound
 	}
@@ -54,7 +55,7 @@ func checkPassword(username string, password string) (int, error) {
 		return -1, err
 	}
 
-	if bcrypt.CompareHashAndPassword([]byte(user.Password), decoded) != nil {
+	if bcrypt.CompareHashAndPassword([]byte(user.HashedPassword), decoded) != nil {
 		return -1, errIncorrectLogin
 	}
 

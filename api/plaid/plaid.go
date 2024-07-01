@@ -7,11 +7,13 @@ import (
 	"money-monkey/api/auth"
 	"money-monkey/api/db"
 	"money-monkey/api/middleware"
+	"money-monkey/api/model"
 	"money-monkey/api/types"
 	"net/http"
 	"os"
 	"strconv"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/go-playground/validator/v10"
 	"github.com/plaid/plaid-go/v21/plaid"
 )
@@ -75,6 +77,22 @@ func NewRouter() http.Handler {
 
 	router.HandleFunc("GET /plaid/create-link-token", middleware.Auth(createLinkToken))
 	router.HandleFunc("POST /plaid/generate-access-token", middleware.Auth(generateAccessToken))
+	router.HandleFunc("GET /plaid/transactions/{id}", middleware.Auth(fetchTransactions))
+	router.HandleFunc("GET /plaid/temp/{id}", middleware.Auth(func(w http.ResponseWriter, r *http.Request) {
+		id, err := strconv.Atoi(r.PathValue("id"))
+		if err != nil {
+			http.Error(w, "id given in path is invalid", http.StatusBadRequest)
+		}
+
+		var plaidConnection model.PlaidConnection
+		plaidConnection, err = db.GetPlaidConnection(context.Background(), id)
+		if err != nil {
+			log.Println(err.Error())
+			http.Error(w, "Unable to get connection from plaid using given id", http.StatusBadRequest)
+			return
+		}
+		spew.Dump(plaidConnection)
+	}))
 
 	return router
 }
@@ -94,7 +112,7 @@ func createLinkToken(w http.ResponseWriter, r *http.Request) {
 	)
 	request.SetProducts([]plaid.Products{plaid.PRODUCTS_AUTH})
 
-	resp, _, err := client.PlaidApi.LinkTokenCreate(context.Background()).LinkTokenCreateRequest(*request).Execute()
+	resp, _, err := client.PlaidApi.LinkTokenCreate(r.Context()).LinkTokenCreateRequest(*request).Execute()
 	if err != nil {
 		log.Println(err.Error())
 		http.Error(w, "Plaid could not generate link token.", http.StatusInternalServerError)
@@ -130,7 +148,7 @@ func generateAccessToken(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// exchange the public_token for an access_token
-	exchangePublicTokenResp, _, err := client.PlaidApi.ItemPublicTokenExchange(context.Background()).ItemPublicTokenExchangeRequest(
+	exchangePublicTokenResp, _, err := client.PlaidApi.ItemPublicTokenExchange(r.Context()).ItemPublicTokenExchangeRequest(
 		*plaid.NewItemPublicTokenExchangeRequest(request.PublicToken),
 	).Execute()
 	if err != nil {
@@ -141,7 +159,7 @@ func generateAccessToken(w http.ResponseWriter, r *http.Request) {
 	accessToken := exchangePublicTokenResp.GetAccessToken()
 	itemId := exchangePublicTokenResp.GetItemId()
 
-	_, err = db.AddPlaidConnection(userId, accessToken, itemId)
+	_, err = db.AddPlaidConnection(r.Context(), userId, accessToken, itemId)
 	if err != nil {
 		http.Error(w, "Unable to register plaid connection", http.StatusInternalServerError)
 		return
@@ -153,4 +171,59 @@ func generateAccessToken(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/plain")
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("Complete!\n" + accessToken + "\n" + itemId))
+}
+
+func fetchTransactions(w http.ResponseWriter, r *http.Request) {
+	userId, ok := r.Context().Value(auth.UserIdKey).(int)
+	if !ok {
+		http.Error(w, "Authentication issue, unable to read userId from request", http.StatusInternalServerError)
+		return
+	}
+
+	id, err := strconv.Atoi(r.PathValue("id"))
+	if err != nil {
+		http.Error(w, "id given in path is invalid", http.StatusBadRequest)
+	}
+
+	var plaidConnection model.PlaidConnection
+	plaidConnection, err = db.GetPlaidConnection(r.Context(), id)
+	if err != nil {
+		http.Error(w, "Unable to get connection from plaid using given id", http.StatusBadRequest)
+		return
+	}
+
+	var added []plaid.Transaction
+	var modified []plaid.Transaction
+	var removed []plaid.RemovedTransaction
+	hasMore := true
+	for hasMore {
+		request := plaid.NewTransactionsSyncRequest(plaidConnection.AccessToken)
+
+		if plaidConnection.Cursor != nil {
+			request.SetCursor(*plaidConnection.Cursor)
+		}
+		res, _, err := client.PlaidApi.TransactionsSync(r.Context()).TransactionsSyncRequest(*request).Execute()
+		if err != nil {
+			http.Error(w, "Unable to sync transactions from plaid", http.StatusInternalServerError)
+		}
+
+		// Add this page of results
+		added = append(added, res.GetAdded()...)
+		modified = append(modified, res.GetModified()...)
+		removed = append(removed, res.GetRemoved()...)
+		hasMore = res.GetHasMore()
+
+		// Update cursor to the next cursor
+		next := res.GetNextCursor()
+		plaidConnection.Cursor = &next
+	}
+	spew.Dump(added[0].GetAmount())
+	spew.Dump(added[0].GetTransactionId())
+	spew.Dump(added[0].GetAuthorizedDate())
+	spew.Dump(added[0].GetMerchantName())
+	spew.Dump(added[0].GetName())
+	spew.Dump(added[0].GetCategory())
+	spew.Dump(added[0].GetPersonalFinanceCategory())
+	spew.Dump(added[0].GetTransactionType())
+	db.UpdateTransactions(r.Context(), userId, id, added, modified, removed, plaidConnection.Cursor)
 }

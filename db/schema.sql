@@ -5,16 +5,28 @@ CREATE TABLE applied_scripts (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
-CREATE TABLE expense (
+CREATE TABLE plaid_transaction (
     id SERIAL NOT NULL PRIMARY KEY,
     user_id INTEGER NOT NULL,
     plaid_connection_id INTEGER NOT NULL,
+    expense_id INTEGER NOT NULL,
+    transaction_id TEXT,
     name TEXT NOT NULL,
     amount_cents INTEGER NOT NULL,
     date DATE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
+
+CREATE TABLE expense {
+    id SERIAL NOT NULL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    amount_cents INTEGER NOT NULL,
+    date DATE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL 
+}
 
 CREATE TABLE plaid_connection (
     id SERIAL PRIMARY KEY,
@@ -37,9 +49,19 @@ CREATE TABLE users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
-ALTER TABLE expense ADD CONSTRAINT expense_plaid_connection_id_foreign FOREIGN KEY (plaid_connection_id) REFERENCES plaid_connection (id);
-ALTER TABLE expense ADD CONSTRAINT expense_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (id);
-ALTER TABLE plaid_connection ADD CONSTRAINT plaid_connection_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (id);
+CREATE INDEX plaid_transaction_idx_transaction_id ON plaid_transaction (transaction_id);
+
+ALTER TABLE plaid_transaction
+ADD CONSTRAINT plaid_transaction_expense_id_foreign FOREIGN KEY (expense_id) REFERENCES expense (id),
+ADD CONSTRAINT plaid_transaction_plaid_connection_id_foreign FOREIGN KEY (plaid_connection_id) REFERENCES plaid_connection (id),
+ADD CONSTRAINT plaid_transaction_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (id);
+
+ALTER TABLE expense
+ADD CONSTRAINT expense_plaid_connection_id_foreign FOREIGN KEY (plaid_connection_id) REFERENCES plaid_connection (id),
+ADD CONSTRAINT expense_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (id);
+
+ALTER TABLE users
+ADD CONSTRAINT plaid_connection_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (id);
 
 -- Function to update the updated_at column
 CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -54,6 +76,11 @@ CREATE TRIGGER update_applied_scripts_updated_at
 BEFORE UPDATE ON users
 FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column ();
+
+CREATE TRIGGER update_plaid_transaction_updated_at
+BEFORE UPDATE ON plaid_transaction
+FOR EACH ROW
+EXECUTE FUNCTION update_updated_at_column();
 
 CREATE TRIGGER update_expense_updated_at
 BEFORE UPDATE ON expense

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"money-monkey/api/auth"
@@ -18,7 +19,7 @@ func main() {
 		log.Fatalf("Error when loading environment variables from .env file %v", err)
 	}
 
-	dbpool := db.StartConnectionPool()
+	dbpool := db.StartConnectionPool(context.Background())
 	defer dbpool.Close()
 
 	plaid.Initialize()

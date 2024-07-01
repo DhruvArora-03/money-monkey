@@ -10,13 +10,13 @@ import (
 
 var dbpool *pgxpool.Pool
 
-func StartConnectionPool() *pgxpool.Pool {
+func StartConnectionPool(ctx context.Context) *pgxpool.Pool {
 	cfg, err := pgxpool.ParseConfig(os.Getenv("DB_URL"))
 	if err != nil {
 		log.Fatalf("Error when parsing DB_URL from .env")
 	}
 
-	dbpool, err = pgxpool.NewWithConfig(context.Background(), cfg)
+	dbpool, err = pgxpool.NewWithConfig(ctx, cfg)
 	if err != nil {
 		log.Fatalf("Error when connecting to database: %v", err)
 	}
