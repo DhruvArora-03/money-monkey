@@ -25,7 +25,7 @@ CREATE TABLE expense {
     amount_cents INTEGER NOT NULL,
     date DATE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL 
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 }
 
 CREATE TABLE plaid_connection (
@@ -72,7 +72,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER update_applied_scripts_updated_at 
+CREATE TRIGGER update_applied_scripts_updated_at
 BEFORE UPDATE ON users
 FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column ();
