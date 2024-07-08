@@ -14,19 +14,24 @@ CREATE TABLE plaid_transaction (
     name TEXT NOT NULL,
     amount_cents INTEGER NOT NULL,
     date DATE NOT NULL,
+    category TEXT,
+    merchant_name TEXT,
+    personal_finance_category TEXT,
+    transaction_type TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
-CREATE TABLE expense {
+CREATE TABLE expense (
     id SERIAL NOT NULL PRIMARY KEY,
     user_id INTEGER NOT NULL,
     name TEXT NOT NULL,
     amount_cents INTEGER NOT NULL,
     date DATE NOT NULL,
+    category TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
-}
+);
 
 CREATE TABLE plaid_connection (
     id SERIAL PRIMARY KEY,
@@ -57,10 +62,9 @@ ADD CONSTRAINT plaid_transaction_plaid_connection_id_foreign FOREIGN KEY (plaid_
 ADD CONSTRAINT plaid_transaction_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (id);
 
 ALTER TABLE expense
-ADD CONSTRAINT expense_plaid_connection_id_foreign FOREIGN KEY (plaid_connection_id) REFERENCES plaid_connection (id),
 ADD CONSTRAINT expense_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (id);
 
-ALTER TABLE users
+ALTER TABLE plaid_connection
 ADD CONSTRAINT plaid_connection_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (id);
 
 -- Function to update the updated_at column
@@ -96,3 +100,17 @@ CREATE TRIGGER update_users_updated_at
 BEFORE UPDATE ON users
 FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column();
+
+-- Function to add to expense table when adding to plaid_transaction table
+CREATE OR REPLACE FUNCTION create_expense()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO expense (user_id, name, amount_cents, date, category)
+    VALUES (NEW.user_id, NEW.name, NEW.amount_cents, NEW.date, NEW.category);
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER create_expense_from_plaid_connection
+AFTER INSERT ON plaid_transaction
+FOR EACH ROW
+EXECUTE FUNCTION create_expense();

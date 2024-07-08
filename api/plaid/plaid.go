@@ -1,7 +1,6 @@
 package plaid
 
 import (
-	"context"
 	"encoding/json"
 	"log"
 	"money-monkey/api/auth"
@@ -13,7 +12,6 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/go-playground/validator/v10"
 	"github.com/plaid/plaid-go/v21/plaid"
 )
@@ -77,22 +75,7 @@ func NewRouter() http.Handler {
 
 	router.HandleFunc("GET /plaid/create-link-token", middleware.Auth(createLinkToken))
 	router.HandleFunc("POST /plaid/generate-access-token", middleware.Auth(generateAccessToken))
-	router.HandleFunc("GET /plaid/transactions/{id}", middleware.Auth(fetchTransactions))
-	router.HandleFunc("GET /plaid/temp/{id}", middleware.Auth(func(w http.ResponseWriter, r *http.Request) {
-		id, err := strconv.Atoi(r.PathValue("id"))
-		if err != nil {
-			http.Error(w, "id given in path is invalid", http.StatusBadRequest)
-		}
-
-		var plaidConnection model.PlaidConnection
-		plaidConnection, err = db.GetPlaidConnection(context.Background(), id)
-		if err != nil {
-			log.Println(err.Error())
-			http.Error(w, "Unable to get connection from plaid using given id", http.StatusBadRequest)
-			return
-		}
-		spew.Dump(plaidConnection)
-	}))
+	router.HandleFunc("GET /plaid/transactions/{plaid_connection_id}", middleware.Auth(fetchTransactions))
 
 	return router
 }
@@ -180,13 +163,13 @@ func fetchTransactions(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id, err := strconv.Atoi(r.PathValue("id"))
+	plaidConnectionId, err := strconv.Atoi(r.PathValue("plaid_connection_id"))
 	if err != nil {
 		http.Error(w, "id given in path is invalid", http.StatusBadRequest)
 	}
 
 	var plaidConnection model.PlaidConnection
-	plaidConnection, err = db.GetPlaidConnection(r.Context(), id)
+	plaidConnection, err = db.GetPlaidConnection(r.Context(), plaidConnectionId)
 	if err != nil {
 		http.Error(w, "Unable to get connection from plaid using given id", http.StatusBadRequest)
 		return
@@ -217,13 +200,9 @@ func fetchTransactions(w http.ResponseWriter, r *http.Request) {
 		next := res.GetNextCursor()
 		plaidConnection.Cursor = &next
 	}
-	spew.Dump(added[0].GetAmount())
-	spew.Dump(added[0].GetTransactionId())
-	spew.Dump(added[0].GetAuthorizedDate())
-	spew.Dump(added[0].GetMerchantName())
-	spew.Dump(added[0].GetName())
-	spew.Dump(added[0].GetCategory())
-	spew.Dump(added[0].GetPersonalFinanceCategory())
-	spew.Dump(added[0].GetTransactionType())
-	db.UpdateTransactions(r.Context(), userId, id, added, modified, removed, plaidConnection.Cursor)
+
+	res := db.UpdateTransactions(r.Context(), userId, plaidConnectionId, added, modified, removed, plaidConnection.Cursor)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(res)
 }
