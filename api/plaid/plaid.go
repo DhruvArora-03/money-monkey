@@ -175,6 +175,11 @@ func fetchTransactions(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if plaidConnection.UserId != userId {
+		http.Error(w, "User id in path does not match user id in plaid connection", http.StatusBadRequest)
+		return
+	}
+
 	var added []plaid.Transaction
 	var modified []plaid.Transaction
 	var removed []plaid.RemovedTransaction

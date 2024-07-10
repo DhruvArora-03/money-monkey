@@ -2,8 +2,11 @@ package db
 
 import (
 	"context"
+	"log"
+	"math"
 	"money-monkey/api/model"
 	"money-monkey/api/types"
+	"strings"
 
 	"github.com/georgysavva/scany/v2/pgxscan"
 	"github.com/jackc/pgx/v5"
@@ -51,19 +54,20 @@ func UpdateTransactions(ctx context.Context, userId, plaidConnectionId int, adde
 				merchant_name,
 				personal_finance_category,
 				transaction_type
-			) VALUES ($2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+			) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
 			userId,
 			plaidConnectionId,
 			tran.GetTransactionId(),
 			tran.GetName(),
-			tran.GetAmount(),
+			int(math.Floor(tran.GetAmount()*100)),
 			tran.GetDate(),
-			tran.GetCategory(),
-			tran.GetAuthorizedDate(),
+			strings.Join(tran.GetCategory(), ", "),
 			tran.GetMerchantName(),
-			tran.GetPersonalFinanceCategory(),
+			tran.GetPersonalFinanceCategory().Primary,
 			tran.GetTransactionType(),
 		)
+		log.Println("DONE ADDING ", tran.GetName())
+		log.Println("amount: ", tran.GetAmount())
 	}
 
 	for _, tran := range modified {
@@ -112,7 +116,11 @@ func UpdateTransactions(ctx context.Context, userId, plaidConnectionId int, adde
 	defer res.Close()
 
 	for range added {
-		res.Exec()
+		result, err := res.Exec()
+		if err != nil {
+			log.Println("error adding transactions to db: ", err)
+		}
+		log.Println(result.String())
 	}
 
 	for range modified {
