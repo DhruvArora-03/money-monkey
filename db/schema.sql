@@ -57,15 +57,15 @@ CREATE TABLE users (
 CREATE INDEX plaid_transaction_idx_transaction_id ON plaid_transaction (transaction_id);
 
 ALTER TABLE plaid_transaction
-ADD CONSTRAINT plaid_transaction_expense_id_foreign FOREIGN KEY (expense_id) REFERENCES expense (id),
-ADD CONSTRAINT plaid_transaction_plaid_connection_id_foreign FOREIGN KEY (plaid_connection_id) REFERENCES plaid_connection (id),
-ADD CONSTRAINT plaid_transaction_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (id);
+ADD CONSTRAINT plaid_transaction_expense_id_foreign FOREIGN KEY (expense_id) REFERENCES expense (id) ON DELETE CASCADE,
+ADD CONSTRAINT plaid_transaction_plaid_connection_id_foreign FOREIGN KEY (plaid_connection_id) REFERENCES plaid_connection (id) ON DELETE CASCADE,
+ADD CONSTRAINT plaid_transaction_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE;
 
 ALTER TABLE expense
-ADD CONSTRAINT expense_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (id);
+ADD CONSTRAINT expense_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE;
 
 ALTER TABLE plaid_connection
-ADD CONSTRAINT plaid_connection_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (id);
+ADD CONSTRAINT plaid_connection_user_id_foreign FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE;
 
 -- Function to update the updated_at column
 CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -104,13 +104,20 @@ EXECUTE FUNCTION update_updated_at_column();
 -- Function to add to expense table when adding to plaid_transaction table
 CREATE OR REPLACE FUNCTION create_expense()
 RETURNS TRIGGER AS $$
+DECLARE
+    new_expense_id INTEGER;
 BEGIN
     INSERT INTO expense (user_id, name, amount_cents, date, category)
-    VALUES (NEW.user_id, NEW.name, NEW.amount_cents, NEW.date, NEW.category);
+    VALUES (NEW.user_id, NEW.name, NEW.amount_cents, NEW.date, NEW.category)
+    RETURNING id into new_expense_id;
+
+    NEW.expense_id = new_expense_id;
+
+    RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER create_expense_from_plaid_connection
-AFTER INSERT ON plaid_transaction
+BEFORE INSERT ON plaid_transaction
 FOR EACH ROW
 EXECUTE FUNCTION create_expense();
