@@ -8,7 +8,7 @@ export default function Home() {
   const random = new Array(7)
     .fill(0)
     .map(() => Math.floor(100_00 - Math.random() * 200_00));
-  const stats = {
+  const stats: HomePageStats = {
     totalCents: 2_808_67 + random.reduce((x, y) => x + y),
     catagories: {
       Housing: 1_328_00 + random[0],
@@ -19,7 +19,7 @@ export default function Home() {
       Necessities: 220_04 + random[5],
       Miscellaneous: 220_29 + random[6],
     },
-  } satisfies HomePageStats;
+  };
 
   return (
     <main className="flex min-h-screen flex-col justify-between p-14 bg-white">
