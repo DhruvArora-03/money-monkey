@@ -22,8 +22,7 @@ export default function Home() {
   } satisfies HomePageStats;
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="relative w-0 h-0 border-l-[15px] border-r-[15px] border-b-[26px] border-l-transparent border-r-transparent border-b-black" />
+    <main className="flex min-h-screen flex-col justify-between p-14 bg-white">
       <MainSpendDisplay radius={radius} stats={stats} />
     </main>
   );

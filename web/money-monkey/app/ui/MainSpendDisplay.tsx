@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import colors from "@/app/lib/colors";
-import { formatMoney } from "@/app/lib/money";
-import { ExpenseTypes, HomePageStats } from "@/app/lib/types";
+import colors from "@lib/colors";
+import { formatMoney } from "@lib/money";
+import { ExpenseTypes, HomePageStats } from "@lib/types";
 
 const MIN_THRESHOLD = 0.05;
 
@@ -123,7 +123,7 @@ export default function MainSpendDisplay({
   }
 
   return (
-    <view className="w-full, height-[300px]">
+    <view className="height-[300px]">
       <svg width={"100%"} height={"100%"} viewBox={`0 0 ${dim} ${dim}`}>
         <text
           x={dim / 2}
