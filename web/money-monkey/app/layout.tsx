@@ -3,6 +3,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import NavBar from "@ui/NavBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +21,10 @@ export default function RootLayout({
     <html lang="en">
       <SpeedInsights />
       <body className={inter.className}>
-        <ClerkProvider>{children}</ClerkProvider>
+        <ClerkProvider>
+          <NavBar />
+          {children}
+        </ClerkProvider>
       </body>
     </html>
   );
