@@ -6,7 +6,7 @@ export default function NavBar() {
       <div>
         <span className="font-semibold text-xl">Money Monkey</span>
       </div>
-      <a href="home">Home</a>
+      <a href="/">Home</a>
       <div className="flex-grow text-right">
         <SignedIn>
           <UserButton />
