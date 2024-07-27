@@ -1,6 +1,20 @@
-import { clerkMiddleware } from "@clerk/nextjs/server";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-export default clerkMiddleware();
+const isProtectedRoute = createRouteMatcher(["/home/(.*)"]);
+
+export default clerkMiddleware(
+  (auth, req) => {
+    if (isProtectedRoute(req)) {
+      auth().protect();
+    }
+  },
+  {
+    authorizedParties: [
+      "http://localhost:3000",
+      "https://money-monkey.vercel.app",
+    ],
+  },
+);
 
 export const config = {
   matcher: [
