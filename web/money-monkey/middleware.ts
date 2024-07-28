@@ -1,10 +1,20 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-
-const isProtectedRoute = createRouteMatcher(["/home/(.*)"]);
+import { clerkMiddleware } from "@clerk/nextjs/server";
 
 export default clerkMiddleware((auth, req) => {
-  if (isProtectedRoute(req)) {
-    auth().protect();
+  const { userId, redirectToSignIn, sessionClaims } = auth();
+
+  if (!userId) {
+    redirectToSignIn();
+  } else if (userId && !sessionClaims?.metadata?.onboardingComplete) {
+    fetch(`${process.env.API_BASE}/user/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId,
+      }),
+    });
   }
 });
 
