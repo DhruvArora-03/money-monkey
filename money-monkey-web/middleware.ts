@@ -3,7 +3,8 @@ import { clerkMiddleware } from "@clerk/nextjs/server";
 export default clerkMiddleware((auth, req) => {
   const { userId, redirectToSignIn, sessionClaims } = auth();
 
-  if (!userId) {
+  if (!userId && !req.nextUrl.pathname.startsWith("/sign-in")) {
+    console.log("Redirecting to sign-in");
     redirectToSignIn();
   } else if (userId && !sessionClaims?.metadata?.onboardingComplete) {
     fetch(`${process.env.API_BASE}/user/create`, {

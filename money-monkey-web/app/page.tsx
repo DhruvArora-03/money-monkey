@@ -22,8 +22,8 @@ export default function HomePage() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col justify-between p-14 bg-white">
+    <div className="flex  flex-col justify-between p-14">
       <MainSpendDisplay radius={radius} stats={stats} />
-    </main>
+    </div>
   );
 }

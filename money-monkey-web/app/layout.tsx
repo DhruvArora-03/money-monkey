@@ -22,10 +22,10 @@ export default function RootLayout({
     <html lang="en">
       <SpeedInsights />
       <Analytics />
-      <body className={inter.className}>
+      <body className={inter.className + " flex flex-col h-screen"}>
         <ClerkProvider>
           <NavBar />
-          {children}
+          <main className="flex-grow bg-white">{children}</main>
         </ClerkProvider>
       </body>
     </html>
