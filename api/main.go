@@ -2,12 +2,10 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
-	"money-monkey/api/auth"
+	"money-monkey/api/controllers"
 	"money-monkey/api/db"
-	"money-monkey/api/middleware"
-	"money-monkey/api/plaid"
+	"money-monkey/api/services"
 	"net/http"
 
 	"github.com/joho/godotenv"
@@ -22,20 +20,8 @@ func main() {
 	dbpool := db.StartConnectionPool(context.Background())
 	defer dbpool.Close()
 
-	plaid.Initialize()
-	auth.Initialize()
-
-	router := http.NewServeMux()
-
-	router.HandleFunc("GET /health", func(w http.ResponseWriter, r *http.Request) {})
-
-	router.Handle("/plaid/", plaid.NewRouter())
-	router.Handle("/auth/", auth.NewRouter())
-
-	router.HandleFunc("GET /test-auth", middleware.Auth(func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte(fmt.Sprintf("userId: %v", r.Context().Value(auth.UserIdKey))))
-	}))
+	services.InitializePlaid()
 
 	log.Println("API Initialization Successful! Hosting on port 8080")
-	http.ListenAndServe(":8080", middleware.Logging(router))
+	http.ListenAndServe(":8080", controllers.CreateRouteHandler())
 }

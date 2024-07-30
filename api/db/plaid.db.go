@@ -4,7 +4,6 @@ import (
 	"context"
 	"log"
 	"math"
-	"money-monkey/api/model"
 	"money-monkey/api/types"
 	"strings"
 
@@ -13,7 +12,7 @@ import (
 	"github.com/plaid/plaid-go/v21/plaid"
 )
 
-func AddPlaidConnection(ctx context.Context, userId int, accessToken string, itemId string) (int, error) {
+func AddPlaidConnection(ctx context.Context, userId string, accessToken string, itemId string) (int, error) {
 	var res struct {
 		Id int `db:"id"`
 	}
@@ -27,8 +26,8 @@ func AddPlaidConnection(ctx context.Context, userId int, accessToken string, ite
 	return res.Id, err
 }
 
-func GetPlaidConnection(ctx context.Context, id int) (model.PlaidConnection, error) {
-	var res model.PlaidConnection
+func GetPlaidConnection(ctx context.Context, id int) (types.PlaidConnection, error) {
+	var res types.PlaidConnection
 
 	err := pgxscan.Get(ctx, dbpool, &res, `
 			SELECT pc.id, pc.user_id, pc.access_token, pc.item_id, pc.cursor
@@ -38,7 +37,7 @@ func GetPlaidConnection(ctx context.Context, id int) (model.PlaidConnection, err
 	return res, err
 }
 
-func UpdateTransactions(ctx context.Context, userId, plaidConnectionId int, added, modified []plaid.Transaction, removed []plaid.RemovedTransaction, cursor *string) types.FetchTransactionsResponse {
+func UpdateTransactions(ctx context.Context, connection types.PlaidConnection, added, modified []plaid.Transaction, removed []plaid.RemovedTransaction) {
 	batch := &pgx.Batch{}
 
 	for _, tran := range added {
@@ -55,8 +54,8 @@ func UpdateTransactions(ctx context.Context, userId, plaidConnectionId int, adde
 				personal_finance_category,
 				transaction_type
 			) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
-			userId,
-			plaidConnectionId,
+			connection.UserId,
+			connection.Id,
 			tran.GetTransactionId(),
 			tran.GetName(),
 			int(math.Floor(tran.GetAmount()*100)),
@@ -85,8 +84,8 @@ func UpdateTransactions(ctx context.Context, userId, plaidConnectionId int, adde
 				user_id = $1 AND
 				plaid_connection_id = $2 AND
 				transaction_id = $3`,
-			userId,
-			plaidConnectionId,
+			connection.UserId,
+			connection.Id,
 			tran.GetTransactionId(),
 			tran.GetName(),
 			tran.GetAmount(),
@@ -106,8 +105,8 @@ func UpdateTransactions(ctx context.Context, userId, plaidConnectionId int, adde
 				user_id = $1 AND
 				plaid_connection_id = $2 AND
 				transaction_id = $3`,
-			userId,
-			plaidConnectionId,
+			connection.UserId,
+			connection.Id,
 			tran.GetTransactionId(),
 		)
 	}
@@ -129,11 +128,5 @@ func UpdateTransactions(ctx context.Context, userId, plaidConnectionId int, adde
 
 	for range removed {
 		res.Exec()
-	}
-
-	return types.FetchTransactionsResponse{
-		NumAdded:    len(added),
-		NumModified: len(modified),
-		NumRemoved:  len(removed),
 	}
 }
