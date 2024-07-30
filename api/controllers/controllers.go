@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"errors"
+	"money-monkey/api/utils"
 	"net/http"
 )
 
@@ -16,5 +17,5 @@ func CreateRouteHandler() http.Handler {
 	router.Handle("/expenses/", newExpenseRouter())
 	router.Handle("/users/", newUserRouter())
 
-	return router
+	return utils.LoggingMiddleware(router)
 }
