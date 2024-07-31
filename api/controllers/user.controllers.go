@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"money-monkey/api/services"
 	"money-monkey/api/utils"
 	"net/http"
@@ -27,7 +28,7 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 
 	err = services.CreateUser(r.Context(), request.UserId)
 	if err != nil {
-		http.Error(w, "Unable to create user", http.StatusInternalServerError)
+		http.Error(w, fmt.Errorf("Unable to create user %w", err).Error(), http.StatusInternalServerError)
 		return
 	}
 }

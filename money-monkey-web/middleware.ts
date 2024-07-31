@@ -1,4 +1,4 @@
-import { clerkMiddleware } from "@clerk/nextjs/server";
+import { clerkMiddleware, clerkClient } from "@clerk/nextjs/server";
 
 export default clerkMiddleware((auth, req) => {
   const { userId, redirectToSignIn, sessionClaims } = auth();
@@ -6,14 +6,14 @@ export default clerkMiddleware((auth, req) => {
   if (!userId && !req.nextUrl.pathname.startsWith("/sign-in")) {
     redirectToSignIn();
   } else if (userId && !sessionClaims?.metadata?.onboardingComplete) {
-    fetch(`${process.env.API_BASE}/user/create`, {
+    fetch(`${process.env.API_BASE}/users/create`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId,
-      }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId }),
+    }).then(() => {
+      clerkClient().users.updateUserMetadata(userId, {
+        publicMetadata: { onboardingComplete: true },
+      });
     });
   }
 });
