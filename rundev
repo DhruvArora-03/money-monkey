@@ -1,0 +1,3 @@
+#!/bin/bash
+
+(cd api && air) & (cd money-monkey-web && npm run dev)
