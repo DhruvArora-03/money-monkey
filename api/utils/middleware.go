@@ -44,7 +44,7 @@ func ValidateRequestBody(body io.ReadCloser, s interface{}) error {
 		return ErrBrokenRequestBody
 	}
 
-	validate := validator.New()
+	validate := validator.New(validator.WithRequiredStructEnabled())
 	err = validate.Struct(s)
 	if err != nil {
 		return ErrInvalidRequestBody

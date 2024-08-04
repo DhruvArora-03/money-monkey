@@ -12,19 +12,20 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
-func AddNewUser(ctx context.Context, userId string) error {
-	var default_categories []string
-	rows, err := dbpool.Query(ctx, "SELECT c.name FROM category c")
-	if err != nil {
-		return err
-	}
-	err = pgxscan.ScanAll(&default_categories, rows)
-	if err != nil {
-		return err
-	}
+var default_categories = [...]string{
+	"Housing",
+	"Groceries",
+	"Food",
+	"Transportation",
+	"Entertainment",
+	"Necessities",
+	"Clothes",
+	"Other",
+}
 
+func AddNewUser(ctx context.Context, userId string) error {
 	var existing_categories []string
-	rows, err = dbpool.Query(ctx, "SELECT uc.name FROM user_category uc WHERE uc.user_id = $1", userId)
+	rows, err := dbpool.Query(ctx, "SELECT uc.name FROM user_category uc WHERE uc.user_id = $1", userId)
 	if err != nil {
 		return err
 	}

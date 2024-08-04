@@ -26,10 +26,10 @@ CREATE TABLE expense (
     id SERIAL NOT NULL PRIMARY KEY,
     user_id TEXT NOT NULL,
     plaid_transaction_id INTEGER,
+    category_id INTEGER,
     name TEXT NOT NULL,
     amount_cents INTEGER NOT NULL,
     date DATE NOT NULL,
-    category TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
@@ -46,32 +46,15 @@ CREATE TABLE plaid_connection (
 
 CREATE TABLE category (
     id SERIAL PRIMARY KEY,
-    name TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
-);
-
-INSERT INTO category (name) VALUES
-    ('Housing'),
-    ('Groceries'),
-    ('Food'),
-    ('Transportation'),
-    ('Entertainment'),
-    ('Necessities'),
-    ('Clothes'),
-    ('Other');
-
-CREATE TABLE user_category (
-    id SERIAL PRIMARY KEY,
     user_id TEXT NOT NULL,
-    name TEXT NOT NULL,
+    name TEXT NOT NULL UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
-CREATE TABLE user_category_month (
+CREATE TABLE category_month (
     id SERIAL PRIMARY KEY,
-    user_category_id INTEGER NOT NULL,
+    category_id INTEGER NOT NULL,
     month INTEGER NOT NULL,
     year INTEGER NOT NULL,
     total_cents INTEGER NOT NULL,
@@ -86,10 +69,11 @@ ADD CONSTRAINT plaid_transaction_expense_id_foreign FOREIGN KEY (expense_id) REF
 ADD CONSTRAINT plaid_transaction_plaid_connection_id_foreign FOREIGN KEY (plaid_connection_id) REFERENCES plaid_connection (id) ON DELETE CASCADE;
 
 ALTER TABLE expense
-ADD CONSTRAINT expense_plaid_transaction_id_foreign FOREIGN KEY (plaid_transaction_id) REFERENCES plaid_transaction (id) ON DELETE CASCADE;
+ADD CONSTRAINT expense_plaid_transaction_id_foreign FOREIGN KEY (plaid_transaction_id) REFERENCES plaid_transaction (id) ON DELETE CASCADE,
+ADD CONSTRAINT expense_category_id_foreign FOREIGN KEY (category_id) REFERENCES category (id) ON DELETE CASCADE;
 
-ALTER TABLE user_category_month
-ADD CONSTRAINT user_category_month_user_category_id_foreign FOREIGN KEY (user_category_id) REFERENCES user_category (id) ON DELETE CASCADE;
+ALTER TABLE category_month
+ADD CONSTRAINT category_month_category_id_foreign FOREIGN KEY (category_id) REFERENCES category (id) ON DELETE CASCADE;
 
 -- Function to update the updated_at column
 CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -125,12 +109,7 @@ BEFORE UPDATE ON category
 FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column();
 
-CREATE TRIGGER update_user_category_updated_at
-BEFORE UPDATE ON user_category
-FOR EACH ROW
-EXECUTE FUNCTION update_updated_at_column();
-
-CREATE TRIGGER update_user_category_month_updated_at
-BEFORE UPDATE ON user_category_month
+CREATE TRIGGER update_category_month_updated_at
+BEFORE UPDATE ON category_month
 FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column();
