@@ -28,7 +28,7 @@ func createExpense(w http.ResponseWriter, r *http.Request) {
 
 	err = services.CreateExpense(r.Context(), &request)
 	if err != nil {
-		http.Error(w, fmt.Errorf("Unable to create user %w", err).Error(), http.StatusInternalServerError)
+		http.Error(w, fmt.Errorf("unable to create expense %w", err).Error(), http.StatusInternalServerError)
 		return
 	}
 }

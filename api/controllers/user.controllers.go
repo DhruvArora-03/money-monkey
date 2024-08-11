@@ -28,7 +28,9 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 
 	err = services.CreateUser(r.Context(), request.UserId)
 	if err != nil {
-		http.Error(w, fmt.Errorf("Unable to create user %w", err).Error(), http.StatusInternalServerError)
+		http.Error(w, fmt.Errorf("unable to create user %w", err).Error(), http.StatusInternalServerError)
 		return
 	}
+
+	w.WriteHeader(http.StatusCreated)
 }
