@@ -1,4 +1,4 @@
-import { clerkClient } from "@clerk/nextjs/server";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 
 export async function createUser(userId: string) {
   const res = await fetch(`${process.env.API_BASE}/users/create`, {
@@ -15,7 +15,14 @@ export async function createUser(userId: string) {
 }
 
 export async function getExpenses(): Promise<Expense[]> {
-  const res = await fetch(`${process.env.API_BASE}/expenses`);
+  var userId = auth().userId
+  if (userId == null) {
+    throw new Error("could not find userId")
+  }
+
+  const res = await fetch(`${process.env.API_BASE}/expenses`, {
+    headers: { "X-User-Id": userId }
+  });
   if (!res.ok) {
     throw new Error(await res.text());
   }

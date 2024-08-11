@@ -1,11 +1,20 @@
 package types
 
+import "time"
+
 type ExpensePartial struct {
-	UserId      string `json:"user_id" validate:"required"`
-	CategoryId  int    `json:"category_id" validate:"required"`
-	Name        string `json:"name" validate:"required"`
-	Date        string `json:"date" validate:"required"`
-	AmountCents int    `json:"amount_cents" validate:"required"`
+	CategoryId  int    `json:"category_id" validate:"required" db:"category_id"`
+	Name        string `json:"name" validate:"required" db:"name"`
+	Date        string `json:"date" validate:"required" db:"date"`
+	AmountCents int    `json:"amount_cents" validate:"required" db:"amount_cents"`
+}
+
+type Expense struct {
+	Id           int       `json:"id" db:"id"`
+	Name         string    `json:"name" db:"name"`
+	Date         time.Time `json:"date" db:"date"`
+	AmountCents  int       `json:"amount_cents" db:"amount_cents"`
+	CategoryName string    `json:"category_name" db:"category_name"`
 }
 
 type FetchTransactionsResult struct {

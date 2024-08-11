@@ -26,7 +26,7 @@ CREATE TABLE expense (
     id SERIAL NOT NULL PRIMARY KEY,
     user_id TEXT NOT NULL,
     plaid_transaction_id INTEGER,
-    category_id INTEGER,
+    category_id INTEGER NOT NULL,
     name TEXT NOT NULL,
     amount_cents INTEGER NOT NULL,
     date DATE NOT NULL,

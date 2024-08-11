@@ -2,14 +2,11 @@ package db
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"money-monkey/api/utils"
 
 	"github.com/georgysavva/scany/v2/pgxscan"
-	"github.com/jackc/pgerrcode"
 	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgconn"
 )
 
 var default_categories = [...]string{
@@ -20,7 +17,6 @@ var default_categories = [...]string{
 	"Entertainment",
 	"Necessities",
 	"Clothes",
-	"Other",
 }
 
 func AddNewUser(ctx context.Context, userId string) error {
@@ -50,11 +46,6 @@ func AddNewUser(ctx context.Context, userId string) error {
 		if !utils.Contains(existing_categories, category) {
 			_, err = results.Exec()
 			if err != nil {
-				var pgErr *pgconn.PgError
-				if errors.As(err, &pgErr) && pgErr.Code == pgerrcode.UniqueViolation {
-					continue
-				}
-
 				return fmt.Errorf("unable to insert category: %w", err)
 			}
 		}

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"fmt"
 	"money-monkey/api/services"
 	"money-monkey/api/types"
@@ -11,10 +12,22 @@ import (
 func newExpenseRouter() http.Handler {
 	router := http.NewServeMux()
 
+	router.HandleFunc("GET /expenses/", getExpenses)
 	router.HandleFunc("POST /expenses/new", createExpense)
 	router.HandleFunc("POST /expenses/import", importPlaidExpense)
 
-	return router
+	return utils.UserIdMiddleware(router)
+}
+
+func getExpenses(w http.ResponseWriter, r *http.Request) {
+	expenses, err := services.GetExpenses(r.Context())
+	if err != nil {
+		http.Error(w, fmt.Errorf("unable to get expenses %w", err).Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(expenses)
 }
 
 func createExpense(w http.ResponseWriter, r *http.Request) {

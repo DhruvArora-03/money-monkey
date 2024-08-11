@@ -15,7 +15,7 @@ func StartConnectionPool(ctx context.Context) *pgxpool.Pool {
 	if err != nil {
 		log.Fatalf("Error when parsing DB_URL from .env")
 	}
-
+	
 	dbpool, err = pgxpool.NewWithConfig(ctx, cfg)
 	if err != nil {
 		log.Fatalf("Error when connecting to database: %v", err)
