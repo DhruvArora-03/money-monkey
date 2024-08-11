@@ -10,14 +10,14 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Money Monkey",
-  description: "Simple expenxe tracking",
+  description: "Simple expense tracking",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <SpeedInsights />
@@ -25,7 +25,7 @@ export default function RootLayout({
       <body className={inter.className + " flex flex-col h-screen"}>
         <ClerkProvider>
           <NavBar />
-          <main className="flex-grow bg-white">{children}</main>
+          <main className="flex-grow bg-white text-black">{children}</main>
         </ClerkProvider>
       </body>
     </html>
