@@ -22,6 +22,6 @@ func main() {
 
 	services.InitializePlaid()
 
-	log.Println("API Initialization Successful! Hosting on port 8080")
+	log.Println("API: Initialization Successful! Hosting on port 8080")
 	http.ListenAndServe(":8080", controllers.CreateRouteHandler())
 }

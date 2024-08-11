@@ -25,7 +25,7 @@ var default_categories = [...]string{
 
 func AddNewUser(ctx context.Context, userId string) error {
 	var existing_categories []string
-	rows, err := dbpool.Query(ctx, "SELECT uc.name FROM user_category uc WHERE uc.user_id = $1", userId)
+	rows, err := dbpool.Query(ctx, "SELECT c.name FROM category c WHERE c.user_id = @user_id", pgx.NamedArgs{"user_id": userId})
 	if err != nil {
 		return err
 	}
@@ -34,12 +34,12 @@ func AddNewUser(ctx context.Context, userId string) error {
 		return err
 	}
 
-	query := "INSERT INTO user_category (user_id, name) VALUES ($1, $2)"
+	const query = "INSERT INTO category (user_id, name) VALUES (@user_id, @category)"
 
 	batch := &pgx.Batch{}
 	for _, category := range default_categories {
 		if !utils.Contains(existing_categories, category) {
-			batch.Queue(query, userId, category)
+			batch.Queue(query, pgx.NamedArgs{"user_id": userId, "category": category})
 		}
 	}
 

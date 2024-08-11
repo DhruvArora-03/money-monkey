@@ -34,7 +34,7 @@ func LoggingMiddleware(next http.Handler) http.Handler {
 		}
 		next.ServeHTTP(writer, r)
 
-		log.Println(r.Method, r.URL.Path, writer.statusCode, time.Since(start))
+		log.Println("API:", r.Method, r.URL.Path, writer.statusCode, time.Since(start))
 	})
 }
 
