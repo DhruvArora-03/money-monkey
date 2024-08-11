@@ -25,9 +25,14 @@ func AddNewUser(ctx context.Context, userId string) error {
 	if err != nil {
 		return err
 	}
+	defer rows.Close()
+
 	err = pgxscan.ScanAll(&existing_categories, rows)
 	if err != nil {
 		return err
+	}
+	if rows.Err() != nil {
+		return rows.Err()
 	}
 
 	const query = "INSERT INTO category (user_id, name) VALUES (@user_id, @category)"

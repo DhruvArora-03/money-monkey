@@ -6,8 +6,14 @@ import (
 	"money-monkey/api/types"
 )
 
-func GetExpenses(ctx context.Context) ([]types.Expense, error) {
-	return db.GetExpenses(ctx)
+func GetExpenses(ctx context.Context) (expenses *[]types.Expense, err error) {
+	expenses, err = db.GetExpenses(ctx)
+
+	if expenses == nil {
+		expenses = &[]types.Expense{}
+	}
+
+	return expenses, err
 }
 
 func CreateExpense(ctx context.Context, expense *types.ExpensePartial) error {
