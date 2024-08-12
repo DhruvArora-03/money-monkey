@@ -3,11 +3,11 @@ import MainSpendDisplay from "@ui/MainSpendDisplay";
 
 export default function HomePage() {
    return (
-    <div className="flex flex-col sm:flex-row p-6">
-      <div className="basis-full px-32 sm:basis-80 sm:px-0 ">
+    <div className="flex w-screen flex-col sm:flex-row py-6 sm:px-6 items-center sm:items-start gap-8">
+      <div className="basis-full w-64 overflow-hidden sm:basis-80 ">
         <MainSpendDisplay />
       </div>
-      <div>
+      <div className="w-full px-3">
         <ExpenseList />
       </div>
     </div>

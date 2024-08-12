@@ -1,3 +1,4 @@
+import { formatMoney } from '@lib/money';
 import React from 'react';
 
 type ExpenseProps = {
@@ -6,11 +7,11 @@ type ExpenseProps = {
 
 export default function ExpenseItem({ expense: { name, date, amount_cents, category_name }}: ExpenseProps) {
   return (
-    <div>
-      <h2>{name}</h2>
-      <p>{date}</p>
-      <p>{amount_cents / 100}</p>
-      <p>{category_name}</p>
-    </div>
+    <tr className='border-y-4'>
+      <td>{name}</td>
+      <td>{date.toDateString()}</td>
+      <td>{formatMoney(amount_cents)}</td>
+      <td>{category_name}</td>
+    </tr>
   );
 };

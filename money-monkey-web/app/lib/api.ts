@@ -26,5 +26,6 @@ export async function getExpenses(): Promise<Expense[]> {
   if (!res.ok) {
     throw new Error(await res.text());
   }
-  return res.json();
+  var expenses: any[] = await res.json();
+  return expenses.map((e) => ({ ...e, date: new Date(e.date) } satisfies Expense) )
 }
