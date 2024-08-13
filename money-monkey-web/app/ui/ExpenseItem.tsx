@@ -9,7 +9,7 @@ export default function ExpenseItem({ expense: { name, date, amount_cents, categ
   return (
     <tr className='border-y-4'>
       <td>{name}</td>
-      <td>{date.toDateString()}</td>
+      <td>{date.toString()}</td>
       <td>{formatMoney(amount_cents)}</td>
       <td>{category_name}</td>
     </tr>
