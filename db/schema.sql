@@ -22,6 +22,16 @@ CREATE TABLE plaid_transaction (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
+CREATE TABLE plaid_connection (
+    id SERIAL PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    access_token TEXT NOT NULL,
+    item_id TEXT NOT NULL,
+    cursor TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
 CREATE TABLE expense (
     id SERIAL NOT NULL PRIMARY KEY,
     user_id TEXT NOT NULL,
@@ -30,16 +40,6 @@ CREATE TABLE expense (
     name TEXT NOT NULL,
     amount_cents INTEGER NOT NULL,
     date DATE NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
-);
-
-CREATE TABLE plaid_connection (
-    id SERIAL PRIMARY KEY,
-    user_id TEXT NOT NULL,
-    access_token TEXT NOT NULL,
-    item_id TEXT NOT NULL,
-    cursor TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
 );

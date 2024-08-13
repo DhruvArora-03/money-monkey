@@ -10,6 +10,7 @@ import (
 )
 
 var default_categories = [...]string{
+	"Other",
 	"Housing",
 	"Groceries",
 	"Food",
