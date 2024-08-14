@@ -22,7 +22,7 @@ export default async function ExpenseList() {
           return (
             <React.Fragment key={key}>
               {key != prevKey && (
-                <div className="w-full pt-5 [&:first-child]:pt-0 whitespace-nowrap text-xl">
+                <div className="w-full pt-5 [&:first-child]:pt-0 border-b-4 whitespace-nowrap text-xl">
                   {(prevKey = key)}
                 </div>
               )}

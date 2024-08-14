@@ -7,7 +7,7 @@ type ExpenseProps = {
 
 export default function ExpenseItem({ expense: { name, date, amount_cents, category_name }}: ExpenseProps) {
   return (
-    <tr className='border-y-4'>
+    <tr className='border-y-2 [&:has(div +)]:border-t-4'>
       <td>{name}</td>
       <td>{date.toString()}</td>
       <td>{formatMoney(amount_cents)}</td>
