@@ -20,7 +20,7 @@ export async function getExpenses(): Promise<Expense[]> {
     throw new Error("could not find userId")
   }
 
-  const res = await fetch(`${process.env.API_BASE}/expenses`, {
+  const res = await fetch(`${process.env.API_BASE}/expenses/`, {
     headers: { "X-User-Id": userId }
   });
   if (!res.ok) {
