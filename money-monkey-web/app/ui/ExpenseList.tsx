@@ -16,6 +16,7 @@ export default async function ExpenseList() {
       const key = e.date.toLocaleDateString("en-US", {
         month: "long",
         year: "numeric",
+        timeZone: "UTC",
       });
 
       return (
