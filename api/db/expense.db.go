@@ -11,7 +11,7 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func GetExpenses(ctx context.Context) (*[]types.Expense, error) {
+func GetExpenses(ctx context.Context) (expenses *[]types.Expense, err error) {
 	rows, err := dbpool.Query(ctx, `
 		SELECT
 			e.id,
@@ -28,8 +28,8 @@ func GetExpenses(ctx context.Context) (*[]types.Expense, error) {
 	}
 	defer rows.Close()
 
-	expenses := []types.Expense{}
-	err = pgxscan.ScanAll(&expenses, rows)
+	expenses = &[]types.Expense{}
+	err = pgxscan.ScanAll(expenses, rows)
 	if err != nil {
 		return nil, err
 	}
@@ -37,7 +37,7 @@ func GetExpenses(ctx context.Context) (*[]types.Expense, error) {
 		return nil, rows.Err()
 	}
 
-	return &expenses, nil
+	return expenses, nil
 }
 
 func CreateExpense(ctx context.Context, expense *types.ExpensePartial) error {
@@ -107,3 +107,4 @@ func ImportPlaidExpense(ctx context.Context, plaidTransactionId, categoryId int)
 
 	return CreateExpense(ctx, &expense)
 }
+

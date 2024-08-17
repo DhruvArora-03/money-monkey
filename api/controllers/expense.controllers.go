@@ -60,7 +60,7 @@ func importPlaidExpense(w http.ResponseWriter, r *http.Request) {
 
 	err = services.ImportPlaidExpense(r.Context(), request.PlaidTransactionId, request.CategoryId)
 	if err != nil {
-		http.Error(w, fmt.Errorf("Unable to import plaid expense %w", err).Error(), http.StatusInternalServerError)
+		http.Error(w, fmt.Errorf("unable to import plaid expense %w", err).Error(), http.StatusInternalServerError)
 		return
 	}
 }

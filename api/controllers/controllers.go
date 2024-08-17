@@ -22,6 +22,7 @@ func CreateRouteHandler() http.Handler {
 
 	router.Handle("/plaid/", newPlaidRouter())
 	router.Handle("/expenses/", newExpenseRouter())
+	router.Handle("/categories/", newCategoriesRouter())
 	router.Handle("/users/", newUserRouter())
 
 	return utils.LoggingMiddleware(router)

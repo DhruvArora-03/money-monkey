@@ -30,3 +30,8 @@ type PlaidConnection struct {
 	ItemId      string  `db:"item_id"`
 	Cursor      *string `db:"cursor"`
 }
+
+type Category struct {
+	Id   int    `json:"id" db:"id"`
+	Name string `json:"name" db:"name"`
+}
