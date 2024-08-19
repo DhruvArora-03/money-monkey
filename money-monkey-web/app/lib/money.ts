@@ -1,3 +1,8 @@
+const usdFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+})
+
 export function formatMoney(amountCents: number): string {
-  return `$${(amountCents / 100).toFixed(2)}`
+  return usdFormatter.format(amountCents / 100)
 }
