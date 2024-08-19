@@ -1,78 +1,46 @@
-import { useMemo } from "react";
 import colors from "@lib/colors";
 import { formatMoney } from "@lib/money";
-import { ExpenseTypes, HomePageStats } from "@lib/types";
 
 const MIN_THRESHOLD = 0.05;
 
 type CircleSection = {
-  type: ExpenseTypes;
+  category_id: number
   percentage: number;
+  color: string;
 };
 
-export default function MainSpendDisplay() {
+export default function MainSpendDisplay({sums} : {sums: CategorySum[]}) {
   const width = 450;
   const r = (width - 70 - 30) / 2;
-  const random = new Array(7).fill(0).map(() => Math.floor(100_00 - Math.random() * 200_00));
-  const stats: HomePageStats = {
-    totalCents: 2_808_67 + random.reduce((x, y) => x + y),
-    catagories: {
-      Housing: 1_328_00 + random[0],
-      Food: 254_37 + random[1],
-      Entertainment: 173_46 + random[2],
-      Clothes: 145_08 + random[3],
-      Groceries: 467_43 + random[4],
-      Necessities: 220_04 + random[5],
-      Miscellaneous: 220_29 + random[6],
-    }
-  };
 
   const pad = 10;
-  const dim = (pad + r) * 2;
+  const offset = pad + r;
+  const dim = (offset) * 2;
 
-  const values = useMemo(
-    () =>
-      ExpenseTypes.map((type) => {
-        const val = stats ? stats.catagories[type] : 0;
-        return {
-          type,
-          value:
-            stats && val > 0 && val / stats.totalCents < MIN_THRESHOLD
-              ? MIN_THRESHOLD * stats.totalCents
-              : val,
-        };
-      }).filter((x) => x.value > 0),
-    [stats],
-  );
-  const total = useMemo(
-    () =>
-      values.reduce((x, y) => ({ ...x, value: x.value + y.value }), {
-        type: "",
-        value: 0,
-      }).value,
-    [values],
-  );
-  const sections: CircleSection[] = useMemo(
-    () =>
-      values.map(
-        ({ type, value }) =>
-          ({
-            type,
-            percentage: value / total,
-          }) satisfies CircleSection,
-      ),
-    [values, total],
-  );
+  const total = sums.reduce((x, y) => ({ ...x, total_cents: x.total_cents + y.total_cents }), {
+    category_id: 0,
+    name: "",
+    total_cents: 0,
+    color: "#000000",
+  } satisfies CategorySum).total_cents;
+  const sections: CircleSection[] = sums.filter((s) => s.total_cents != 0).map(
+    ({ category_id, color, total_cents }) =>
+      ({
+        category_id: category_id,
+        color: color ?? "#0FF0AF",
+        percentage: total_cents / total,
+      }) satisfies CircleSection,
+    );
 
-  if (stats == undefined) {
+  if (sums == undefined || total == 0) {
     return (
       <svg className="w-full h-[300px]" width={dim} height={dim}>
         <circle
           stroke="black"
           strokeWidth={4}
           fill="none"
-          cx={pad + r}
-          cy={pad + r}
+          cx={offset}
+          cy={offset}
           r={r}
         />
         <text
@@ -90,7 +58,7 @@ export default function MainSpendDisplay() {
     );
   }
 
-  function Section({ percentage: p, type, i }: CircleSection & { i: number }) {
+  function Section({ percentage: p, color, i }: CircleSection & { i: number }) {
     if (p === 0) {
       return null;
     }
@@ -104,10 +72,10 @@ export default function MainSpendDisplay() {
     if (p === 1) {
       return (
         <circle
-          cx={pad + r}
-          cy={pad + r}
+          cx={offset}
+          cy={offset}
           r={r}
-          stroke={colors.expenses[type]}
+          stroke={color}
           strokeWidth={20}
           fill="none"
         />
@@ -120,9 +88,9 @@ export default function MainSpendDisplay() {
 
     return (
       <path
-        d={`M ${pad + r + r * Math.cos(start)} ${pad + r + r * Math.sin(start)}
-            A ${r} ${r} 0 ${p > 0.51 ? 1 : 0} 1 ${pad + r + r * Math.cos(end)} ${pad + r + r * Math.sin(end)}`}
-        stroke={colors.expenses[type]}
+        d={`M ${offset + r * Math.cos(start)} ${offset + r * Math.sin(start)}
+            A ${r} ${r} 0 ${p > 0.5 ? 1 : 0} 1 ${offset + r * Math.cos(end)} ${offset + r * Math.sin(end)}`}
+        stroke={color}
         strokeWidth={15}
         strokeLinecap="round"
         fill="none"
@@ -142,12 +110,12 @@ export default function MainSpendDisplay() {
           fontWeight={600}
           fill="black"
         >
-          {formatMoney(stats.totalCents)}
+          {formatMoney(total)}
         </text>
         {sections
           .sort((a, b) => b.percentage - a.percentage)
           .map((s: CircleSection, i) => (
-            <Section key={s.type} i={i} {...s} />
+            <Section key={s.category_id} i={i} {...s} />
           ))}
       </svg>
     </view>

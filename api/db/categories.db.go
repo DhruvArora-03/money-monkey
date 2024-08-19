@@ -37,6 +37,7 @@ func GetYearCategorySums(ctx context.Context, year int) (categorySums *[]types.C
 		SELECT
 			c.id as category_id,
 			c.name,
+			c.color,
 			SUM(COALESCE(cm.total_cents, 0)) AS total_cents
 		FROM category c
 		LEFT JOIN (
@@ -70,6 +71,7 @@ func GetMonthCategorySums(ctx context.Context, year, month int) (categorySums *[
 		SELECT
 			c.id as category_id,
 			c.name,
+			c.color,
 			SUM(COALESCE(cm.total_cents, 0)) AS total_cents
 		FROM category c
 		LEFT JOIN (

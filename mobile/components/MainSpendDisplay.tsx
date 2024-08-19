@@ -22,7 +22,7 @@ export default function MainSpendDisplay({
   ...props
 }: MainSpendDisplayProps) {
   const pad = 10
-  const dim = (pad + r) * 2
+  const dim = (offset) * 2
 
   const values = useMemo(
     () =>
@@ -67,8 +67,8 @@ export default function MainSpendDisplay({
           stroke="black"
           strokeWidth={4}
           fill="none"
-          cx={pad + r}
-          cy={pad + r}
+          cx={offset}
+          cy={offset}
           r={r}
         />
         <Text
@@ -99,8 +99,8 @@ export default function MainSpendDisplay({
     if (p === 1) {
       return (
         <Circle
-          cx={pad + r}
-          cy={pad + r}
+          cx={offset}
+          cy={offset}
           r={r}
           stroke={colors.expenses[type]}
           strokeWidth={20}
@@ -115,8 +115,8 @@ export default function MainSpendDisplay({
 
     return (
       <Path
-        d={`M ${pad + r + r * Math.cos(start)} ${pad + r + r * Math.sin(start)}
-            A ${r} ${r} 0 ${p > 0.51 ? 1 : 0} 1 ${pad + r + r * Math.cos(end)} ${pad + r + r * Math.sin(end)}`}
+        d={`M ${offset + r * Math.cos(start)} ${offset + r * Math.sin(start)}
+            A ${r} ${r} 0 ${p > 0.51 ? 1 : 0} 1 ${offset + r * Math.cos(end)} ${offset + r * Math.sin(end)}`}
         stroke={colors.expenses[type]}
         strokeWidth={15}
         strokeLinecap='round'

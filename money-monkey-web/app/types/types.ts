@@ -5,3 +5,10 @@ interface Expense {
   amount_cents: number;
   category_name: string;
 }
+
+interface CategorySum {
+  category_id: number;
+  name: string;
+  total_cents: number;
+  color: string;
+}

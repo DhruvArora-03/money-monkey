@@ -40,4 +40,5 @@ type CategorySum struct {
 	CategoryId int    `json:"category_id" db:"category_id"`
 	Name       string `json:"name" db:"name"`
 	TotalCents int    `json:"total_cents" db:"total_cents"`
+	Color      string `json:"color" db:"color"`
 }
