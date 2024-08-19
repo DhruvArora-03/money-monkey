@@ -15,3 +15,21 @@ func GetCategories(ctx context.Context) (categories *[]types.Category, err error
 
 	return categories, err
 }
+
+func GetYearCategorySums(ctx context.Context, year int) (categorySums *[]types.CategorySum, err error) {
+	categorySums, err = db.GetYearCategorySums(ctx, year)
+	if categorySums == nil {
+		categorySums = &[]types.CategorySum{}
+	}
+
+	return categorySums, err
+}
+
+func GetMonthCategorySums(ctx context.Context, year, month int) (categorySums *[]types.CategorySum, err error) {
+	categorySums, err = db.GetMonthCategorySums(ctx, year, month)
+	if categorySums == nil {
+		categorySums = &[]types.CategorySum{}
+	}
+
+	return categorySums, err
+}
