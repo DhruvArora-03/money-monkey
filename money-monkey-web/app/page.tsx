@@ -11,8 +11,8 @@ export default async function HomePage() {
   }
 
    return (
-    <div className="flex w-screen flex-col sm:flex-row py-6 sm:px-6 items-center sm:items-start gap-8">
-      <div className="basis-full w-64 overflow-hidden sm:basis-80 ">
+    <div className="flex w-screen flex-col sm:flex-row py-6 sm:px-6 items-center sm:items-start gap-6">
+      <div className="basis-full w-64 overflow-hidden sm:basis-80 flex flex-col gap-2 p-2 border-gray-300 border-2 rounded-lg bg-neutral-50">
         <MainSpendDisplay sums={sums} />
         <CategoryList sums={sums} />
       </div>
