@@ -1,4 +1,3 @@
-import colors from "@lib/colors";
 import { formatMoney } from "@lib/money";
 
 const MIN_THRESHOLD = 0.05;
