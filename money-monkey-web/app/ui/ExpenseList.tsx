@@ -70,11 +70,9 @@ export default async function ExpenseList() {
                 <td className="pt-5 text-nowrap">{m.monthYear}</td>
               </tr>
               {m.dates.map((d) => (
-                <div key={d.date} className="grid grid-cols-[50px_1fr] my-1">
-                  <tr className="text-lg">
-                    <td className="pt-2 text-nowrap">{d.date}</td>
-                  </tr>
-                  <div className="pt-2">
+                <div key={d.date} className="grid grid-cols-[75px_1fr] my-2">
+                  <p className="text-lg text-nowrap">{d.date}</p>
+                  <div>
                     {d.expenses.map((e) => (
                       <tr
                         key={e.id}
