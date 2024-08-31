@@ -54,26 +54,30 @@ export default async function ExpenseList() {
   });
 
   return (
-    <table className="group w-full">
+    <table className="w-full">
       <tbody>
         {expenseMonths.map((m) => (
-          <React.Fragment key={m.monthYear} >
+          <React.Fragment key={m.monthYear}>
             <tr className="border-b-4 text-xl">
               <td className="pt-5 text-nowrap">{m.monthYear}</td>
             </tr>
             {m.dates.map((d) => (
               <React.Fragment key={d.date}>
-                <tr className="border-b-2 text-md">
+                <tr className="text-lg">
                   <td className="pt-2 text-nowrap">{d.date}</td>
                 </tr>
                 {d.expenses.map((e) => (
                   <tr
                     key={e.id}
-                    className="text-sm [&>*]:px-2 hover:bg-blue-100"
+                    className="text-md [&>*]:px-4 hover:bg-blue-100"
                   >
-                    <td className="text-nowrap text-ellipsis overflow-hidden w-[20ch] md:w-[36ch] lg:w-[44ch]">{e.name}</td>
-                    <td className="">{e.category_name}</td>
-                    <td className="">{formatMoney(e.amount_cents)}</td>
+                    <td className="text-nowrap text-ellipsis overflow-hidden w-[20ch] md:w-[36ch] lg:w-[44ch]">
+                      {e.name.trim()}
+                      <span className="text-sm text-gray-700">
+                        {` - ${e.category_name}`}
+                      </span>
+                    </td>
+                    <td>{formatMoney(e.amount_cents)}</td>
                   </tr>
                 ))}
               </React.Fragment>
