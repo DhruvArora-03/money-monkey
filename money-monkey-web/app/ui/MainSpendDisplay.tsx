@@ -1,9 +1,7 @@
 import { formatMoney } from "@lib/money";
 
-const MIN_THRESHOLD = 0.05;
-
 type CircleSection = {
-  category_id: number
+  category_id: number;
   percentage: number;
   color: string;
 };
@@ -98,25 +96,23 @@ export default function MainSpendDisplay({sums} : {sums: CategorySum[]}) {
   }
 
   return (
-    <view className="height-[300px]">
-      <svg width={"100%"} height={"100%"} viewBox={`0 0 ${dim} ${dim}`}>
-        <text
-          x={dim / 2}
-          y={dim / 2}
-          textAnchor="middle"
-          alignmentBaseline="middle"
-          fontSize={36}
-          fontWeight={600}
-          fill="black"
-        >
-          {formatMoney(total)}
-        </text>
-        {sections
-          .sort((a, b) => b.percentage - a.percentage)
-          .map((s: CircleSection, i) => (
-            <Section key={s.category_id} i={i} {...s} />
-          ))}
-      </svg>
-    </view>
+    <svg className="height-[300px]" width={"100%"} height={"100%"} viewBox={`0 0 ${dim} ${dim}`}>
+      <text
+        x={dim / 2}
+        y={dim / 2}
+        textAnchor="middle"
+        alignmentBaseline="middle"
+        fontSize={36}
+        fontWeight={600}
+        fill="black"
+      >
+        {formatMoney(total)}
+      </text>
+      {sections
+        .sort((a, b) => b.percentage - a.percentage)
+        .map((s: CircleSection, i) => (
+          <Section key={s.category_id} i={i} {...s} />
+        ))}
+    </svg>
   );
 }
