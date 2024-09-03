@@ -56,6 +56,7 @@ export default async function ExpenseList() {
     currDate.expenses.push(e);
   });
 
+  var lastDate = null;
   return (
     <table className="w-full">
       <tbody>
@@ -66,29 +67,31 @@ export default async function ExpenseList() {
         ) : (
           expenseMonths.map((m) => (
             <React.Fragment key={m.monthYear}>
-              <tr className="border-b-4 text-xl">
-                <td className="pt-5 text-nowrap">{m.monthYear}</td>
+              <tr className="w-full border-b-4 text-xl pt-5 text-nowrap">
+                <td colSpan={3}>{m.monthYear}</td>
               </tr>
               {m.dates.map((d) => (
-                <div key={d.date} className="grid grid-cols-[75px_1fr] my-2">
-                  <p className="text-lg text-nowrap">{d.date}</p>
-                  <div>
-                    {d.expenses.map((e) => (
-                      <tr
-                        key={e.id}
-                        className="text-md [&>*]:px-4 hover:bg-blue-100"
-                      >
-                        <td className="text-nowrap text-ellipsis overflow-hidden w-[20ch] md:w-[36ch] lg:w-[44ch]">
-                          {e.name.trim()}
-                          <span className="text-sm text-gray-700">
-                            {` - ${e.category_name}`}
-                          </span>
-                        </td>
-                        <td>{formatMoney(e.amount_cents)}</td>
-                      </tr>
-                    ))}
-                  </div>
-                </div>
+                <React.Fragment key={d.date}>
+                  {d.expenses.map((e, index) => (
+                    <tr
+                      key={e.id}
+                      className="text-md hover:bg-blue-100"
+                    >
+                      <td className="text-lg w-0 pr-2">{index == 0 ? d.date : ""}</td>
+                      <td className="max-w-0 text-nowrap text-ellipsis overflow-hidden">
+                        <span className="text-sm text-gray-600">
+                          {e.category_name}
+                        </span>
+                        <span className="hidden md:visible">
+                          {` - `}
+                        </span>
+                        <br className="md:hidden" />
+                        {e.name.trim().repeat(100)}
+                      </td>
+                      <td className="text-right w-0 pl-2">{formatMoney(e.amount_cents)}</td>
+                    </tr>
+                  ))}
+                </React.Fragment>
               ))}
             </React.Fragment>
           ))
