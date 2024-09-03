@@ -16,7 +16,7 @@ export default async function ExpenseList() {
   try {
     var expenses = await getExpenses();
   } catch {
-    return <div>Could not fetch expenses</div>;
+    return <>Could not fetch expenses</>;
   }
 
   var expenseMonths: ExpenseMonth[] = [];
