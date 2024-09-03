@@ -31,7 +31,7 @@ export default function MainSpendDisplay({sums} : {sums: CategorySum[]}) {
 
   if (sums == undefined || total == 0) {
     return (
-      <svg className="w-full h-[300px]" width={dim} height={dim}>
+      <svg className="height-[300px]" width={"100%"} height={"100%"} viewBox={`0 0 ${dim} ${dim}`}>
         <circle
           stroke="black"
           strokeWidth={4}
@@ -49,7 +49,7 @@ export default function MainSpendDisplay({sums} : {sums: CategorySum[]}) {
           fontWeight={600}
           fill="black"
         >
-          ...
+          {formatMoney(0)}
         </text>
       </svg>
     );
