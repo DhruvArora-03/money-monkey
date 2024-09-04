@@ -82,11 +82,11 @@ export default async function ExpenseList() {
                         <span className="text-sm text-gray-600">
                           {e.category_name}
                         </span>
-                        <span className="hidden md:visible">
+                        <span className="invisible md:visible">
                           {` - `}
                         </span>
                         <br className="md:hidden" />
-                        {e.name.trim().repeat(100)}
+                        {e.name.trim()}
                       </td>
                       <td className="text-right w-0 pl-2">{formatMoney(e.amount_cents)}</td>
                     </tr>
