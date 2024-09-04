@@ -17,7 +17,7 @@ export default async function HomePage() {
         <MainSpendDisplay sums={sums} />
         <CategoryList sums={sums} />
       </div>
-      <div className="lg:w-[900px] overflow-hidden px-3">
+      <div className="w-2/3 overflow-hidden px-3">
         <ExpenseList />
       </div>
     </div>

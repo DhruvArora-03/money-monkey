@@ -56,7 +56,6 @@ export default async function ExpenseList() {
     currDate.expenses.push(e);
   });
 
-  var lastDate = null;
   return (
     <table className="w-full">
       <tbody>
@@ -67,8 +66,8 @@ export default async function ExpenseList() {
         ) : (
           expenseMonths.map((m) => (
             <React.Fragment key={m.monthYear}>
-              <tr className="w-full border-b-4 text-xl pt-5 text-nowrap">
-                <td colSpan={3}>{m.monthYear}</td>
+              <tr className="w-full border-b-4 text-xl text-nowrap">
+                <td colSpan={3} className="pt-5">{m.monthYear}</td>
               </tr>
               {m.dates.map((d) => (
                 <React.Fragment key={d.date}>
@@ -77,16 +76,16 @@ export default async function ExpenseList() {
                       key={e.id}
                       className="text-md hover:bg-blue-100"
                     >
-                      <td className="text-lg w-0 pr-2">{index == 0 ? d.date : ""}</td>
+                      <td className="text-lg w-0 pr-2 pt-2">{index == 0 ? d.date : ""}</td>
                       <td className="max-w-0 text-nowrap text-ellipsis overflow-hidden">
-                        <span className="text-sm text-gray-600">
+                        <span className="text-sm text-gray-600 hidden md:inline">
+                          {`${e.category_name} - `}
+                        </span>
+                        {e.name.trim()}
+                        <br className="md:hidden" />
+                        <span className="text-sm text-gray-600 md:hidden">
                           {e.category_name}
                         </span>
-                        <span className="invisible md:visible">
-                          {` - `}
-                        </span>
-                        <br className="md:hidden" />
-                        {e.name.trim()}
                       </td>
                       <td className="text-right w-0 pl-2">{formatMoney(e.amount_cents)}</td>
                     </tr>
