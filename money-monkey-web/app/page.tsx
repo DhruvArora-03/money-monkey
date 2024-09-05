@@ -1,7 +1,9 @@
 import { getCategorySums, getYearCategorySums } from "@lib/api";
+import Button from "@ui/Button";
 import CategoryList from "@ui/CategoryList";
 import ExpenseList from "@ui/ExpenseList";
 import MainSpendDisplay from "@ui/MainSpendDisplay";
+import { MdAddCircle } from "react-icons/md";
 
 export default async function HomePage() {
   try {
@@ -20,6 +22,7 @@ export default async function HomePage() {
       <div className="w-2/3 overflow-hidden px-3">
         <ExpenseList />
       </div>
+      <Button text="bruh" icon={MdAddCircle} />
     </div>
   );
 }
