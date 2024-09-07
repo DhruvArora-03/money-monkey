@@ -3,7 +3,7 @@ import Button from "@ui/Button";
 import CategoryList from "@ui/CategoryList";
 import ExpenseList from "@ui/ExpenseList";
 import MainSpendDisplay from "@ui/MainSpendDisplay";
-import { MdAddCircle } from "react-icons/md";
+import { MdAdd } from "react-icons/md";
 
 export default async function HomePage() {
   try {
@@ -15,14 +15,14 @@ export default async function HomePage() {
 
   return (
     <div className="flex w-screen flex-col md:p-6 items-center justify-start">
-      <div className="overflow-hidden flex flex-col md:flex-row gap-8 pt-6 md:p-6 border-gray-300">
+      <Button className="self-end" text="New Expense" icon={MdAdd} />
+      <div className="overflow-hidden flex flex-col md:flex-row gap-8 pt-6 md:pb-6 md:pt-0 border-gray-300">
         <MainSpendDisplay sums={sums} />
         <CategoryList sums={sums} />
       </div>
       <div className="w-2/3 overflow-hidden px-3">
         <ExpenseList />
       </div>
-      <Button text="bruh" icon={MdAddCircle} />
     </div>
   );
 }

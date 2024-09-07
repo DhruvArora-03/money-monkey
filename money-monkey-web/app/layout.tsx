@@ -22,7 +22,7 @@ export default function RootLayout({
     <html lang="en">
       <SpeedInsights />
       <Analytics />
-      <body className={inter.className + " flex flex-col h-screen"}>
+      <body className={inter.className + " relative h-screen"}>
         <ClerkProvider>
           <NavBar />
           <main className="flex-grow bg-white text-black">{children}</main>

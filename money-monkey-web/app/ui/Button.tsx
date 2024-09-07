@@ -11,8 +11,8 @@ interface ButtonProps {
 
 export default function Button(props: ButtonProps) {
   return (
-    <button className={`flex items-center gap-2 border-2 rounded p-2 active:bg-green-600 ${props.className}`} onClick={props.onClick}>
-      {props.icon && <props.icon color={props.iconColor} size={24} />}
+    <button className={`flex items-center gap-1 border-2 rounded p-1.5 hover:bg-gray-100 active:bg-gray-200 ${props.className}`} onClick={props.onClick}>
+      {props.icon && <props.icon color={props.iconColor} size={20} />}
       {props.text && <span className="">{props.text}</span>}
     </button>
   );
