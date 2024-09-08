@@ -76,8 +76,8 @@ export default async function ExpenseList() {
                       key={e.id}
                       className="text-md hover:bg-blue-100"
                     >
-                      <td className="text-lg w-0 pr-3 pt-3">{index == 0 ? d.date : ""}</td>
-                      <td className="max-w-0 text-nowrap text-ellipsis overflow-hidden">
+                      <td className="text-lg w-0 pr-3">{index == 0 ? d.date : ""}</td>
+                      <td className="max-w-0 text-nowrap text-ellipsis overflow-hidden py-1">
                         <span className="text-sm text-gray-600 hidden md:inline">
                           {`${e.category_name} - `}
                         </span>
