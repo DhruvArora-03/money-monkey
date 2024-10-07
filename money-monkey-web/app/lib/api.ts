@@ -14,6 +14,21 @@ export async function createUser(userId: string) {
   }
 }
 
+export async function getCategories(): Promise<Category[]> {
+  var userId = auth().userId
+  if (userId == null) {
+    throw new Error("could not find userId")
+  }
+
+  const res = await fetch(`${process.env.API_BASE}/categories/`, {
+    headers: { "X-User-Id": userId }
+  });
+  if (!res.ok) {
+    throw new Error(await res.text());
+  }
+  return await res.json();
+}
+
 export async function getExpenses(): Promise<Expense[]> {
   var userId = auth().userId
   if (userId == null) {
