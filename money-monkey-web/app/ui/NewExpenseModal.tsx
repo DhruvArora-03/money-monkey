@@ -24,8 +24,8 @@ export default async function NewExpenseModal() {
   return (
     <div>
       <h2>Create New Expense</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
+      {/* <form onSubmit={handleSubmit}> */}
+        {/* <div>
           <label htmlFor="name">Expense Name:</label>
           <input type="text" id="name" name="name" value={expense.name} onChange={handleInputChange} />
         </div>
@@ -47,9 +47,9 @@ export default async function NewExpenseModal() {
               </option>
             ))}
           </select>
-        </div>
-        <button type="submit">Create Expense</button>
-      </form>
+        </div> */}
+        {/* <button type="submit">Create Expense</button> */}
+      {/* </form> */}
     </div>
   );
 };
