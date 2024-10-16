@@ -1,55 +1,88 @@
-import { getCategories } from '@lib/api';
+"use client";
 
-export default async function NewExpenseModal() {
+import Button from "./Button";
+import { MdAdd } from "react-icons/md";
+import React, { useState } from "react";
+import { Field, Form, Formik, FormikHelpers } from "formik";
+import { NewExpenseSchema } from "@lib/validation";
+
+type NewExpenseModalProps = {
+  categories: CategorySum[];
+};
+
+export default function NewExpenseModal({ categories }: NewExpenseModalProps) {
+  const [visible, setVisible] = useState(false);
   const expense: NewExpense = {
-    name: '',
+    name: "",
     amount_cents: 0,
     date: new Date(),
     category_id: -1,
   };
 
-  try {
-    var categories = await getCategories();
-  } catch {
-    return <>Could not fetch categories</>;
-  }
-
-
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    // TODO: Send expense data to API for creation
-    console.log('New expense:', expense);
+  const handleSubmit = (
+    expense: NewExpense,
+    formikHelpers: FormikHelpers<NewExpense>
+  ) => {
+    console.log("New expense:", expense);
+    console.log("Helpers: " + formikHelpers);
   };
 
   return (
     <div>
-      <h2>Create New Expense</h2>
-      {/* <form onSubmit={handleSubmit}> */}
-        {/* <div>
-          <label htmlFor="name">Expense Name:</label>
-          <input type="text" id="name" name="name" value={expense.name} onChange={handleInputChange} />
-        </div>
-        <div>
-          <label htmlFor="amount">Expense Amount:</label>
-          <input type="number" id="amount" name="amount" value={expense.amount} onChange={handleInputChange} />
-        </div>
-        <div>
-          <label htmlFor="date">Expense Date:</label>
-          <input type="date" id="date" name="date" value={expense.date.toISOString().split('T')[0]} onChange={handleInputChange} />
-        </div>
-        <div>
-          <label htmlFor="category">Expense Category:</label>
-          <select id="category" name="category" value={expense.category} onChange={handleInputChange}>
-            <option value="">Select a category</option>
-            {categories.map((category) => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
-        </div> */}
-        {/* <button type="submit">Create Expense</button> */}
-      {/* </form> */}
+      {!visible && (
+        <Button icon={MdAdd} onClick={() => setVisible(true)}>
+          New Expense
+        </Button>
+      )}
+      {visible && (
+        <Formik
+          initialValues={{
+            name: "",
+            amount_cents: 0,
+            date: new Date(),
+            category_id: -1,
+          }}
+          validationSchema={NewExpenseSchema}
+          onSubmit={handleSubmit}
+        >
+          {(a) => (
+            <Form>
+              <h2>Create New Expense</h2>
+              {console.log(a.values) ?? undefined}
+              <div>
+                <label htmlFor="name">Name:</label>
+                <Field name="name" placeholder="Name" />
+              </div>
+              <div>
+                <label htmlFor="amount">Amount:</label>
+                <Field name="amount_cents" type="number" />
+              </div>
+              <div>
+                <label htmlFor="date">Date:</label>
+                <Field name="date" type="date" />
+              </div>
+              <div>
+                <label htmlFor="category">Category:</label>
+                <Field name="category_id" as="select">
+                  <option value="">Select a category</option>
+                  {categories.map((category) => (
+                    <option
+                      key={category.category_id}
+                      value={category.category_id}
+                    >
+                      {category.name}
+                    </option>
+                  ))}
+                </Field>
+              </div>
+              <div className="flex">
+                <Button onClick={() => setVisible(false)}>Cancel</Button>
+                <Button type="submit">Create Expense</Button>
+              </div>
+            </Form>
+          )}
+        </Formik>
+      )}
     </div>
   );
-};
+}
