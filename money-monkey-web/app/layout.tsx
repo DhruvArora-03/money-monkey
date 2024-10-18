@@ -25,9 +25,7 @@ export default function RootLayout({
       <body className={inter.className + " relative h-screen"}>
         <ClerkProvider>
           <NavBar />
-          <main className="flex-grow h-full bg-white text-black">
-            {children}
-          </main>
+          <main className="flex-grow bg-white text-black">{children}</main>
         </ClerkProvider>
       </body>
     </html>
