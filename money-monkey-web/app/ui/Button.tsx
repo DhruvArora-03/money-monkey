@@ -1,10 +1,14 @@
 import React, { ReactNode } from "react";
 import { IconType } from "react-icons";
 
+/**
+ * Props for the Button component.
+ *
+ * @property {IconType} [Icon] - Optional icon component to be rendered inside the button.
+ * @property {string} [iconColor] - Color of the icon, if provided.
+ */
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  /** Optional icon component to be rendered inside the button */
   Icon?: IconType;
-  /** Color of the icon, if provided */
   iconColor?: string;
 }
 
