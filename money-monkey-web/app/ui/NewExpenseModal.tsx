@@ -39,16 +39,15 @@ export default function NewExpenseModal({
 
   function CustomField(props: {
     name: string;
-    label?: string;
+    label: string;
     placeholder?: string;
     type?: string;
   }) {
-    props.label ??= props.name;
     const [field, meta] = useField(props.name);
     return (
       <div>
         <label className="capitalize" htmlFor={field.name}>
-          {props.label ?? props.name}
+          {props.label}
         </label>
         <Field {...field} {...props} />
         {meta.touched && <p className="text-red-500">{meta.error}</p>}
