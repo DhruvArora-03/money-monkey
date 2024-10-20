@@ -13,7 +13,7 @@ type NewExpenseModalProps = {
 
 export default function NewExpenseModal({
   categories,
-  className,
+  className = "",
 }: NewExpenseModalProps) {
   const [visible, setVisible] = useState(false);
 
@@ -39,12 +39,11 @@ export default function NewExpenseModal({
 
   return (
     <div
-      className={
-        (className ?? "") +
-        (visible
+      className={`${className} ${
+        visible
           ? "h-screen flex items-center justify-center fixed inset-0 bg-gray-200 bg-opacity-50"
-          : "")
-      }
+          : ""
+      }`.trim()}
       onClick={() => visible && setVisible(false)}
     >
       {!visible && (
