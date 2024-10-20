@@ -4,6 +4,5 @@ const usdFormatter = new Intl.NumberFormat("en-US", {
 });
 
 export function formatMoney(amountCents: number): string {
-  return usdFormatter.format(amountCents / 100)
-}
+  return usdFormatter.format(amountCents / 100);
 }
