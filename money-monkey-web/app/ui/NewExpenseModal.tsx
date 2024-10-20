@@ -82,6 +82,13 @@ export default function NewExpenseModal({
                 props.handleReset(e);
               }
             }}
+            onKeyDown={(e) => {
+              if (e.key === "Escape") {
+                setVisible(false);
+                props.handleReset(e);
+              }
+            }}
+            tabIndex={0}
           >
             <Form
               className={`transition-all flex justify-center flex-col gap-1 pt-2 p-4 bg-white border-2 rounded-xl [&_label]:pr-2 ${
