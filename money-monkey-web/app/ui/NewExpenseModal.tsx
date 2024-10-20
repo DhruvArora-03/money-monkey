@@ -7,10 +7,14 @@ import { Field, Form, Formik, FormikHelpers } from "formik";
 import { NewExpenseSchema } from "@lib/validation";
 
 type NewExpenseModalProps = {
+  className?: string;
   categories: CategorySum[];
 };
 
-export default function NewExpenseModal({ categories }: NewExpenseModalProps) {
+export default function NewExpenseModal({
+  categories,
+  className,
+}: NewExpenseModalProps) {
   const [visible, setVisible] = useState(false);
 
   const handleSubmit = useCallback(
@@ -36,9 +40,10 @@ export default function NewExpenseModal({ categories }: NewExpenseModalProps) {
   return (
     <div
       className={
-        visible
+        (className ?? "") +
+        (visible
           ? "h-screen flex items-center justify-center fixed inset-0 bg-gray-200 bg-opacity-50"
-          : ""
+          : "")
       }
       onClick={() => visible && setVisible(false)}
     >
