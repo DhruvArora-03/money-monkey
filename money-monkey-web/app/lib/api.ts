@@ -16,7 +16,7 @@ export async function createUser(userId: string) {
 }
 
 export async function getCategories(): Promise<Category[]> {
-  var userId = auth().userId;
+  const userId = auth().userId;
   if (userId == null) {
     throw new Error("could not find userId");
   }
@@ -31,7 +31,7 @@ export async function getCategories(): Promise<Category[]> {
 }
 
 export async function getExpenses(): Promise<Expense[]> {
-  var userId = auth().userId;
+  const userId = auth().userId;
   if (userId == null) {
     throw new Error("could not find userId");
   }
@@ -42,7 +42,7 @@ export async function getExpenses(): Promise<Expense[]> {
   if (!res.ok) {
     throw new Error(await res.text());
   }
-  var expenses: any[] = await res.json();
+  const expenses: any[] = await res.json();
   return expenses.map(
     ({ date, amount_cents, ...e }) =>
       ({
@@ -63,7 +63,7 @@ export async function getCategorySums(
   month: number,
   year: number
 ): Promise<CategorySum[]> {
-  var userId = auth().userId;
+  const userId = auth().userId;
   if (userId == null) {
     throw new Error("could not find userId");
   }
