@@ -14,12 +14,10 @@ export default async function HomePage() {
 
   return (
     <div className="flex w-screen flex-col md:p-6 items-center justify-start">
-      <div className="self-end">
-        <NewExpenseModal categories={sums} />
-      </div>
-      <div className="overflow-hidden flex flex-col md:flex-row gap-8 pt-6 md:pb-6 md:pt-0 border-gray-300">
+      <div className="overflow-hidden md:w-1/2 flex flex-col md:flex-row gap-12 pt-6 md:pb-6 md:pt-0 border-gray-300">
         <MainSpendDisplay sums={sums} />
         <CategoryList sums={sums} />
+        <NewExpenseModal className="absolute right-6" categories={sums} />
       </div>
       <div className="w-full md:w-2/3 overflow-hidden px-3">
         <ExpenseList />
