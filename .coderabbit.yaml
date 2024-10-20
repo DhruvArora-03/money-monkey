@@ -14,5 +14,12 @@ reviews:
   sequence_diagrams: true
   changed_files_summary: true
   abort_on_close: true
+  auto_review:
+    enabled: true
+    auto_incremental_review: true
+    drafts: true
+  tools:
+    eslint:
+      enabled: true
 chat:
  auto_reply: true
