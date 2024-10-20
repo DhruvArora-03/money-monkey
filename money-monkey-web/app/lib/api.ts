@@ -68,7 +68,7 @@ export async function getCategorySums(
     throw new Error("could not find userId");
   }
 
-  var url = `${process.env.API_BASE}/categories/sums?year=${year}`;
+  let url = `${process.env.API_BASE}/categories/sums?year=${year}`;
   if (month != 0) {
     url += `&month=${month}`;
   }
