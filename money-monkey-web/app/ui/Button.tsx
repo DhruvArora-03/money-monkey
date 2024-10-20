@@ -2,13 +2,9 @@ import React, { ReactNode } from "react";
 import { IconType } from "react-icons";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  /**
-   * Optional icon component to be rendered inside the button.
-   */
+  /** Optional icon component to be rendered inside the button */
   Icon?: IconType;
-  /**
-   * Color of the icon, if provided.
-   */
+  /** Color of the icon, if provided */
   iconColor?: string;
 }
 
