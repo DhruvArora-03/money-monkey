@@ -38,20 +38,18 @@ export default function NewExpenseModal({
   }, [visible]);
 
   return (
-    <div
-      className={`${className} ${
-        visible
-          ? "h-screen flex items-center justify-center fixed inset-0 bg-gray-200 bg-opacity-50"
-          : ""
-      }`.trim()}
-      onClick={() => visible && setVisible(false)}
-    >
-      {!visible && (
-        <Button icon={MdAdd} onClick={() => setVisible(true)}>
-          New Expense
-        </Button>
-      )}
-      {visible && (
+    <div className={className}>
+      <Button Icon={MdAdd} disabled={visible} onClick={() => setVisible(true)}>
+        New Expense
+      </Button>
+      <div
+        className={
+          visible
+            ? "h-screen flex items-center justify-center fixed inset-0 bg-gray-200 bg-opacity-50"
+            : "invisible w-0 h-0"
+        }
+        onClick={() => setVisible(false)}
+      >
         <Formik
           initialValues={{
             name: "",
@@ -110,7 +108,7 @@ export default function NewExpenseModal({
             </Form>
           )}
         </Formik>
-      )}
+      </div>
     </div>
   );
 }
