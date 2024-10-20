@@ -62,7 +62,7 @@ export default function NewExpenseModal({
           validationSchema={NewExpenseSchema}
           onSubmit={handleSubmit}
         >
-          {(a) => (
+          {() => (
             <Form
               className="flex justify-center flex-col gap-1 p-4 bg-white border-2 rounded-xl [&_label]:pr-2"
               onClick={(e) => {
