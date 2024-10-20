@@ -2,14 +2,14 @@ interface Expense {
   id: string;
   name: string;
   date: Date;
-  amount_cents: number;
+  amount: string;
   category_name: string;
 }
 
 interface NewExpense {
   name: string;
   date: Date;
-  amount_cents: number;
+  amount: string;
   category_id: number;
 }
 

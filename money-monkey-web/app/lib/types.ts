@@ -20,8 +20,6 @@ export type ExpenseItem = {
   type: ExpenseTypes;
 };
 
-export type ExpenseItemWithoutID = Omit<ExpenseItem, "id">;
-
 export type HomePageStats = {
   totalCents: number;
   catagories: Record<ExpenseTypes, number>;
@@ -45,7 +43,7 @@ export const MONTHS = [
 
 export const START_YEAR = 2024;
 export const YEARS: number[] = new Array(
-  new Date().getFullYear() - START_YEAR + 1,
+  new Date().getFullYear() - START_YEAR + 1
 )
   .fill(START_YEAR)
   .map((x, i) => x + i);

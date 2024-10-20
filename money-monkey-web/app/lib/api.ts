@@ -1,4 +1,5 @@
 import { auth, clerkClient } from "@clerk/nextjs/server";
+import { formatMoney } from "@lib/money";
 
 export async function createUser(userId: string) {
   const res = await fetch(`${process.env.API_BASE}/users/create`, {
@@ -15,13 +16,13 @@ export async function createUser(userId: string) {
 }
 
 export async function getCategories(): Promise<Category[]> {
-  var userId = auth().userId
+  var userId = auth().userId;
   if (userId == null) {
-    throw new Error("could not find userId")
+    throw new Error("could not find userId");
   }
 
   const res = await fetch(`${process.env.API_BASE}/categories/`, {
-    headers: { "X-User-Id": userId }
+    headers: { "X-User-Id": userId },
   });
   if (!res.ok) {
     throw new Error(await res.text());
@@ -30,38 +31,50 @@ export async function getCategories(): Promise<Category[]> {
 }
 
 export async function getExpenses(): Promise<Expense[]> {
-  var userId = auth().userId
+  var userId = auth().userId;
   if (userId == null) {
-    throw new Error("could not find userId")
+    throw new Error("could not find userId");
   }
 
   const res = await fetch(`${process.env.API_BASE}/expenses/`, {
-    headers: { "X-User-Id": userId }
+    headers: { "X-User-Id": userId },
   });
   if (!res.ok) {
     throw new Error(await res.text());
   }
   var expenses: any[] = await res.json();
-  return expenses.map((e) => ({ ...e, date: new Date(e.date) } satisfies Expense))
+  return expenses.map(
+    ({ date, amount_cents, ...e }) =>
+      ({
+        ...e,
+        date: new Date(date),
+        amount: formatMoney(amount_cents),
+      } satisfies Expense)
+  );
 }
 
-export async function getYearCategorySums(year: number): Promise<CategorySum[]> {
+export async function getYearCategorySums(
+  year: number
+): Promise<CategorySum[]> {
   return getCategorySums(0, year);
 }
 
-export async function getCategorySums(month: number, year: number): Promise<CategorySum[]> {
-  var userId = auth().userId
+export async function getCategorySums(
+  month: number,
+  year: number
+): Promise<CategorySum[]> {
+  var userId = auth().userId;
   if (userId == null) {
-    throw new Error("could not find userId")
+    throw new Error("could not find userId");
   }
 
-  var url = `${process.env.API_BASE}/categories/sums?year=${year}`
+  var url = `${process.env.API_BASE}/categories/sums?year=${year}`;
   if (month != 0) {
-    url += `&month=${month}`
+    url += `&month=${month}`;
   }
 
   const res = await fetch(url, {
-    headers: { "X-User-Id": userId }
+    headers: { "X-User-Id": userId },
   });
   if (!res.ok) {
     throw new Error(await res.text());
