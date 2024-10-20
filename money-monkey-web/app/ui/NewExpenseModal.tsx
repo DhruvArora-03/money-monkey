@@ -1,7 +1,7 @@
 "use client";
 
 import Button from "./Button";
-import { MdAdd } from "react-icons/md";
+import { MdAdd, MdClose } from "react-icons/md";
 import React, { useCallback, useEffect, useState } from "react";
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { NewExpenseSchema } from "@lib/validation";
@@ -64,15 +64,20 @@ export default function NewExpenseModal({
         >
           {() => (
             <Form
-              className="flex justify-center flex-col gap-1 p-4 bg-white border-2 rounded-xl [&_label]:pr-2"
+              className="flex justify-center flex-col gap-1 pt-2 p-4 bg-white border-2 rounded-xl [&_label]:pr-2"
               onClick={(e) => {
                 e.stopPropagation();
               }}
             >
-              <h2 className="font-bold self-center mb-2 underline">
-                Create New Expense
-              </h2>
-              {console.log(a.values) ?? undefined}
+              <div className="relative text-center w-full h-10">
+                <h2 className="p-2 font-bold mb-2 underline">New Expense</h2>
+                <button
+                  className="absolute top-0 right-[-0.5rem] hover:bg-gray-400 rounded-full p-2 m-0"
+                  onClick={() => setVisible(false)}
+                >
+                  <MdClose size={24} />
+                </button>
+              </div>
               <div>
                 <label htmlFor="name">Name:</label>
                 <Field id="name" name="name" placeholder="Name" />
@@ -99,10 +104,9 @@ export default function NewExpenseModal({
                   ))}
                 </Field>
               </div>
-              <div className="flex self-center">
-                <Button onClick={() => setVisible(false)}>Cancel</Button>
-                <Button type="submit">Create Expense</Button>
-              </div>
+              <Button className="self-center" type="submit">
+                Create
+              </Button>
             </Form>
           )}
         </Formik>
