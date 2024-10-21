@@ -2,7 +2,6 @@
 
 import { MdClose } from "react-icons/md";
 import React, { useEffect, useRef } from "react";
-import { Console } from "console";
 
 type NewExpenseModalProps = {
   visible: boolean;
