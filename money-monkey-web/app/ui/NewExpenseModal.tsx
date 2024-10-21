@@ -3,7 +3,7 @@
 import Button from "./Button";
 import { MdAdd, MdClose } from "react-icons/md";
 import React, { useCallback, useEffect, useState } from "react";
-import { Field, Form, Formik, FormikHelpers } from "formik";
+import { Field, Form, Formik, FormikHelpers, useField } from "formik";
 import { NewExpenseSchema } from "@lib/validation";
 
 type NewExpenseModalProps = {
@@ -21,7 +21,7 @@ export default function NewExpenseModal({
     (expense: NewExpense, formikHelpers: FormikHelpers<NewExpense>) => {
       console.log("New expense:", expense);
       console.log("Helpers: " + formikHelpers);
-      // formikHelpers.resetForm();
+      formikHelpers.resetForm();
       setVisible(false);
     },
     []
@@ -37,34 +37,62 @@ export default function NewExpenseModal({
     };
   }, [visible]);
 
+  function CustomField(props: {
+    name: string;
+    label: string;
+    placeholder?: string;
+    type?: string;
+  }) {
+    const [field, meta] = useField(props.name);
+    return (
+      <div>
+        <label className="capitalize" htmlFor={field.name}>
+          {props.label}
+        </label>
+        <Field {...field} {...props} />
+        {meta.touched && <p className="text-red-500">{meta.error}</p>}
+      </div>
+    );
+  }
+
   return (
-    <div
-      className={`${className} ${
-        visible
-          ? "h-screen flex items-center justify-center fixed inset-0 bg-gray-200 bg-opacity-50"
-          : ""
-      }`.trim()}
-      onClick={() => visible && setVisible(false)}
-    >
-      {!visible && (
-        <Button icon={MdAdd} onClick={() => setVisible(true)}>
-          New Expense
-        </Button>
-      )}
-      {visible && (
-        <Formik
-          initialValues={{
-            name: "",
-            amount_cents: 0,
-            date: new Date(),
-            category_id: -1,
-          }}
-          validationSchema={NewExpenseSchema}
-          onSubmit={handleSubmit}
-        >
-          {() => (
+    <div className={className}>
+      <Button Icon={MdAdd} disabled={visible} onClick={() => setVisible(true)}>
+        New Expense
+      </Button>
+      <Formik
+        initialValues={{
+          name: "",
+          amount: "",
+          date: new Date(),
+          category_id: -1,
+        }}
+        validationSchema={NewExpenseSchema}
+        onSubmit={handleSubmit}
+      >
+        {(props) => (
+          <div
+            className={`transition w-screen h-screen fixed left-0 top-0 flex items-center justify-center ${
+              visible ? "bg-gray-200 bg-opacity-50" : "pointer-events-none"
+            }`}
+            onClick={(e) => {
+              if (visible) {
+                setVisible(false);
+                props.handleReset(e);
+              }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Escape") {
+                setVisible(false);
+                props.handleReset(e);
+              }
+            }}
+            tabIndex={0}
+          >
             <Form
-              className="flex justify-center flex-col gap-1 pt-2 p-4 bg-white border-2 rounded-xl [&_label]:pr-2"
+              className={`transition-all flex justify-center flex-col gap-1 pt-2 p-4 bg-white border-2 rounded-xl [&_label]:pr-2 ${
+                visible ? "scale-100" : "scale-0"
+              }`}
               onClick={(e) => {
                 e.stopPropagation();
               }}
@@ -72,24 +100,19 @@ export default function NewExpenseModal({
               <div className="relative text-center w-full h-10">
                 <h2 className="p-2 font-bold mb-2 underline">New Expense</h2>
                 <button
-                  className="absolute top-0 right-[-0.5rem] hover:bg-gray-400 rounded-full p-2 m-0"
-                  onClick={() => setVisible(false)}
+                  className="absolute top-0 right-[-0.5rem] rounded-full hover:bg-gray-400 p-0 hover:p-2 m-2 hover:m-0 transition-all "
+                  type="button"
+                  onClick={(e) => {
+                    setVisible(false);
+                    props.handleReset(e);
+                  }}
                 >
                   <MdClose size={24} />
                 </button>
               </div>
-              <div>
-                <label htmlFor="name">Name:</label>
-                <Field id="name" name="name" placeholder="Name" />
-              </div>
-              <div>
-                <label htmlFor="amount_cents">Amount: $</label>
-                <Field id="amount_cents" name="amount_cents" type="number" />
-              </div>
-              <div>
-                <label htmlFor="date">Date:</label>
-                <Field id="date" name="date" type="date" />
-              </div>
+              <CustomField name="name" label="Name:" placeholder="Name" />
+              <CustomField name="amount" label="Amount: $" placeholder="0.00" />
+              <CustomField name="date" label="Date:" type="date" />
               <div>
                 <label htmlFor="category_id">Category:</label>
                 <Field id="category_id" name="category_id" as="select">
@@ -103,14 +126,17 @@ export default function NewExpenseModal({
                     </option>
                   ))}
                 </Field>
+                {props.touched.category_id && (
+                  <p className="text-red-700">{props.errors.category_id}</p>
+                )}
               </div>
               <Button className="self-center" type="submit">
                 Create
               </Button>
             </Form>
-          )}
-        </Formik>
-      )}
+          </div>
+        )}
+      </Formik>
     </div>
   );
 }

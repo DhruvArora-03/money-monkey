@@ -67,16 +67,17 @@ export default async function ExpenseList() {
           expenseMonths.map((m) => (
             <React.Fragment key={m.monthYear}>
               <tr className="w-full border-b-4 text-xl text-nowrap">
-                <td colSpan={3} className="pt-5">{m.monthYear}</td>
+                <td colSpan={3} className="pt-5">
+                  {m.monthYear}
+                </td>
               </tr>
               {m.dates.map((d) => (
                 <React.Fragment key={d.date}>
                   {d.expenses.map((e, index) => (
-                    <tr
-                      key={e.id}
-                      className="text-md hover:bg-blue-100"
-                    >
-                      <td className="text-lg w-0 pr-3">{index == 0 ? d.date : ""}</td>
+                    <tr key={e.id} className="text-md hover:bg-blue-100">
+                      <td className="text-lg w-0 pr-3">
+                        {index == 0 ? d.date : ""}
+                      </td>
                       <td className="max-w-0 text-nowrap text-ellipsis overflow-hidden py-1">
                         <span className="text-sm text-gray-600 hidden md:inline">
                           {`${e.category_name} - `}
@@ -87,7 +88,7 @@ export default async function ExpenseList() {
                           {e.category_name}
                         </span>
                       </td>
-                      <td className="text-right w-0 pl-2">{formatMoney(e.amount_cents)}</td>
+                      <td className="text-right w-0 pl-2">{e.amount}</td>
                     </tr>
                   ))}
                 </React.Fragment>
