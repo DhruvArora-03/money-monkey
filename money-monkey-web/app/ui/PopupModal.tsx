@@ -46,6 +46,7 @@ export default function PopupModal({
             className="absolute top-0 right-[-0.5rem] rounded-full hover:bg-gray-400 p-0 hover:p-2 m-2 hover:m-0 transition-all "
             type="button"
             onClick={onClose}
+            aria-label={`Close ${title} modal`}
           >
             <MdClose size={24} />
           </button>
