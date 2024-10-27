@@ -31,8 +31,7 @@ export const MONTHS: FilterMonth[] = [
 ];
 
 export const START_YEAR = 2024;
-export const YEARS: number[] = new Array(
-  new Date().getFullYear() - START_YEAR + 1
-)
-  .fill(START_YEAR)
-  .map((x, i) => x + i);
+export const YEARS: number[] = Array.from(
+  { length: new Date().getFullYear() - START_YEAR + 1 },
+  (_, i) => START_YEAR + i
+);
