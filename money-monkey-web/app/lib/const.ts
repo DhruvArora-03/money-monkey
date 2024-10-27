@@ -1,4 +1,20 @@
-export const MONTHS = [
+export type Month =
+  | "January"
+  | "February"
+  | "March"
+  | "April"
+  | "May"
+  | "June"
+  | "July"
+  | "August"
+  | "September"
+  | "October"
+  | "November"
+  | "December";
+
+export type FilterMonth = "All Months" | Month;
+
+export const MONTHS: FilterMonth[] = [
   "All Months",
   "January",
   "February",
