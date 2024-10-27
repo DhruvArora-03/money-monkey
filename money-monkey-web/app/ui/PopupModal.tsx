@@ -18,12 +18,10 @@ export default function PopupModal({
 }: NewExpenseModalProps) {
   // disable scrolling
   useEffect(() => {
-    if (visible) {
-      document.body.style.overflow = "hidden";
-      return () => {
-        document.body.style.overflow = "unset";
-      };
-    }
+    document.body.style.overflow = visible ? "hidden" : "unset";
+    return () => {
+      document.body.style.overflow = "unset";
+    };
   }, [visible]);
 
   return (

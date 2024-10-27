@@ -1,4 +1,8 @@
+"use client";
+
 import { formatMoney } from "@lib/money";
+import { UserSettingsContext } from "@lib/userSettings";
+import { useContext } from "react";
 
 type CircleSection = {
   category_id: number;
@@ -6,32 +10,42 @@ type CircleSection = {
   color: string;
 };
 
-export default function MainSpendDisplay({sums} : {sums: CategorySum[]}) {
+export default function MainSpendDisplay({ sums }: { sums: CategorySum[] }) {
+  var { categories } = useContext(UserSettingsContext);
+
   const width = 450;
   const r = (width - 70 - 30) / 2;
 
   const pad = 10;
   const offset = pad + r;
-  const dim = (offset) * 2;
+  const dim = offset * 2;
 
-  const total = sums.reduce((x, y) => ({ ...x, total_cents: x.total_cents + y.total_cents }), {
-    category_id: 0,
-    name: "",
-    total_cents: 0,
-    color: "#000000",
-  } satisfies CategorySum).total_cents;
-  const sections: CircleSection[] = sums.filter((s) => s.total_cents != 0).map(
-    ({ category_id, color, total_cents }) =>
-      ({
-        category_id: category_id,
-        color: color ?? "#0FF0AF",
-        percentage: total_cents / total,
-      }) satisfies CircleSection,
+  const total = sums.reduce(
+    (x, y) => ({ ...x, total_cents: x.total_cents + y.total_cents }),
+    {
+      category_id: 0,
+      total_cents: 0,
+    } satisfies CategorySum
+  ).total_cents;
+  const sections: CircleSection[] = sums
+    .filter((s) => s.total_cents != 0)
+    .map(
+      ({ category_id, total_cents }) =>
+        ({
+          category_id: category_id,
+          color: categories.get(category_id)?.color ?? "#0FF0AF",
+          percentage: total_cents / total,
+        } satisfies CircleSection)
     );
 
   if (sums == undefined || total == 0) {
     return (
-      <svg className="height-[300px]" width={"100%"} height={"100%"} viewBox={`0 0 ${dim} ${dim}`}>
+      <svg
+        className="height-[300px]"
+        width={"100%"}
+        height={"100%"}
+        viewBox={`0 0 ${dim} ${dim}`}
+      >
         <circle
           stroke="black"
           strokeWidth={4}
@@ -86,7 +100,9 @@ export default function MainSpendDisplay({sums} : {sums: CategorySum[]}) {
     return (
       <path
         d={`M ${offset + r * Math.cos(start)} ${offset + r * Math.sin(start)}
-            A ${r} ${r} 0 ${p > 0.5 ? 1 : 0} 1 ${offset + r * Math.cos(end)} ${offset + r * Math.sin(end)}`}
+            A ${r} ${r} 0 ${p > 0.5 ? 1 : 0} 1 ${offset + r * Math.cos(end)} ${
+          offset + r * Math.sin(end)
+        }`}
         stroke={color}
         strokeWidth={15}
         strokeLinecap="round"
@@ -96,7 +112,12 @@ export default function MainSpendDisplay({sums} : {sums: CategorySum[]}) {
   }
 
   return (
-    <svg className="height-[300px]" width={"100%"} height={"100%"} viewBox={`0 0 ${dim} ${dim}`}>
+    <svg
+      className="height-[300px]"
+      width={"100%"}
+      height={"100%"}
+      viewBox={`0 0 ${dim} ${dim}`}
+    >
       <text
         x={dim / 2}
         y={dim / 2}

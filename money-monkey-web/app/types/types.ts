@@ -6,14 +6,14 @@
  * @property {string} name - The name or description of the expense.
  * @property {Date} date - The date when the expense occurred.
  * @property {string} amount - The amount of the expense as a string.
- * @property {string} category_name - The name of the category the expense belongs to.
+ * @property {string} category_id - The ID of the category the expense belongs to.
  */
 interface Expense {
   id: string;
   name: string;
   date: Date;
   amount: string;
-  category_name: string;
+  category_id: number;
 }
 
 /**
@@ -37,15 +37,11 @@ interface NewExpense {
  *
  * @interface CategorySum
  * @property {number} category_id - The unique identifier for the category.
- * @property {string} name - The name of the category.
  * @property {number} total_cents - The total amount in cents for the category.
- * @property {string} color - The color associated with the category.
  */
 interface CategorySum {
   category_id: number;
-  name: string;
   total_cents: number;
-  color: string;
 }
 
 /**
@@ -60,4 +56,13 @@ interface Category {
   id: number;
   name: string;
   color: string;
+}
+
+interface HomePageStats {
+  totalCents: number;
+  catagories: Record<string, number>;
+}
+
+interface UserSettings {
+  categories: Map<number, Category>;
 }
