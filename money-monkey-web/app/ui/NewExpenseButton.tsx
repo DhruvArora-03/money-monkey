@@ -10,13 +10,13 @@ import BasicField from "@ui/BasicField";
 import MoneyField from "@ui/MoneyField";
 import { UserSettingsContext } from "@lib/userSettings";
 
-type NewExpenseModalProps = {
+type NewExpenseButtonProps = {
   className?: string;
 };
 
 export default function NewExpenseButton({
   className = "",
-}: NewExpenseModalProps) {
+}: NewExpenseButtonProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { categories } = useContext(UserSettingsContext);
 
