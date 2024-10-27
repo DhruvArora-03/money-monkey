@@ -29,15 +29,7 @@ export default function NewExpenseButton({
     },
     []
   );
-  console.log(categories.values().map((x) => x.name));
-
   const options = useMemo(() => {
-    console.log(
-      categories
-        .values()
-        .map((x) => x.name)
-        .forEach(console.log)
-    );
     return (
       <>
         <option value="">Select a category:</option>;
