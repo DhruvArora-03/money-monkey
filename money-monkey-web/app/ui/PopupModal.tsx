@@ -30,12 +30,6 @@ export default function PopupModal({
         visible ? "bg-gray-200 bg-opacity-50" : "pointer-events-none"
       }`}
       onClick={onClose}
-      onKeyDown={(e) => {
-        if (e.key === "Escape") {
-          onClose(e);
-        }
-      }}
-      tabIndex={0}
     >
       <div
         id="modal"
