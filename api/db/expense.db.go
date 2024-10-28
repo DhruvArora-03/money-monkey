@@ -18,9 +18,8 @@ func GetExpenses(ctx context.Context) (expenses *[]types.Expense, err error) {
 			e.name,
 			e.date,
 			e.amount_cents,
-			c.name AS category_name
+			e.category_id
 		FROM expense e 
-		LEFT JOIN category c ON c.id = e.category_id
 		WHERE e.user_id = @user_id
 		ORDER BY e.date DESC`, pgx.NamedArgs{"user_id": utils.GetUserId(ctx)})
 	if err != nil {
@@ -107,4 +106,3 @@ func ImportPlaidExpense(ctx context.Context, plaidTransactionId, categoryId int)
 
 	return CreateExpense(ctx, &expense)
 }
-

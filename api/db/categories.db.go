@@ -11,7 +11,7 @@ import (
 
 func GetCategories(ctx context.Context) (categories *[]types.Category, err error) {
 	rows, err := dbpool.Query(ctx, `
-		SELECT id, name
+		SELECT id, name, color
 		FROM category
 		WHERE user_id = @user_id`,
 		pgx.NamedArgs{"user_id": utils.GetUserId(ctx)})

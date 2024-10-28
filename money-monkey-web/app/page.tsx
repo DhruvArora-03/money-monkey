@@ -1,15 +1,24 @@
-import { getCategorySums } from "@lib/api";
+import { getCategorySums, getExpenses } from "@lib/api";
 import CategoryList from "@ui/CategoryList";
 import ExpenseList from "@ui/ExpenseList";
 import MainSpendDisplay from "@ui/MainSpendDisplay";
-import NewExpenseModal from "@ui/NewExpenseModal";
+import NewExpenseButton from "@ui/NewExpenseButton";
 
 export default async function HomePage() {
+  let sums: CategorySum[] = [];
+  let expenses: Expense[] = [];
+
   try {
-    var date = new Date();
-    var sums = await getCategorySums(date.getMonth() + 1, date.getFullYear());
+    const date = new Date();
+    sums = await getCategorySums(date.getMonth() + 1, date.getFullYear());
   } catch (e) {
     return <div>Could not fetch category sums: {(e as any).message}</div>;
+  }
+
+  try {
+    expenses = await getExpenses();
+  } catch (e) {
+    return <div>Could not fetch expenses: {(e as any).message}</div>;
   }
 
   return (
@@ -17,10 +26,10 @@ export default async function HomePage() {
       <div className="overflow-hidden flex flex-col md:flex-row gap-12 pt-6 md:pb-6 md:pt-0 border-gray-300 max-w-7xl mx-auto">
         <MainSpendDisplay sums={sums} />
         <CategoryList sums={sums} />
-        <NewExpenseModal className="absolute right-0 pr-6" categories={sums} />
+        <NewExpenseButton className="absolute right-0 pr-6" />
       </div>
       <div className="w-full md:w-2/3 overflow-hidden px-3">
-        <ExpenseList />
+        <ExpenseList expenses={expenses} />
       </div>
     </div>
   );

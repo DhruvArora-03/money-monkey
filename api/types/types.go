@@ -10,11 +10,11 @@ type ExpensePartial struct {
 }
 
 type Expense struct {
-	Id           int       `json:"id" db:"id"`
-	Name         string    `json:"name" db:"name"`
-	Date         time.Time `json:"date" db:"date"`
-	AmountCents  int       `json:"amount_cents" db:"amount_cents"`
-	CategoryName string    `json:"category_name" db:"category_name"`
+	Id          int       `json:"id" db:"id"`
+	Name        string    `json:"name" db:"name"`
+	Date        time.Time `json:"date" db:"date"`
+	AmountCents int       `json:"amount_cents" db:"amount_cents"`
+	CategoryId  int       `json:"category_id" db:"category_id"`
 }
 
 type FetchTransactionsResult struct {
@@ -32,8 +32,9 @@ type PlaidConnection struct {
 }
 
 type Category struct {
-	Id   int    `json:"id" db:"id"`
-	Name string `json:"name" db:"name"`
+	Id    int    `json:"id" db:"id"`
+	Name  string `json:"name" db:"name"`
+	Color string `json:"color" db:"color"`
 }
 
 type CategorySum struct {
