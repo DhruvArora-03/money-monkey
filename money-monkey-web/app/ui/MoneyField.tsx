@@ -25,7 +25,7 @@ export default function MoneyField(props: { name: string; label: string }) {
         }}
         onBlur={(e) => {
           if (e.target.value.match(unformattedMoneyRegex)) {
-            e.target.value = usdFormatter.format(parseFloat(e.target.value));
+            e.target.value = usdFormatter.format(Number.parseFloat(e.target.value));
             field.onChange(e);
           }
           field.onBlur(e);
