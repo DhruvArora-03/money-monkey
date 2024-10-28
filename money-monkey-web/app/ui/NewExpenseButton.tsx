@@ -32,7 +32,7 @@ export default function NewExpenseButton({
   const options = useMemo(
     () => (
       <>
-        <option value="">Select a category:</option>
+        <option value={-1}>Select a category:</option>
         {categories.values().map((category) => (
           <option key={category.id} value={category.id}>
             {category.name}
