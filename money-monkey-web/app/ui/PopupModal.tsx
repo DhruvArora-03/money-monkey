@@ -32,7 +32,6 @@ export default function PopupModal({
       onClick={onClose}
     >
       <div
-        id="modal"
         className={`transition-all flex justify-center flex-col gap-1 pt-2 p-4 bg-white border-2 rounded-xl [&_label]:pr-2 ${
           visible ? "scale-100" : "scale-0"
         }`}
