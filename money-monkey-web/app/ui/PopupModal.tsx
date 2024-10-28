@@ -38,6 +38,14 @@ export default function PopupModal({
         onClick={(e) => {
           e.stopPropagation();
         }}
+        onKeyDown={(e) => {
+          // todo: not sure about this
+          if (e.key === "Tab") {
+            e.stopPropagation();
+          }
+        }}
+        role="dialog"
+        aria-modal="true"
       >
         <div className="relative text-center w-full h-10">
           <h2 className="px-10 py-2 font-bold mb-2 underline">{title}</h2>
