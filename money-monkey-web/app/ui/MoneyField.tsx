@@ -1,12 +1,6 @@
+import { usdFormatter } from "@lib/money";
 import { unformattedMoneyRegex } from "@lib/validation";
 import { useField } from "formik";
-
-const moneyDecimalFormat = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
-});
 
 export default function MoneyField(props: { name: string; label: string }) {
   const [field, meta] = useField(props.name);
@@ -31,9 +25,7 @@ export default function MoneyField(props: { name: string; label: string }) {
         }}
         onBlur={(e) => {
           if (e.target.value.match(unformattedMoneyRegex)) {
-            e.target.value = moneyDecimalFormat.format(
-              parseFloat(e.target.value)
-            );
+            e.target.value = usdFormatter.format(parseFloat(e.target.value));
             field.onChange(e);
           }
           field.onBlur(e);
