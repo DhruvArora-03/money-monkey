@@ -12,7 +12,7 @@ export const NewExpenseSchema: Yup.ObjectSchema<NewExpense> = Yup.object({
     .required("Required!")
     .matches(
       /^\$((\d{1,3}(,\d{3})*|\d+))(\.\d{1,2})?$/,
-      "Must be a valid amount with up to 2 decimal places!"
+      "Invalid format!"
     )
     .test(
       "is-at-least-1-cent",
@@ -22,5 +22,5 @@ export const NewExpenseSchema: Yup.ObjectSchema<NewExpense> = Yup.object({
   date: Yup.date().required("Required!"),
   category_id: Yup.number()
     .required("Required!")
-    .min(0, "Must select something"),
+    .min(0, "Must select a category!"),
 });
