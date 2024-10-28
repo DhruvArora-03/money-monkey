@@ -1,7 +1,7 @@
 "use client";
 
 import { MdClose } from "react-icons/md";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 
 type NewExpenseModalProps = {
   visible: boolean;
