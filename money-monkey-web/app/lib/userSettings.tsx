@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext } from "react";
+import { createContext, useMemo } from "react";
 
 export const UserSettingsContext = createContext<UserSettings>({
   categories: new Map(),
@@ -13,9 +13,14 @@ export default function UserSettingsProvider({
   children: React.ReactNode;
   categories: Category[];
 }) {
-  const userSettings: UserSettings = {
-    categories: new Map(categories.map((category) => [category.id, category])),
-  };
+  const userSettings: UserSettings = useMemo(
+    () => ({
+      categories: new Map(
+        categories.map((category) => [category.id, category])
+      ),
+    }),
+    [categories]
+  );
 
   return (
     <UserSettingsContext.Provider value={userSettings}>
