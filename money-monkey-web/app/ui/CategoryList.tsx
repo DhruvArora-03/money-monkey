@@ -5,7 +5,7 @@ import { formatMoney } from "@lib/money";
 import { UserSettingsContext } from "@lib/userSettings";
 
 export default function CategoryList({ sums }: { sums: CategorySum[] }) {
-  var { categories } = useContext(UserSettingsContext);
+  const { categories } = useContext(UserSettingsContext);
 
   return (
     <div className="w-full flex flex-col gap-1">

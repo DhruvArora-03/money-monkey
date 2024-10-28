@@ -11,7 +11,7 @@ type CircleSection = {
 };
 
 export default function MainSpendDisplay({ sums }: { sums: CategorySum[] }) {
-  var { categories } = useContext(UserSettingsContext);
+  const { categories } = useContext(UserSettingsContext);
 
   const width = 450;
   const r = (width - 70 - 30) / 2;
