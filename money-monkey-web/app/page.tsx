@@ -18,7 +18,7 @@ export default async function HomePage() {
   try {
     expenses = await getExpenses();
   } catch (e) {
-    return <>Could not fetch expenses: {(e as any).message}</>;
+    return <div>Could not fetch expenses: {(e as any).message}</div>;
   }
 
   return (
