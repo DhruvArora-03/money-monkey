@@ -3,10 +3,10 @@
 import { MdClose } from "react-icons/md";
 import React, { useEffect } from "react";
 
-type NewExpenseModalProps = {
+type PopupModalProps = {
   visible: boolean;
   title: string;
-  onClose: React.EventHandler<React.SyntheticEvent>;
+  onClose: React.EventHandler<React.MouseEvent | React.KeyboardEvent>;
   children: React.ReactNode;
 };
 
@@ -15,7 +15,7 @@ export default function PopupModal({
   title,
   onClose,
   children,
-}: NewExpenseModalProps) {
+}: PopupModalProps) {
   // disable scrolling
   useEffect(() => {
     document.body.style.overflow = visible ? "hidden" : "unset";
@@ -27,7 +27,7 @@ export default function PopupModal({
   return (
     <div
       className={`transition w-screen h-screen fixed left-0 top-0 flex items-center justify-center ${
-        visible ? "bg-gray-200 bg-opacity-50" : "pointer-events-none"
+        visible ? "bg-gray-200 bg-opacity-75" : "pointer-events-none"
       }`}
       onClick={onClose}
     >
