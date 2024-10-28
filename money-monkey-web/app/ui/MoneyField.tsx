@@ -7,14 +7,14 @@ export default function MoneyField(props: { name: string; label: string }) {
 
   return (
     <div>
-      <label className="capitalize" htmlFor={field.name}>
-        {props.label}
-      </label>
+      <label htmlFor={field.name}>{props.label}</label>
       <input
         {...field}
         {...props}
         id={field.name}
         autoComplete="off"
+        className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        aria-invalid={meta.touched && meta.error ? "true" : "false"}
         onFocus={() => {
           field.onChange({
             target: {
@@ -25,7 +25,9 @@ export default function MoneyField(props: { name: string; label: string }) {
         }}
         onBlur={(e) => {
           if (e.target.value.match(unformattedMoneyRegex)) {
-            e.target.value = usdFormatter.format(Number.parseFloat(e.target.value));
+            e.target.value = usdFormatter.format(
+              Number.parseFloat(e.target.value)
+            );
             field.onChange(e);
           }
           field.onBlur(e);
@@ -38,9 +40,13 @@ export default function MoneyField(props: { name: string; label: string }) {
         }}
         placeholder="$0.00"
       />
-      {meta.touched && (meta.value satisfies string).startsWith("$") && (
-        <p className="text-red-500 text-pretty truncate w-full">{meta.error}</p>
-      )}
+      {meta.touched &&
+        (meta.value satisfies string).startsWith("$") &&
+        meta.error && (
+          <p className="text-red-500 text-sm" role="alert">
+            {meta.error}
+          </p>
+        )}
     </div>
   );
 }
