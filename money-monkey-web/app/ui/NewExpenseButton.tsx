@@ -27,7 +27,7 @@ export default function NewExpenseButton({
       formikHelpers.resetForm();
       setIsModalVisible(false);
     },
-    []
+    [setIsModalVisible]
   );
   const options = useMemo(
     () => (
