@@ -20,7 +20,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  var categories: Category[] = [];
+  let categories: Category[] = [];
   try {
     categories = await getCategories();
   } catch {}
