@@ -29,7 +29,7 @@ export default async function RootLayout({
     <html lang="en">
       <SpeedInsights />
       <Analytics />
-      <body className={inter.className + " relative h-screen"}>
+      <body className={`${inter.className} relative h-screen`}>
         <ClerkProvider>
           <UserSettingsProvider categories={categories}>
             <NavBar />
