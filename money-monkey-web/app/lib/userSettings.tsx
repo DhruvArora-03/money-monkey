@@ -13,7 +13,7 @@ export default function UserSettingsProvider({
   children: React.ReactNode;
   categories: Category[];
 }) {
-  var userSettings: UserSettings = {
+  const userSettings: UserSettings = {
     categories: new Map(categories.map((category) => [category.id, category])),
   };
 
