@@ -29,18 +29,19 @@ export default function NewExpenseButton({
     },
     []
   );
-  const options = useMemo(() => {
-    return (
+  const options = useMemo(
+    () => (
       <>
-        <option value="">Select a category:</option>;
+        <option value="">Select a category:</option>
         {categories.values().map((category) => (
           <option key={category.id} value={category.id}>
             {category.name}
           </option>
         ))}
       </>
-    );
-  }, [categories]);
+    ),
+    [categories]
+  );
 
   return (
     <div className={className}>
