@@ -5,18 +5,20 @@ import MainSpendDisplay from "@ui/MainSpendDisplay";
 import NewExpenseButton from "@ui/NewExpenseButton";
 
 export default async function HomePage() {
+  let sums: CategorySum[] = [];
+  let expenses: Expense[] = [];
+
   try {
-    var date = new Date();
-    var sums = await getCategorySums(date.getMonth() + 1, date.getFullYear());
+    const date = new Date();
+    sums = await getCategorySums(date.getMonth() + 1, date.getFullYear());
   } catch (e) {
     return <div>Could not fetch category sums: {(e as any).message}</div>;
   }
 
   try {
-    var expenses = await getExpenses();
+    expenses = await getExpenses();
   } catch (e) {
-    console.log(e);
-    return <>Could not fetch expenses</>;
+    return <>Could not fetch expenses: {(e as any).message}</>;
   }
 
   return (
