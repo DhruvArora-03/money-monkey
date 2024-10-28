@@ -72,17 +72,28 @@ export default function NewExpenseButton({
               props.resetForm();
             }}
           >
-            <Form className="flex flex-col">
+            <Form className="flex flex-col" aria-label="New expense form">
               <BasicField name="name" label="Name:" placeholder="Name" />
               <MoneyField name="amount" label="Amount:" />
               <BasicField name="date" label="Date:" type="date" />
-              <div>
-                <label htmlFor="category_id">Category:</label>
-                <Field id="category_id" name="category_id" as="select">
+              <div className="flex flex-col gap-1">
+                <label htmlFor="category_id">
+                  Category: <span className="text-red-500">*</span>
+                </label>
+                <Field
+                  id="category_id"
+                  name="category_id"
+                  as="select"
+                  aria-required="true"
+                  aria-invalid={props.touched.category_id && !!props.errors.category_id}
+                  aria-describedby={props.errors.category_id ? "category-error" : undefined}
+                >
                   {options}
                 </Field>
                 {props.touched.category_id && (
-                  <p className="text-red-500">{props.errors.category_id}</p>
+                  <p id="category-error" className="text-sm text-red-500" role="alert">
+                    {props.errors.category_id}
+                  </p>
                 )}
               </div>
               <Button className="self-center" type="submit">
