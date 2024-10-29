@@ -1,7 +1,7 @@
 import { useField } from "formik";
 import { HTMLInputTypeAttribute, InputHTMLAttributes } from "react";
 
-interface BasicFieldProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface BasicFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
   label: string;
   placeholder?: string;
@@ -20,7 +20,7 @@ export default function BasicField(props: BasicFieldProps) {
         {...field}
         {...props}
         autoComplete="off"
-        className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         aria-invalid={meta.touched && meta.error ? "true" : "false"}
       />
       {meta.touched && meta.error && (

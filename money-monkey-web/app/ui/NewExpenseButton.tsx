@@ -9,6 +9,7 @@ import PopupModal from "@ui/PopupModal";
 import BasicField from "@ui/BasicField";
 import MoneyField from "@ui/MoneyField";
 import { UserSettingsContext } from "@lib/userSettings";
+import SelectField from "@ui/SelectField";
 
 type NewExpenseButtonProps = {
   className?: string;
@@ -32,12 +33,15 @@ export default function NewExpenseButton({
   const options = useMemo(
     () => (
       <>
-        <option value={-1}>Select a category:</option>
-        {categories.values().map((category) => (
-          <option key={category.id} value={category.id}>
-            {category.name}
-          </option>
-        ))}
+        <option value={-1}>Select a category</option>
+        {categories
+          .values()
+          .toArray()
+          .map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
+          ))}
       </>
     ),
     [categories]
@@ -76,26 +80,11 @@ export default function NewExpenseButton({
               <BasicField name="name" label="Name:" placeholder="Name" />
               <MoneyField name="amount" label="Amount:" />
               <BasicField name="date" label="Date:" type="date" />
-              <div className="flex flex-col gap-1">
-                <label htmlFor="category_id">
-                  Category: <span className="text-red-500">*</span>
-                </label>
-                <Field
-                  id="category_id"
-                  name="category_id"
-                  as="select"
-                  aria-required="true"
-                  aria-invalid={props.touched.category_id && !!props.errors.category_id}
-                  aria-describedby={props.errors.category_id ? "category-error" : undefined}
-                >
-                  {options}
-                </Field>
-                {props.touched.category_id && (
-                  <p id="category-error" className="text-sm text-red-500" role="alert">
-                    {props.errors.category_id}
-                  </p>
-                )}
-              </div>
+              <SelectField
+                name="category_id"
+                label="Category:"
+                options={options}
+              />
               <Button className="self-center" type="submit">
                 Create
               </Button>
