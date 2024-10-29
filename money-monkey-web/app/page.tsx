@@ -41,8 +41,8 @@ export default async function HomePage() {
       )
       .where(
         and(
-          eq(categoryTable.user_id, auth().userId),
-          eq(expenseTable.user_id, auth().user_id),
+          eq(categoryTable.user_id, user_id),
+          eq(expenseTable.user_id, user_id),
           or(
             and(isNull(columns.month), isNull(columns.year)),
             and(
