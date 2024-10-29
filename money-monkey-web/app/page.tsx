@@ -42,12 +42,16 @@ export default async function HomePage() {
       .where(
         and(
           eq(categoryTable.user_id, user_id),
-          eq(expenseTable.user_id, user_id),
           or(
-            and(isNull(columns.month), isNull(columns.year)),
+            and(
+              isNull(columns.month),
+              isNull(columns.year),
+              isNull(expenseTable.user_id)
+            ),
             and(
               eq(columns.month, currDate.getMonth() + 1),
-              eq(columns.year, currDate.getFullYear())
+              eq(columns.year, currDate.getFullYear()),
+              eq(expenseTable.user_id, user_id)
             )
           )
         )
