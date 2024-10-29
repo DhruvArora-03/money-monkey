@@ -8,6 +8,8 @@ import NavBar from "@ui/NavBar";
 import UserSettingsProvider from "@lib/userSettings";
 import { db } from "@lib/db";
 import { categoryTable } from "@lib/db/schema";
+import { eq } from "drizzle-orm";
+import { auth } from "@clerk/nextjs/server";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +23,11 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const categories: Category[] = await db.select().from(categoryTable);
+  const user_id = auth().userId;
+  const categories: Category[] = await db
+    .select()
+    .from(categoryTable)
+    .where(eq(categoryTable.user_id, user_id));
 
   return (
     <html lang="en">

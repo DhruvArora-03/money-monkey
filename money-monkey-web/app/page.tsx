@@ -1,3 +1,4 @@
+import { auth } from "@clerk/nextjs/server";
 import { db } from "@lib/db";
 import { categoryTable, expenseTable } from "@lib/db/schema";
 import CategoryList from "@ui/CategoryList";
@@ -7,15 +8,17 @@ import NewExpenseButton from "@ui/NewExpenseButton";
 import { and, desc, eq, isNull, or, sql, sum } from "drizzle-orm";
 
 export default async function HomePage() {
+  const user_id = auth().userId;
+
   let expenses: Expense[] = [];
   try {
     expenses = await db
       .select()
       .from(expenseTable)
+      .where(eq(expenseTable.user_id, user_id))
       .orderBy(desc(expenseTable.date));
   } catch (error) {
     console.error("Failed to fetch expenses:", error);
-    // Optionally, handle the error by returning an appropriate response or fallback data.
   }
 
   const currDate = new Date(2024, 7, 1);
@@ -32,11 +35,15 @@ export default async function HomePage() {
     .from(categoryTable)
     .leftJoin(expenseTable, and(eq(categoryTable.id, expenseTable.category_id)))
     .where(
-      or(
-        and(isNull(columns.month), isNull(columns.year)),
-        and(
-          eq(columns.month, currDate.getMonth() + 1),
-          eq(columns.year, currDate.getFullYear())
+      and(
+        eq(categoryTable.user_id, auth().userId),
+        eq(expenseTable.user_id, auth().user_id),
+        or(
+          and(isNull(columns.month), isNull(columns.year)),
+          and(
+            eq(columns.month, currDate.getMonth() + 1),
+            eq(columns.year, currDate.getFullYear())
+          )
         )
       )
     )
