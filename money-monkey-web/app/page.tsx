@@ -21,34 +21,42 @@ export default async function HomePage() {
     console.error("Failed to fetch expenses:", error);
   }
 
-  const currDate = new Date(2024, 7, 1);
-  const columns = {
-    category_id: categoryTable.id,
-    month: sql`extract(month from ${expenseTable.date})`.mapWith(Number),
-    year: sql`extract(year from ${expenseTable.date})`.mapWith(Number),
-    total_cents: sum(sql`coalesce(${expenseTable.amount_cents}, 0)`).mapWith(
-      Number
-    ),
-  };
-  const sums: CategorySum[] = await db
-    .select(columns)
-    .from(categoryTable)
-    .leftJoin(expenseTable, and(eq(categoryTable.id, expenseTable.category_id)))
-    .where(
-      and(
-        eq(categoryTable.user_id, auth().userId),
-        eq(expenseTable.user_id, auth().user_id),
-        or(
-          and(isNull(columns.month), isNull(columns.year)),
-          and(
-            eq(columns.month, currDate.getMonth() + 1),
-            eq(columns.year, currDate.getFullYear())
+  let sums: CategorySum[] = [];
+  try {
+    const currDate = new Date(2024, 7, 1);
+    const columns = {
+      category_id: categoryTable.id,
+      month: sql`extract(month from ${expenseTable.date})`.mapWith(Number),
+      year: sql`extract(year from ${expenseTable.date})`.mapWith(Number),
+      total_cents: sum(sql`coalesce(${expenseTable.amount_cents}, 0)`).mapWith(
+        Number
+      ),
+    };
+    sums = await db
+      .select(columns)
+      .from(categoryTable)
+      .leftJoin(
+        expenseTable,
+        and(eq(categoryTable.id, expenseTable.category_id))
+      )
+      .where(
+        and(
+          eq(categoryTable.user_id, auth().userId),
+          eq(expenseTable.user_id, auth().user_id),
+          or(
+            and(isNull(columns.month), isNull(columns.year)),
+            and(
+              eq(columns.month, currDate.getMonth() + 1),
+              eq(columns.year, currDate.getFullYear())
+            )
           )
         )
       )
-    )
-    .groupBy(columns.category_id, columns.month, columns.year)
-    .orderBy(desc(columns.total_cents));
+      .groupBy(columns.category_id, columns.month, columns.year)
+      .orderBy(desc(columns.total_cents));
+  } catch (error) {
+    console.error("Failed to fetch sums:", error);
+  }
 
   return (
     <div className="flex w-screen flex-col md:p-6 items-center justify-start">
