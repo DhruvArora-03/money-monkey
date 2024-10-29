@@ -7,10 +7,16 @@ import NewExpenseButton from "@ui/NewExpenseButton";
 import { and, desc, eq, isNull, or, sql, sum } from "drizzle-orm";
 
 export default async function HomePage() {
-  const expenses: Expense[] = await db
-    .select()
-    .from(expenseTable)
-    .orderBy(desc(expenseTable.date));
+  let expenses: Expense[] = [];
+  try {
+    expenses = await db
+      .select()
+      .from(expenseTable)
+      .orderBy(desc(expenseTable.date));
+  } catch (error) {
+    console.error("Failed to fetch expenses:", error);
+    // Optionally, handle the error by returning an appropriate response or fallback data.
+  }
 
   const currDate = new Date(2024, 7, 1);
   const columns = {
