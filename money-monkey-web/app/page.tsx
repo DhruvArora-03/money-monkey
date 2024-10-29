@@ -30,7 +30,7 @@ export default async function HomePage() {
       Number
     ),
   };
-  const sums: any[] = await db
+  const sums: CategorySum[] = await db
     .select(columns)
     .from(categoryTable)
     .leftJoin(expenseTable, and(eq(categoryTable.id, expenseTable.category_id)))
