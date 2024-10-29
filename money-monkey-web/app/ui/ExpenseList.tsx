@@ -3,6 +3,7 @@
 import React, { useContext, useMemo, useState } from "react";
 import EditExpenseModal from "@ui/EditExpenseModal";
 import { UserSettingsContext } from "@lib/userSettings";
+import { usdFormatter } from "@lib/money";
 
 interface ExpenseListProps {
   expenses: Expense[];
@@ -109,7 +110,9 @@ export default function ExpenseList({ expenses }: ExpenseListProps) {
                             {categories.get(e.category_id)?.name}
                           </span>
                         </td>
-                        <td className="text-right w-0 pl-2">{e.amount}</td>
+                        <td className="text-right w-0 pl-2">
+                          {usdFormatter.format(e.amount_cents / 100)}
+                        </td>
                       </tr>
                     ))}
                   </React.Fragment>
