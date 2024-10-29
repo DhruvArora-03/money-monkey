@@ -1,25 +1,41 @@
-import { getCategorySums, getExpenses } from "@lib/api";
+import { db } from "@lib/db";
+import { categoryTable, expenseTable } from "@lib/db/schema";
 import CategoryList from "@ui/CategoryList";
 import ExpenseList from "@ui/ExpenseList";
 import MainSpendDisplay from "@ui/MainSpendDisplay";
 import NewExpenseButton from "@ui/NewExpenseButton";
+import { and, desc, eq, isNull, or, sql, sum } from "drizzle-orm";
 
 export default async function HomePage() {
-  let sums: CategorySum[] = [];
-  let expenses: Expense[] = [];
+  const expenses: Expense[] = await db
+    .select()
+    .from(expenseTable)
+    .orderBy(desc(expenseTable.date));
 
-  try {
-    const date = new Date();
-    sums = await getCategorySums(date.getMonth() + 1, date.getFullYear());
-  } catch (e) {
-    return <div>Could not fetch category sums: {(e as any).message}</div>;
-  }
-
-  try {
-    expenses = await getExpenses();
-  } catch (e) {
-    return <div>Could not fetch expenses: {(e as any).message}</div>;
-  }
+  const currDate = new Date(2024, 7, 1);
+  const columns = {
+    category_id: categoryTable.id,
+    month: sql`extract(month from ${expenseTable.date})`.mapWith(Number),
+    year: sql`extract(year from ${expenseTable.date})`.mapWith(Number),
+    total_cents: sum(sql`coalesce(${expenseTable.amount_cents}, 0)`).mapWith(
+      Number
+    ),
+  };
+  const sums: any[] = await db
+    .select(columns)
+    .from(categoryTable)
+    .leftJoin(expenseTable, and(eq(categoryTable.id, expenseTable.category_id)))
+    .where(
+      or(
+        and(isNull(columns.month), isNull(columns.year)),
+        and(
+          eq(columns.month, currDate.getMonth() + 1),
+          eq(columns.year, currDate.getFullYear())
+        )
+      )
+    )
+    .groupBy(columns.category_id, columns.month, columns.year)
+    .orderBy(desc(columns.total_cents));
 
   return (
     <div className="flex w-screen flex-col md:p-6 items-center justify-start">

@@ -1,8 +1,8 @@
 interface Expense {
-  id: string;
+  id: number;
   name: string;
   date: Date;
-  amount: string;
+  amount_cents: number;
   category_id: number;
 }
 

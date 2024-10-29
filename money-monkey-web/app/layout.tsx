@@ -6,7 +6,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import NavBar from "@ui/NavBar";
 import UserSettingsProvider from "@lib/userSettings";
-import { getCategories } from "@lib/api";
+import { db } from "@lib/db";
+import { categoryTable } from "@lib/db/schema";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,10 +21,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  let categories: Category[] = [];
-  try {
-    categories = await getCategories();
-  } catch {}
+  const categories: Category[] = await db.select().from(categoryTable);
 
   return (
     <html lang="en">
