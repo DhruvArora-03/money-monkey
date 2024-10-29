@@ -48,7 +48,7 @@ export default function PopupModal({
         aria-modal="true"
       >
         <div className="relative text-center w-full h-10">
-          <h2 className="px-10 py-2 font-bold mb-2 underline">{title}</h2>
+          <h2 className="px-10 py-2 text-xl font-semibold mb-2 ">{title}</h2>
           <button
             className="absolute top-0 right-[-0.5rem] rounded-full hover:bg-gray-400 p-0 hover:p-2 m-2 hover:m-0 transition-all "
             type="button"
