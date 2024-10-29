@@ -76,8 +76,13 @@ export default function NewExpenseButton({
               props.resetForm();
             }}
           >
-            <Form className="flex flex-col" aria-label="New expense form">
-              <BasicField name="name" label="Name:" placeholder="Name" />
+            <Form className="flex flex-col gap-2" aria-label="New expense form">
+              <BasicField
+                name="name"
+                label="Name:"
+                placeholder="Name"
+                aria-required="true"
+              />
               <MoneyField name="amount" label="Amount:" />
               <BasicField name="date" label="Date:" type="date" />
               <SelectField

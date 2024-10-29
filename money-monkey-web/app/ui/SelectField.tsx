@@ -9,7 +9,7 @@ interface SelectFieldProps extends Omit<BasicFieldProps, "type"> {
 export default function SelectField(props: SelectFieldProps) {
   const [field, meta] = useField(props.name);
   return (
-    <>
+    <div>
       <label htmlFor={field.name}>{props.label}</label>
       <Field
         id={field.name}
@@ -17,7 +17,7 @@ export default function SelectField(props: SelectFieldProps) {
         {...field}
         {...props}
         autoComplete="off"
-        className="px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         aria-invalid={meta.touched && meta.error ? "true" : "false"}
       >
         {props.options}
@@ -27,6 +27,6 @@ export default function SelectField(props: SelectFieldProps) {
           {meta.error}
         </p>
       )}
-    </>
+    </div>
   );
 }
