@@ -97,7 +97,7 @@ export default function NewExpenseButton({
                 label="Category:"
                 options={options}
               />
-              <Button className="self-center" type="submit">
+              <Button className="self-center" type="submit" disabled={props.dirty}>
                 Create
               </Button>
             </Form>
