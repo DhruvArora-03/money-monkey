@@ -21,7 +21,7 @@ export const ExpenseSchema: Yup.ObjectSchema<ExpenseEdit> = Yup.object({
     .test("is-valid-date", "Invalid date!", (value) => {
       if (!value) return false;
       const date = new Date(value);
-      return date instanceof Date && !isNaN(date.getTime());
+      return date instanceof Date && !Number.isNaN(date.getTime());
     }),
   category_id: Yup.number()
     .required("Required!")
