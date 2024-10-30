@@ -17,7 +17,12 @@ export const ExpenseSchema: Yup.ObjectSchema<ExpenseEdit> = Yup.object({
     }),
   date: Yup.string()
     .required("Required!")
-    .matches(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format!"),
+    .matches(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format!")
+    .test("is-valid-date", "Invalid date!", (value) => {
+      if (!value) return false;
+      const date = new Date(value);
+      return date instanceof Date && !isNaN(date.getTime());
+    }),
   category_id: Yup.number()
     .required("Required!")
     .min(0, "Must select a category!"),
