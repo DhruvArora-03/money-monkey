@@ -60,7 +60,7 @@ export default async function HomePage() {
   return (
     <div className="flex w-screen flex-col md:p-6 items-center justify-start">
       <NewExpenseButton className="absolute right-0 p-3 md:pt-0 md:pr-6" />
-      <div className="overflow-hidden flex flex-col md:flex-row gap-12 pt-16 md:pb-6 md:pt-0 border-gray-300 max-w-7xl mx-auto">
+      <div className="overflow-hidden flex flex-col md:flex-row gap-8 pt-16 md:pb-6 md:pt-0 border-gray-300 max-w-7xl mx-auto">
         <MainSpendDisplay sums={sums} />
         <CategoryList sums={sums} />
       </div>
