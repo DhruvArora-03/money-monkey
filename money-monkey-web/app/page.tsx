@@ -35,27 +35,22 @@ export default async function HomePage() {
     sums = await db
       .select(columns)
       .from(categoryTable)
-      .leftJoin(
-        expenseTable,
-        and(eq(categoryTable.id, expenseTable.category_id))
-      )
-      .where(
-        and(
-          eq(categoryTable.user_id, user_id),
-          or(
-            and(
-              isNull(columns.month),
-              isNull(columns.year),
-              isNull(expenseTable.user_id)
-            ),
-            and(
-              eq(columns.month, currDate.getMonth() + 1),
-              eq(columns.year, currDate.getFullYear()),
-              eq(expenseTable.user_id, user_id)
-            )
+      .leftJoin(expenseTable, and(eq(categoryTable.id, expenseTable.category_id)))
+      .where(and(
+        eq(categoryTable.user_id, user_id),
+        or(
+          and(
+            isNull(columns.month),
+            isNull(columns.year),
+            isNull(expenseTable.user_id)
+          ),
+          and(
+            eq(columns.month, currDate.getMonth() + 1),
+            eq(columns.year, currDate.getFullYear()),
+            eq(expenseTable.user_id, user_id)
           )
         )
-      )
+      ))
       .groupBy(columns.category_id, columns.month, columns.year)
       .orderBy(desc(columns.total_cents));
   } catch (error) {
