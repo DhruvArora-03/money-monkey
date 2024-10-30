@@ -90,6 +90,7 @@ export default function NewExpenseButton({
                 type="date"
                 min={"1970-01-01"}
                 max={new Date().toISOString().split("T")[0]}
+                defaultValue={new Date().toISOString().split("T")[0]}
               />
               <SelectField
                 name="category_id"
