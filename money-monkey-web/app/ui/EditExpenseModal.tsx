@@ -29,7 +29,7 @@ export default function EditExpenseModal({
   const handleSubmit = useCallback(
     (expense: ExpenseEdit, formikHelpers: FormikHelpers<ExpenseEdit>) => {
       console.log("New expense:", expense);
-      console.log("Helpers: " + formikHelpers);
+      console.log(`Helpers: ${formikHelpers}`);
       formikHelpers.resetForm();
       onClose();
     },
