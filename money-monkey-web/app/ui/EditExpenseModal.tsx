@@ -83,7 +83,7 @@ export default function EditExpenseModal({
               <Button
                 className="self-center"
                 type="submit"
-                disabled={props.dirty}
+                disabled={!props.dirty && !props.isValid}
               >
                 Finish Editing
               </Button>
