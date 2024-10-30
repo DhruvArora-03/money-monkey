@@ -1,15 +1,15 @@
 "use client";
 
-import Button from "@ui/Button";
-import { MdAdd } from "react-icons/md";
-import React, { useCallback, useContext, useMemo, useState } from "react";
-import { Field, Form, Formik, FormikHelpers } from "formik";
-import { NewExpenseSchema } from "@lib/validation";
-import PopupModal from "@ui/PopupModal";
-import BasicField from "@ui/BasicField";
-import MoneyField from "@ui/MoneyField";
 import { UserSettingsContext } from "@lib/userSettings";
+import { ExpenseSchema } from "@lib/validation";
+import BasicField from "@ui/BasicField";
+import Button from "@ui/Button";
+import MoneyField from "@ui/MoneyField";
+import PopupModal from "@ui/PopupModal";
 import SelectField from "@ui/SelectField";
+import { Form, Formik, FormikHelpers } from "formik";
+import React, { useCallback, useContext, useMemo, useState } from "react";
+import { MdAdd } from "react-icons/md";
 
 type NewExpenseButtonProps = {
   className?: string;
@@ -22,7 +22,7 @@ export default function NewExpenseButton({
   const { categories } = useContext(UserSettingsContext);
 
   const handleSubmit = useCallback(
-    (expense: NewExpense, formikHelpers: FormikHelpers<NewExpense>) => {
+    (expense: ExpenseEdit, formikHelpers: FormikHelpers<ExpenseEdit>) => {
       console.log("New expense:", expense);
       console.log("Helpers: " + formikHelpers);
       formikHelpers.resetForm();
@@ -61,10 +61,10 @@ export default function NewExpenseButton({
         initialValues={{
           name: "",
           amount: "",
-          date: new Date(),
+          date: "",
           category_id: -1,
         }}
-        validationSchema={NewExpenseSchema}
+        validationSchema={ExpenseSchema}
         onSubmit={handleSubmit}
       >
         {(props) => (
@@ -84,7 +84,13 @@ export default function NewExpenseButton({
                 aria-required="true"
               />
               <MoneyField name="amount" label="Amount:" />
-              <BasicField name="date" label="Date:" type="date" />
+              <BasicField
+                name="date"
+                label="Date:"
+                type="date"
+                min={"1970-01-01"}
+                max={new Date().toISOString().split("T")[0]}
+              />
               <SelectField
                 name="category_id"
                 label="Category:"

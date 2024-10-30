@@ -6,9 +6,9 @@ interface Expense {
   category_id: number;
 }
 
-interface NewExpense {
+interface ExpenseEdit {
   name: string;
-  date: Date;
+  date: string;
   amount: string;
   category_id: number;
 }
