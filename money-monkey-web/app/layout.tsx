@@ -34,11 +34,11 @@ export default async function RootLayout({
     <html lang="en">
       <SpeedInsights />
       <Analytics />
-      <body className={`${inter.className} relative h-full`}>
+      <body className={`${inter.className} relative h-screen`}>
         <ClerkProvider>
           <UserSettingsProvider categories={categories}>
             <NavBar />
-            <main className="flex-grow h-full bg-white text-black pb-16">
+            <main className="flex-grow min-h-full bg-white text-black pb-16">
               {children}
             </main>
           </UserSettingsProvider>
