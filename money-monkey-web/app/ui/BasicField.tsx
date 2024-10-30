@@ -13,24 +13,21 @@ export interface BasicFieldProps extends InputHTMLAttributes<HTMLInputElement> {
 export default function BasicField(props: BasicFieldProps) {
   const [field, meta] = useField(props.name);
   return (
-    <>
+    <div>
       <label htmlFor={field.name}>{props.label}</label>
       <input
         id={field.name}
         {...field}
         {...props}
         autoComplete="off"
-        className="px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         aria-invalid={meta.touched && meta.error ? "true" : "false"}
       />
       {meta.touched && meta.error && (
-        <p
-          className="text-red-500 text-sm"
-          role="alert"
-        >
+        <p className="text-red-500 text-sm" role="alert">
           {meta.error}
         </p>
       )}
-    </>
+    </div>
   );
 }

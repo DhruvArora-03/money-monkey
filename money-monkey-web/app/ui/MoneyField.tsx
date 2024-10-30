@@ -41,7 +41,8 @@ export default function MoneyField(props: { name: string; label: string }) {
         placeholder="$0.00"
       />
       {meta.touched &&
-        (meta.value satisfies string).startsWith("$") &&
+        typeof meta.value === "string" &&
+        (meta.value.length === 0 || meta.value.startsWith("$")) &&
         meta.error && (
           <p className="text-red-500 text-sm" role="alert">
             {meta.error}

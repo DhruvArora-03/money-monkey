@@ -1,9 +1,13 @@
-import React, { useCallback } from "react";
-import PopupModal from "@ui/PopupModal";
-import { NewExpenseSchema } from "@lib/validation";
-import { FormikHelpers, Formik, Form, Field } from "formik";
+import { usdFormatter } from "@lib/money";
+import { UserSettingsContext } from "@lib/userSettings";
+import { ExpenseSchema } from "@lib/validation";
 import BasicField from "@ui/BasicField";
 import Button from "@ui/Button";
+import MoneyField from "@ui/MoneyField";
+import PopupModal from "@ui/PopupModal";
+import SelectField from "@ui/SelectField";
+import { Form, Formik, FormikHelpers } from "formik";
+import React, { useCallback, useContext, useMemo } from "react";
 
 interface EditExpenseModalProps {
   initialExpense: Expense | null;
@@ -14,50 +18,73 @@ export default function EditExpenseModal({
   initialExpense,
   onClose,
 }: EditExpenseModalProps) {
+  const { categories } = useContext(UserSettingsContext);
+  const initialValues = initialExpense && {
+    name: initialExpense.name,
+    amount: usdFormatter.format(initialExpense.amount_cents / 100),
+    date: initialExpense.date.toISOString().split("T")[0],
+    category_id: initialExpense.category_id,
+  };
+
   const handleSubmit = useCallback(
-    (expense: Expense, formikHelpers: FormikHelpers<Expense>) => {
+    (expense: ExpenseEdit, formikHelpers: FormikHelpers<ExpenseEdit>) => {
       console.log("New expense:", expense);
-      console.log("Helpers: " + formikHelpers);
+      console.log(`Helpers: ${formikHelpers}`);
       formikHelpers.resetForm();
       onClose();
     },
     [onClose]
   );
+
+  const options = useMemo(
+    () => (
+      <>
+        {categories
+          .values()
+          .toArray()
+          .map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
+          ))}
+      </>
+    ),
+    [categories]
+  );
+
   return (
     <PopupModal
       title="Edit Expense"
       onClose={onClose}
-      visible={initialExpense != null}
+      visible={!!initialValues}
     >
-      {initialExpense && (
+      {initialValues && (
         <Formik
-          initialValues={initialExpense}
-          validationSchema={NewExpenseSchema}
+          initialValues={initialValues}
+          validationSchema={ExpenseSchema}
           onSubmit={handleSubmit}
         >
           {(props) => (
-            <Form className="flex flex-col">
+            <Form className="flex flex-col gap-2">
               <BasicField name="name" label="Name:" placeholder="Name" />
-              <BasicField name="amount" label="Amount: $" placeholder="0.00" />
-              <BasicField name="date" label="Date:" type="date" />
-              {/* <div>
-                <label htmlFor="category_id">Category:</label>
-                <Field id="category_id" name="category_id" as="select">
-                  <option value="">Select a category</option>
-                  {categories.map((category) => (
-                    <option
-                      key={category.category_id}
-                      value={category.category_id}
-                    >
-                      {category.name}
-                    </option>
-                  ))}
-                </Field>
-                {props.touched.category_id && (
-                  <p className="text-red-700">{props.errors.category_id}</p>
-                )}
-              </div> */}
-              <Button className="self-center" type="submit">
+              <MoneyField name="amount" label="Amount:" />
+              <BasicField
+                name="date"
+                label="Date:"
+                type="date"
+                min={"1970-01-01"}
+                max={new Date().toISOString().split("T")[0]}
+              />
+              <SelectField
+                name="category_id"
+                label="Category:"
+                options={options}
+              />
+              <Button
+                className="self-center"
+                type="submit"
+                disabled={props.dirty}
+              >
                 Finish Editing
               </Button>
             </Form>
