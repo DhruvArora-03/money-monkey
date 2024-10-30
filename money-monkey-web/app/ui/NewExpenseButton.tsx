@@ -98,7 +98,7 @@ export default function NewExpenseButton({
               <Button
                 className="self-center"
                 type="submit"
-                disabled={!props.dirty && !props.isValid}
+                disabled={!props.dirty || !props.isValid}
               >
                 Create
               </Button>
