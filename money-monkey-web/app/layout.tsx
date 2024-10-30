@@ -23,7 +23,8 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const user_id = auth().userId;
+  const user_id = auth().userId!;
+
   const categories: Category[] = await db
     .select()
     .from(categoryTable)

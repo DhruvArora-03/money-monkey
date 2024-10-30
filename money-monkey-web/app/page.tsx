@@ -8,7 +8,7 @@ import NewExpenseButton from "@ui/NewExpenseButton";
 import { and, desc, eq, isNull, or, sql, sum } from "drizzle-orm";
 
 export default async function HomePage() {
-  const user_id = auth().userId;
+  const user_id = auth().userId!;
 
   let expenses: Expense[] = [];
   try {
