@@ -38,7 +38,7 @@ export default async function RootLayout({
         <ClerkProvider>
           <UserSettingsProvider categories={categories}>
             <NavBar />
-            <main className="flex-grow h-full bg-white text-black">
+            <main className="flex-grow min-h-full bg-white text-black pb-16">
               {children}
             </main>
           </UserSettingsProvider>

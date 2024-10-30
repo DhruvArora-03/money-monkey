@@ -8,7 +8,7 @@ export default function CategoryList({ sums }: { sums: CategorySum[] }) {
   const { categories } = useContext(UserSettingsContext);
 
   return (
-    <div className="w-full flex flex-col gap-1">
+    <div className="w-full flex flex-col gap-1 px-8 md:px-0">
       {sums
         .filter((sum) => categories.has(sum.category_id))
         .map((sum) => {

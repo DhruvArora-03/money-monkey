@@ -113,7 +113,7 @@ export default function MainSpendDisplay({ sums }: { sums: CategorySum[] }) {
 
   return (
     <svg
-      className="height-[300px]"
+      className="w-full height-[300px] px-16 md:px-0"
       width={"100%"}
       height={"100%"}
       viewBox={`0 0 ${dim} ${dim}`}
