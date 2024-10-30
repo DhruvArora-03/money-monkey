@@ -59,7 +59,7 @@ export default function NewExpenseButton({
         initialValues={{
           name: "",
           amount: "",
-          date: "",
+          date: new Date().toISOString().split("T")[0],
           category_id: -1,
         }}
         validationSchema={ExpenseSchema}
@@ -88,7 +88,6 @@ export default function NewExpenseButton({
                 type="date"
                 min={"1970-01-01"}
                 max={new Date().toISOString().split("T")[0]}
-                defaultValue={new Date().toISOString().split("T")[0]}
               />
               <SelectField
                 name="category_id"
