@@ -39,9 +39,7 @@ export default function EditExpenseModal({
   const options = useMemo(
     () => (
       <>
-        {categories
-          .values()
-          .toArray()
+        {Array.from(categories.values())
           .map((category) => (
             <option key={category.id} value={category.id}>
               {category.name}
