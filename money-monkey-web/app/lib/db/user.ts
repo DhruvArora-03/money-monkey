@@ -11,9 +11,11 @@ export async function createUser(userId: string): Promise<void> {
       .where(eq(categoryTable.user_id, userId))
   ).map((e) => e.name);
 
-  var categories = DEFAULT_CATEGORIES.filter(
+  const categories = DEFAULT_CATEGORIES.filter(
     (cat) => !existing.includes(cat.name)
   ).map((cat) => ({ ...cat, user_id: userId }));
 
-  await db.insert(categoryTable).values(categories);
+  if (categories.length > 0) {
+    await db.insert(categoryTable).values(categories);
+  }
 }

@@ -1,16 +1,17 @@
 import { clerkClient, clerkMiddleware } from "@clerk/nextjs/server";
 import { createUser } from "@lib/db/user";
 
-export default clerkMiddleware(async (auth, req) => {
+export default clerkMiddleware((auth, req) => {
   const { userId, redirectToSignIn, sessionClaims } = auth();
 
   if (!userId && !req.nextUrl.pathname.startsWith("/sign-in")) {
     redirectToSignIn();
   } else if (userId && !sessionClaims.metadata.onboardingComplete) {
-    await createUser(userId);
-    clerkClient().users.updateUserMetadata(userId, {
-      publicMetadata: { onboardingComplete: true },
-    });
+    createUser(userId).then(() =>
+      clerkClient().users.updateUserMetadata(userId, {
+        publicMetadata: { onboardingComplete: true },
+      })
+    );
   }
 });
 
