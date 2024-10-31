@@ -24,6 +24,8 @@ interface Category {
   color: string;
 }
 
+type NewCategory = Omit<Category, "id">;
+
 interface HomePageStats {
   totalCents: number;
   catagories: Record<string, number>;

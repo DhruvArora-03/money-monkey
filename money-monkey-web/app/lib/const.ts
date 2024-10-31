@@ -1,4 +1,4 @@
-export const DEFAULT_CATEGORIES = [
+export const DEFAULT_CATEGORIES: NewCategory[] = [
   { name: "Other", color: "#404040" },
   { name: "Housing", color: "#FF0000" },
   { name: "Groceries", color: "#00FF00" },
