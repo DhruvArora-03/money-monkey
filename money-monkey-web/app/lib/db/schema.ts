@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import {
   date,
   integer,
@@ -5,8 +6,8 @@ import {
   serial,
   text,
   timestamp,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
-import { sql } from "drizzle-orm";
 
 const createTable = pgTableCreator((name) => `money_monkey_${name}`);
 
@@ -33,14 +34,25 @@ export const expenseTable = createTable("expense", {
   updated_at: getUpdatedAtColumn(),
 });
 
-export const categoryTable = createTable("category", {
-  user_id: text("user_id").notNull(),
+export const categoryTable = createTable(
+  "category",
+  {
+    user_id: text("user_id").notNull(),
 
-  id: serial("id").primaryKey(),
+    id: serial("id").primaryKey(),
 
-  name: text("name").notNull(),
-  color: text("color").notNull(),
+    name: text("name").notNull(),
+    color: text("color").notNull(),
 
-  created_at: getCreatedAtColumn(),
-  updated_at: getUpdatedAtColumn(),
-});
+    created_at: getCreatedAtColumn(),
+    updated_at: getUpdatedAtColumn(),
+  },
+  (table) => {
+    return {
+      userCategoryIdx: uniqueIndex("user_category_idx").on(
+        table.user_id,
+        table.name
+      ),
+    };
+  }
+);

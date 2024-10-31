@@ -1,3 +1,14 @@
+export const DEFAULT_CATEGORIES: NewCategory[] = [
+  { name: "Other", color: "#404040" },
+  { name: "Housing", color: "#FF0000" },
+  { name: "Groceries", color: "#00FF00" },
+  { name: "Food", color: "#0000FF" },
+  { name: "Transportation", color: "#FFFF00" },
+  { name: "Entertainment", color: "#00FFFF" },
+  { name: "Necessities", color: "#FF00FF" },
+  { name: "Clothes", color: "#E0E0E0" },
+];
+
 export type Month =
   | "January"
   | "February"
