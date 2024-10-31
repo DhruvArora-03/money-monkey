@@ -1,3 +1,14 @@
+export const DEFAULT_CATEGORIES = [
+  { name: "Other", color: "#000000" },
+  { name: "Housing", color: "#FF0000" },
+  { name: "Groceries", color: "#00FF00" },
+  { name: "Food", color: "#0000FF" },
+  { name: "Transportation", color: "#FFFF00" },
+  { name: "Entertainment", color: "#00FFFF" },
+  { name: "Necessities", color: "#FF00FF" },
+  { name: "Clothes", color: "#FFFFFF" },
+];
+
 export type Month =
   | "January"
   | "February"
