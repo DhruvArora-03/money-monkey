@@ -31,11 +31,11 @@ export default function MainSpendDisplay({ sums }: { sums: CategorySum[] }) {
     .filter((s) => s.total_cents != 0)
     .map(
       ({ category_id, total_cents }) =>
-      ({
-        category_id: category_id,
-        color: categories.get(category_id)?.color ?? "#0FF0AF",
-        percentage: total_cents / total,
-      } satisfies CircleSection)
+        ({
+          category_id: category_id,
+          color: categories.get(category_id)?.color ?? "#0FF0AF",
+          percentage: total_cents / total,
+        } satisfies CircleSection)
     );
 
   if (sums == undefined || total == 0) {
@@ -100,7 +100,9 @@ export default function MainSpendDisplay({ sums }: { sums: CategorySum[] }) {
     return (
       <path
         d={`M ${offset + r * Math.cos(start)} ${offset + r * Math.sin(start)}
-            A ${r} ${r} 0 ${p > 0.5 ? 1 : 0} 1 ${offset + r * Math.cos(end)} ${offset + r * Math.sin(end)}`}
+            A ${r} ${r} 0 ${p > 0.5 ? 1 : 0} 1 ${offset + r * Math.cos(end)} ${
+          offset + r * Math.sin(end)
+        }`}
         stroke={color}
         strokeWidth={15}
         strokeLinecap="round"
@@ -111,8 +113,8 @@ export default function MainSpendDisplay({ sums }: { sums: CategorySum[] }) {
 
   return (
     <svg
-      className="w-full px-16 py-0 md:px-0 h-fit border-2 border-black"
-      width={"100%"}
+      className="px-0 py-0 md:px-0 border-2 border-black"
+      width={"100%"
       height={"100%"}
       viewBox={`0 0 ${dim} ${dim}`}
     >
