@@ -112,12 +112,7 @@ export default function MainSpendDisplay({ sums }: { sums: CategorySum[] }) {
   }
 
   return (
-    <svg
-      className="px-0 py-0 md:px-0 border-2 border-black"
-      width={"100%"}
-      height={"100%"}
-      viewBox={`0 0 ${dim} ${dim}`}
-    >
+    <svg width={"100%"} height={"100%"} viewBox={`0 0 ${dim} ${dim}`}>
       <text
         x={dim / 2}
         y={dim / 2}
