@@ -1,5 +1,6 @@
 "use client";
 
+import { createExpense } from "@lib/db/queries";
 import { UserSettingsContext } from "@lib/userSettings";
 import { ExpenseSchema } from "@lib/validation";
 import BasicField from "@ui/BasicField";
@@ -13,10 +14,12 @@ import { MdAdd } from "react-icons/md";
 
 type NewExpenseButtonProps = {
   className?: string;
+  userId: string;
 };
 
 export default function NewExpenseButton({
   className = "",
+  userId,
 }: NewExpenseButtonProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { categories } = useContext(UserSettingsContext);
@@ -25,21 +28,21 @@ export default function NewExpenseButton({
     (expense: ExpenseEdit, formikHelpers: FormikHelpers<ExpenseEdit>) => {
       console.log("New expense:", expense);
       console.log("Helpers: " + formikHelpers);
+      createExpense(expense, userId);
       formikHelpers.resetForm();
       setIsModalVisible(false);
     },
-    [setIsModalVisible]
+    [setIsModalVisible, userId]
   );
   const options = useMemo(
     () => (
       <>
         <option value={-1}>Select a category</option>
-        {Array.from(categories.values())
-          .map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.name}
-            </option>
-          ))}
+        {Array.from(categories.values()).map((category) => (
+          <option key={category.id} value={category.id}>
+            {category.name}
+          </option>
+        ))}
       </>
     ),
     [categories]
