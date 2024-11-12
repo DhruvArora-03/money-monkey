@@ -3,9 +3,11 @@
   "name": "app",
   "main": "index.ts",
   "dependencies": {
+    "@shopify/react-native-skia": "^1.5.3",
     "moti": "latest",
     "nativewind": "2.0.11",
-    "solito": "4.0.1"
+    "solito": "4.0.1",
+    "victory-native": "41.9.0"
   },
   "sideEffects": false
 }
