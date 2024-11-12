@@ -2,7 +2,6 @@ import { Text } from 'app/design/typography'
 import { View } from 'app/design/view'
 
 import { Pie, PolarChart } from 'victory-native'
-import { Platform } from 'react-native'
 
 function randomNumber() {
   return Math.floor(Math.random() * 26) + 125
