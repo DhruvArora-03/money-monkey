@@ -4,6 +4,7 @@
   "main": "index.ts",
   "dependencies": {
     "@react-native-async-storage/async-storage": "1.23.1",
+    "@react-native-google-signin/google-signin": "^13.1.0",
     "@shopify/react-native-skia": "^1.5.3",
     "@supabase/supabase-js": "^2.46.1",
     "moti": "latest",

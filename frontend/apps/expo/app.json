@@ -4,9 +4,15 @@
     "slug": "money-monkey",
     "version": "1.0.0",
     "scheme": "money-monkey",
-    "platforms": ["ios", "android"],
     "ios": {
-      "bundleIdentifier": "com.dhruvarora.money-monkey"
+      "bundleIdentifier": "com.dhruvarora.money-monkey",
+      "googleServicesFile": "./GoogleService-Info.plist"
+    },
+    "plugins": [
+      "@react-native-google-signin/google-signin"
+    ],
+    "android": {
+      "package": "com.dhruvarora.moneymonkey"
     }
   }
 }
