@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "solito-nativewind",
-    "slug": "solito-nativewind",
+    "name": "money-monkey",
+    "slug": "money-monkey",
     "version": "1.0.0",
-    "scheme": "solito-nativewind",
+    "scheme": "money-monkey",
     "platforms": ["ios", "android"],
     "ios": {
-      "bundleIdentifier": "com.solito.nativewind"
+      "bundleIdentifier": "com.dhruvarora.money-monkey"
     }
   }
 }
