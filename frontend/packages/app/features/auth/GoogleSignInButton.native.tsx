@@ -5,7 +5,7 @@ import {
 } from '@react-native-google-signin/google-signin'
 import { supabase } from 'app/features/supabase'
 
-export default function () {
+export default function GoogleSignInButton() {
   GoogleSignin.configure({
     scopes: ['https://www.googleapis.com/auth/drive.readonly'],
     webClientId:
