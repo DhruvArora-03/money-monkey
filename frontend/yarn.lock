@@ -3701,7 +3701,7 @@ __metadata:
     moti: latest
     nativewind: 2.0.11
     react-native-url-polyfill: ^2.0.0
-    solito: 4.0.1
+    solito: 4.3.0
     victory-native: 41.9.0
   languageName: unknown
   linkType: soft
@@ -12388,12 +12388,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"solito@npm:4.0.1":
-  version: 4.0.1
-  resolution: "solito@npm:4.0.1"
+"solito@npm:4.3.0":
+  version: 4.3.0
+  resolution: "solito@npm:4.3.0"
   dependencies:
     typescript: ^5.0.4
-  checksum: 2148da025f3943c78009049c362a23ea2e08b9b430dc5ba4eb3b681faf618dad513847de7f95407575e9adf6dfda3a8060d12f69a7c1e018bbcf70b3b0f5b308
+  checksum: 7aaa0cc7e3814c29887215f922cc184f28b287a9ae1f37eaddae3710d8773d16a9266a5ef0ff340f9d5c3d1b013b29fe53d288233dbcb6f635c0a4bcf1eb4064
   languageName: node
   linkType: hard
 
