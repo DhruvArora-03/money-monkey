@@ -1,4 +1,6 @@
 const { withExpo } = require('@expo/next-adapter')
+const fs = require('fs')
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin')
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -20,4 +22,52 @@ const nextConfig = {
   ],
 }
 
-module.exports = withExpo(nextConfig)
+module.exports = {
+  ...withExpo(nextConfig),
+  webpack: (
+    config,
+    { buildId, dev, isServer, defaultLoaders, nextRuntime, webpack },
+  ) => ({
+    ...config,
+    plugins: [
+      ...config.plugins,
+      // 1. Ensure wasm file availability
+      new (class CopySkiaPlugin {
+        apply(compiler) {
+          compiler.hooks.thisCompilation.tap('AddSkiaPlugin', (compilation) => {
+            compilation.hooks.processAssets.tapPromise(
+              {
+                name: 'copy-skia',
+                stage:
+                  compiler.webpack.Compilation.PROCESS_ASSETS_STAGE_ADDITIONAL,
+              },
+              async () => {
+                const src = require.resolve('./plugins/canvaskit.wasm')
+                if (!compilation.getAsset(src)) {
+                  compilation.emitAsset(
+                    '/canvaskit.wasm',
+                    new webpack.sources.RawSource(
+                      await fs.promises.readFile(src),
+                    ),
+                  )
+                }
+              },
+            )
+          })
+        }
+      })(),
+      // 2. Polyfill fs and path modules
+      new NodePolyfillPlugin(),
+    ],
+    // alias: {
+    //   ...config.alias,
+    //   // 3. Suppress reanimated module warning
+    //   // This assumes Reanimated is installed, if not you can use false.
+    //   'react-native-reanimated/package.json': require.resolve(
+    //     'react-native-reanimated/package.json',
+    //   ),
+    //   'react-native-reanimated': require.resolve('react-native-reanimated'),
+    //   'react-native/Libraries/Image/AssetRegistry': false,
+    // },
+  }),
+}
