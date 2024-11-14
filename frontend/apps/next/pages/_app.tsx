@@ -1,5 +1,6 @@
 import 'raf/polyfill'
 import 'setimmediate'
+import '../global.css'
 
 import { Provider } from 'app/provider'
 import { AppProps } from 'next/app'
@@ -23,5 +24,3 @@ export default async function MyApp({ Component, pageProps }: AppProps) {
     </>
   )
 }
-
-export default MyApp
