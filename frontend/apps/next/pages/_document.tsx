@@ -6,6 +6,7 @@ import type { DocumentContext } from 'next/document'
 
 class Document extends NextDocument {
   static async getInitialProps(ctx: DocumentContext) {
+
     AppRegistry.registerComponent('Main', () => Main)
     // @ts-ignore
     const { getStyleElement } = AppRegistry.getApplication('Main')

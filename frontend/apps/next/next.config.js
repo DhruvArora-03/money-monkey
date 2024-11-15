@@ -9,21 +9,24 @@ const nextConfig = {
   // https://github.com/necolas/react-native-web/pull/2330
   // https://github.com/nandorojo/moti/issues/224
   // once that gets fixed, set this back to true
-  reactStrictMode: false,
+  reactStrictMode: true,
   transpilePackages: [
     'react-native',
     'react-native-web',
+    'expo',
     'solito',
     'moti',
     'app',
     'react-native-reanimated',
     'nativewind',
     'react-native-gesture-handler',
+    'victory-native',
+    '@shopify/react-native-skia',
   ],
-}
-
-module.exports = {
-  ...withExpo(nextConfig),
+  experimental: {
+    forceSwcTransforms: true,
+    esmExternals: 'loose',
+  },
   webpack: (
     config,
     { buildId, dev, isServer, defaultLoaders, nextRuntime, webpack },
@@ -59,15 +62,20 @@ module.exports = {
       // 2. Polyfill fs and path modules
       new NodePolyfillPlugin(),
     ],
-    // alias: {
-    //   ...config.alias,
-    //   // 3. Suppress reanimated module warning
-    //   // This assumes Reanimated is installed, if not you can use false.
-    //   'react-native-reanimated/package.json': require.resolve(
-    //     'react-native-reanimated/package.json',
-    //   ),
-    //   'react-native-reanimated': require.resolve('react-native-reanimated'),
-    //   'react-native/Libraries/Image/AssetRegistry': false,
-    // },
+    resolve: {
+      ...config.resolve,
+      alias: {
+        ...config.resolve.alias,
+        // 3. Suppress reanimated module warning
+        // This assumes Reanimated is installed, if not you can use false.
+        'react-native-reanimated/package.json': require.resolve(
+          'react-native-reanimated/package.json',
+        ),
+        'react-native-reanimated': require.resolve('react-native-reanimated'),
+        'react-native/Libraries/Image/AssetRegistry': false,
+      },
+    },
   }),
 }
+
+module.exports = withExpo(nextConfig)
