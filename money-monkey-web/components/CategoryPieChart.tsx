@@ -4,6 +4,7 @@ import * as React from "react";
 import { Label, Pie, PieChart } from "recharts";
 
 import {
+  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
@@ -35,19 +36,30 @@ export function CategoryPieChart({ sums }: { sums: CategorySum[] }) {
     return {
       amount: total_cents / 100,
       name: cat.name,
-      fill: cat.color,
+      fill: `var(--color-${cat.name}`,
+      // fill: cat.color,
     };
   });
   // .filter((x) => x);
 
+  const chartConfig: ChartConfig = sums
+    .map(({ category_id }) => {
+      const cat = categories.get(category_id);
+      if (!cat) {
+        return null;
+      }
+      return {
+        label: cat.name,
+        color: cat.color,
+      };
+    })
+    .reduce((acc, val) => ({ ...acc, [val!.label]: val }), {});
+
   return (
     <div className="w-[500px] h-full">
-      <ChartContainer config={{}} className="aspect-square w-full">
+      <ChartContainer config={chartConfig} className="aspect-square w-full">
         <PieChart>
-          <ChartTooltip
-            cursor={false}
-            content={<ChartTooltipContent hideLabel />}
-          />
+          <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
           <Pie
             data={chartData}
             dataKey="amount"

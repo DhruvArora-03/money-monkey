@@ -3,7 +3,6 @@ import { db } from "@/lib/db";
 import { categoryTable, expenseTable } from "@/lib/db/schema";
 import CategoryList from "@/components/CategoryList";
 import ExpenseList from "@/components/ExpenseList";
-import MainSpendDisplay from "@/components/MainSpendDisplay";
 import NewExpenseButton from "@/components/NewExpenseButton";
 import { and, desc, eq, isNull, or, sql, sum } from "drizzle-orm";
 import { CategoryPieChart } from "@/components/CategoryPieChart";
@@ -70,7 +69,6 @@ export default async function HomePage() {
         userId={userId}
       />
       <div className="overflow-hidden flex flex-col md:flex-row gap-8 pt-16 md:pb-6 md:pt-0 border-gray-300 max-w-7xl mx-auto">
-        {/* <MainSpendDisplay sums={sums} /> */}
         <CategoryPieChart sums={sums} />
         <CategoryList sums={sums} />
       </div>
