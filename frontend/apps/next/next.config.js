@@ -9,11 +9,11 @@ const nextConfig = {
   // https://github.com/necolas/react-native-web/pull/2330
   // https://github.com/nandorojo/moti/issues/224
   // once that gets fixed, set this back to true
-  reactStrictMode: true,
+  reactStrictMode: false,
   transpilePackages: [
     'react-native',
     'react-native-web',
-    'expo',
+    // 'expo',
     'solito',
     'moti',
     'app',
@@ -23,15 +23,17 @@ const nextConfig = {
     'victory-native',
     '@shopify/react-native-skia',
   ],
+  productionBrowserSourceMaps: false,
   experimental: {
-    forceSwcTransforms: true,
-    esmExternals: 'loose',
+    // forceSwcTransforms: true,
+    // esmExternals: 'loose',
   },
   webpack: (
     config,
     { buildId, dev, isServer, defaultLoaders, nextRuntime, webpack },
   ) => ({
     ...config,
+    devtool: false,
     plugins: [
       ...config.plugins,
       // 1. Ensure wasm file availability
