@@ -6,6 +6,7 @@ import ExpenseList from "@/components/ExpenseList";
 import MainSpendDisplay from "@/components/MainSpendDisplay";
 import NewExpenseButton from "@/components/NewExpenseButton";
 import { and, desc, eq, isNull, or, sql, sum } from "drizzle-orm";
+import { CategoryPieChart } from "@/components/CategoryPieChart";
 
 export default async function HomePage() {
   const userId = auth().userId!;
@@ -64,6 +65,7 @@ export default async function HomePage() {
 
   return (
     <div className="flex w-screen flex-col md:p-6 items-center justify-start">
+      <CategoryPieChart />
       <NewExpenseButton
         className="absolute right-0 p-3 md:pt-0 md:pr-6"
         userId={userId}
