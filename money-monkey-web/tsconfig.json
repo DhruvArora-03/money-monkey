@@ -17,11 +17,8 @@
         "name": "next"
       }
     ],
-    "baseUrl": ".",
     "paths": {
-      "@lib/*": ["lib/*"],
-      "@components/*": ["components/*"],
-      "@env": ["lib/env.ts"]
+      "@/*": ["./*"],
     }
   },
   "include": [

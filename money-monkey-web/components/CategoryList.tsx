@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useContext } from "react";
-import { formatMoney } from "@lib/money";
-import { UserSettingsContext } from "@lib/userSettings";
+import { formatMoney } from "@/lib/money";
+import { UserSettingsContext } from "@/lib/userSettings";
 
 export default function CategoryList({ sums }: { sums: CategorySum[] }) {
   const { categories } = useContext(UserSettingsContext);

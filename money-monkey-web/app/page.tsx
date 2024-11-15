@@ -1,10 +1,10 @@
 import { auth } from "@clerk/nextjs/server";
-import { db } from "@lib/db";
-import { categoryTable, expenseTable } from "@lib/db/schema";
-import CategoryList from "@components/CategoryList";
-import ExpenseList from "@components/ExpenseList";
-import MainSpendDisplay from "@components/MainSpendDisplay";
-import NewExpenseButton from "@components/NewExpenseButton";
+import { db } from "@/lib/db";
+import { categoryTable, expenseTable } from "@/lib/db/schema";
+import CategoryList from "@/components/CategoryList";
+import ExpenseList from "@/components/ExpenseList";
+import MainSpendDisplay from "@/components/MainSpendDisplay";
+import NewExpenseButton from "@/components/NewExpenseButton";
 import { and, desc, eq, isNull, or, sql, sum } from "drizzle-orm";
 
 export default async function HomePage() {

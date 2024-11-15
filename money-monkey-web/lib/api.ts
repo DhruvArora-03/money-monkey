@@ -1,5 +1,5 @@
 // import { auth, clerkClient } from "@clerk/nextjs/server";
-// import { formatMoney } from "@lib/money";
+// import { formatMoney } from "@/lib/money";
 
 // export async function createUser(userId: string) {
 //   const res = await fetch(`${process.env.API_BASE}/users/create`, {

@@ -1,6 +1,6 @@
 import { Field, useField } from "formik";
 import React from "react";
-import { BasicFieldProps } from "@components/BasicField";
+import { BasicFieldProps } from "@/components/BasicField";
 
 interface SelectFieldProps extends Omit<BasicFieldProps, "type"> {
   options: React.ReactNode;

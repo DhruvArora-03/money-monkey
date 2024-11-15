@@ -1,8 +1,8 @@
 "use server";
 
-import { db } from "@lib/db";
-import { expenseTable } from "@lib/db/schema";
-import { moneyToCents } from "@lib/money";
+import { db } from "@/lib/db";
+import { expenseTable } from "@/lib/db/schema";
+import { moneyToCents } from "@/lib/money";
 
 export async function createExpense(
   expense: ExpenseEdit,

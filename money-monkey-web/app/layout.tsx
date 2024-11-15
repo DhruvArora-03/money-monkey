@@ -4,10 +4,10 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import NavBar from "@components/NavBar";
-import UserSettingsProvider from "@lib/userSettings";
-import { db } from "@lib/db";
-import { categoryTable } from "@lib/db/schema";
+import NavBar from "@/components/NavBar";
+import UserSettingsProvider from "@/lib/userSettings";
+import { db } from "@/lib/db";
+import { categoryTable } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
 

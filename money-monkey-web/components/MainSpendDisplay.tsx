@@ -1,7 +1,7 @@
 "use client";
 
-import { formatMoney } from "@lib/money";
-import { UserSettingsContext } from "@lib/userSettings";
+import { formatMoney } from "@/lib/money";
+import { UserSettingsContext } from "@/lib/userSettings";
 import { useContext } from "react";
 
 type CircleSection = {

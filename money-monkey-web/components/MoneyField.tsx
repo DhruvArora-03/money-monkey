@@ -1,5 +1,5 @@
-import { usdFormatter } from "@lib/money";
-import { unformattedMoneyRegex } from "@lib/validation";
+import { usdFormatter } from "@/lib/money";
+import { unformattedMoneyRegex } from "@/lib/validation";
 import { useField } from "formik";
 
 export default function MoneyField(props: { name: string; label: string }) {

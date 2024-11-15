@@ -1,5 +1,5 @@
 import { clerkClient, clerkMiddleware } from "@clerk/nextjs/server";
-import { createUser } from "@lib/db/user";
+import { createUser } from "@/lib/db/user";
 
 export default clerkMiddleware((auth, req) => {
   const { userId, redirectToSignIn, sessionClaims } = auth();

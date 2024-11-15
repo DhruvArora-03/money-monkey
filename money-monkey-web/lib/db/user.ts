@@ -1,6 +1,6 @@
-import { DEFAULT_CATEGORIES } from "@lib/const";
-import { db } from "@lib/db";
-import { categoryTable } from "@lib/db/schema";
+import { DEFAULT_CATEGORIES } from "@/lib/const";
+import { db } from "@/lib/db";
+import { categoryTable } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 
 export async function createUser(userId: string): Promise<void> {
