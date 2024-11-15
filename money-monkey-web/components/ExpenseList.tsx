@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useContext, useMemo, useState } from "react";
-import EditExpenseModal from "@ui/EditExpenseModal";
+import EditExpenseModal from "@components/EditExpenseModal";
 import { UserSettingsContext } from "@lib/userSettings";
 import { usdFormatter } from "@lib/money";
 

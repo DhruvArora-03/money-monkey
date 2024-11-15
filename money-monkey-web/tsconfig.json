@@ -17,10 +17,11 @@
         "name": "next"
       }
     ],
+    "baseUrl": ".",
     "paths": {
-      "@lib/*": ["./app/lib/*"],
-      "@ui/*": ["./app/ui/*"],
-      "@env": ["./app/env.ts"]
+      "@lib/*": ["lib/*"],
+      "@components/*": ["components/*"],
+      "@env": ["lib/env.ts"]
     }
   },
   "include": [

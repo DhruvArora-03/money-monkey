@@ -1,10 +1,10 @@
 import { auth } from "@clerk/nextjs/server";
 import { db } from "@lib/db";
 import { categoryTable, expenseTable } from "@lib/db/schema";
-import CategoryList from "@ui/CategoryList";
-import ExpenseList from "@ui/ExpenseList";
-import MainSpendDisplay from "@ui/MainSpendDisplay";
-import NewExpenseButton from "@ui/NewExpenseButton";
+import CategoryList from "@components/CategoryList";
+import ExpenseList from "@components/ExpenseList";
+import MainSpendDisplay from "@components/MainSpendDisplay";
+import NewExpenseButton from "@components/NewExpenseButton";
 import { and, desc, eq, isNull, or, sql, sum } from "drizzle-orm";
 
 export default async function HomePage() {
@@ -35,22 +35,27 @@ export default async function HomePage() {
     sums = await db
       .select(columns)
       .from(categoryTable)
-      .leftJoin(expenseTable, and(eq(categoryTable.id, expenseTable.category_id)))
-      .where(and(
-        eq(categoryTable.user_id, userId),
-        or(
-          and(
-            isNull(columns.month),
-            isNull(columns.year),
-            isNull(expenseTable.user_id)
-          ),
-          and(
-            eq(columns.month, currDate.getMonth() + 1),
-            eq(columns.year, currDate.getFullYear()),
-            eq(expenseTable.user_id, userId)
+      .leftJoin(
+        expenseTable,
+        and(eq(categoryTable.id, expenseTable.category_id))
+      )
+      .where(
+        and(
+          eq(categoryTable.user_id, userId),
+          or(
+            and(
+              isNull(columns.month),
+              isNull(columns.year),
+              isNull(expenseTable.user_id)
+            ),
+            and(
+              eq(columns.month, currDate.getMonth() + 1),
+              eq(columns.year, currDate.getFullYear()),
+              eq(expenseTable.user_id, userId)
+            )
           )
         )
-      ))
+      )
       .groupBy(columns.category_id, columns.month, columns.year)
       .orderBy(desc(columns.total_cents));
   } catch (error) {
@@ -59,7 +64,10 @@ export default async function HomePage() {
 
   return (
     <div className="flex w-screen flex-col md:p-6 items-center justify-start">
-      <NewExpenseButton className="absolute right-0 p-3 md:pt-0 md:pr-6" userId={userId} />
+      <NewExpenseButton
+        className="absolute right-0 p-3 md:pt-0 md:pr-6"
+        userId={userId}
+      />
       <div className="overflow-hidden flex flex-col md:flex-row gap-8 pt-16 md:pb-6 md:pt-0 border-gray-300 max-w-7xl mx-auto">
         <MainSpendDisplay sums={sums} />
         <CategoryList sums={sums} />
