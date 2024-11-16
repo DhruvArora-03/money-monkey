@@ -21,8 +21,15 @@ import {
 import { formatMoney } from "@/lib/money";
 import { UserSettingsContext } from "@/lib/userSettings";
 import { useContext, useMemo } from "react";
+import { cn } from "@/lib/utils";
 
-export function CategoryPieChart({ sums }: { sums: CategorySum[] }) {
+export function CategoryPieChart({
+  className,
+  sums,
+}: {
+  className: string;
+  sums: CategorySum[];
+}) {
   const { categories } = useContext(UserSettingsContext);
 
   const total = useMemo(
@@ -52,7 +59,13 @@ export function CategoryPieChart({ sums }: { sums: CategorySum[] }) {
         fill: `var(--color-${cat.name}`,
       });
       config.push({
-        label: cat.name,
+        key: cat.name,
+        label: (
+          <div className="flex w-full justify-between">
+            <p>{cat.name}</p>
+            <p>{formatMoney(sum.total_cents)}</p>
+          </div>
+        ),
         color: cat.color,
       });
     }
@@ -60,63 +73,64 @@ export function CategoryPieChart({ sums }: { sums: CategorySum[] }) {
     return [
       data,
       config.reduce(
-        (acc, val) => ({ ...acc, [val!.label]: val }),
+        (acc, val) => ({ ...acc, [val!.key]: val }),
         {}
       ) satisfies ChartConfig,
     ];
   }, [sums, categories]);
 
   return (
-    <div className="w-[500px] h-full">
-      <Card>
-        <CardHeader>
-          <CardTitle>Expenses by Category</CardTitle>
-          <CardDescription>
-            Showing total visitors for the last 6 months
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ChartContainer config={chartConfig} className="aspect-square w-full">
-            <PieChart>
-              <ChartTooltip
-                cursor={false}
-                content={<ChartTooltipContent labelKey="label" />}
-              />
-              <Pie
-                data={chartData}
-                dataKey="amount"
-                nameKey="name"
-                innerRadius={80}
-                strokeWidth={5}
-              >
-                <Label
-                  content={({ viewBox }) => {
-                    if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                      return (
-                        <text
+    <Card className={cn("max-w-xl w-full h-full", className)}>
+      <CardHeader>
+        <CardTitle className="text-xl">Expenses by Category</CardTitle>
+        <CardDescription>hi</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ChartContainer config={chartConfig} className="aspect-square w-full">
+          <PieChart>
+            <ChartTooltip
+              cursor={false}
+              content={
+                <ChartTooltipContent
+                  valueFormatter={formatMoney}
+                  nameKey="key"
+                />
+              }
+            />
+            <Pie
+              data={chartData}
+              dataKey="amount"
+              nameKey="name"
+              innerRadius={80}
+              strokeWidth={5}
+            >
+              <Label
+                content={({ viewBox }) => {
+                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                    return (
+                      <text
+                        x={viewBox.cx}
+                        y={viewBox.cy}
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                      >
+                        <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          textAnchor="middle"
-                          dominantBaseline="middle"
+                          className="fill-foreground text-xl font-bold"
                         >
-                          <tspan
-                            x={viewBox.cx}
-                            y={viewBox.cy}
-                            className="fill-foreground text-xl font-bold"
-                          >
-                            {formatMoney(total)}
-                          </tspan>
-                        </text>
-                      );
-                    }
-                  }}
-                />
-              </Pie>
-              <ChartLegend content={<ChartLegendContent />} />
-            </PieChart>
-          </ChartContainer>
-        </CardContent>
-      </Card>
-    </div>
+                          {formatMoney(total)}
+                        </tspan>
+                      </text>
+                    );
+                  }
+                }}
+              />
+            </Pie>
+            <ChartLegend className="" content={<ChartLegendContent />} />
+          </PieChart>
+        </ChartContainer>
+      </CardContent>
+    </Card>
   );
 }

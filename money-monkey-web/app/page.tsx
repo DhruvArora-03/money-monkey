@@ -68,8 +68,8 @@ export default async function HomePage() {
         className="absolute right-0 p-3 md:pt-0 md:pr-6"
         userId={userId}
       />
-      <div className="overflow-hidden flex flex-col md:flex-row gap-8 pt-16 md:pb-6 md:pt-0 border-gray-300 max-w-7xl mx-auto">
-        <CategoryPieChart sums={sums} />
+      <div className="overflow-hidden w-full pt-16 md:pb-6 md:pt-0 border-gray-300 max-w-7xl mx-auto">
+        <CategoryPieChart className="mx-auto min-h-fit" sums={sums} />
         {/* <CategoryList sums={sums} /> */}
       </div>
       <div className="w-full md:w-2/3 overflow-hidden px-6">
