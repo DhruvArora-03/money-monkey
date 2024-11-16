@@ -1,21 +1,21 @@
-import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 import { categoryTable, expenseTable } from "@/lib/db/schema";
-import CategoryList from "@/components/CategoryList";
 import ExpenseList from "@/components/ExpenseList";
 import NewExpenseButton from "@/components/NewExpenseButton";
 import { and, desc, eq, isNull, or, sql, sum } from "drizzle-orm";
 import { CategoryPieChart } from "@/components/CategoryPieChart";
+import { createClient } from "@/lib/supabase/server";
 
 export default async function HomePage() {
-  const userId = auth().userId!;
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.getUser();
 
   let expenses: Expense[] = [];
   try {
     expenses = await db
       .select()
       .from(expenseTable)
-      .where(eq(expenseTable.user_id, userId))
+      .where(eq(expenseTable.user_id, data.user!.id))
       .orderBy(desc(expenseTable.date));
   } catch (error) {
     console.error("Failed to fetch expenses:", error);
@@ -41,7 +41,7 @@ export default async function HomePage() {
       )
       .where(
         and(
-          eq(categoryTable.user_id, userId),
+          eq(categoryTable.user_id, data.user!.id),
           or(
             and(
               isNull(columns.month),
@@ -51,7 +51,7 @@ export default async function HomePage() {
             and(
               eq(columns.month, currDate.getMonth() + 1),
               eq(columns.year, currDate.getFullYear()),
-              eq(expenseTable.user_id, userId)
+              eq(expenseTable.user_id, data.user!.id)
             )
           )
         )
@@ -66,7 +66,7 @@ export default async function HomePage() {
     <div className="flex w-screen flex-col md:p-6 items-center justify-start">
       <NewExpenseButton
         className="absolute right-0 p-3 md:pt-0 md:pr-6"
-        userId={userId}
+        userId={data.user!.id}
       />
       <div className="overflow-hidden w-full pt-16 md:pb-6 md:pt-0 border-gray-300 max-w-7xl mx-auto">
         <CategoryPieChart className="mx-auto min-h-fit" sums={sums} />
