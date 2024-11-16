@@ -54,7 +54,7 @@ export function CategoryPieChart({
       }
 
       data.push({
-        amount: sum.total_cents / 100,
+        amount: sum.total_cents,
         name: cat.name,
         fill: `var(--color-${cat.name}`,
       });
@@ -92,7 +92,12 @@ export function CategoryPieChart({
               cursor={false}
               content={
                 <ChartTooltipContent
-                  valueFormatter={formatMoney}
+                  valueFormatter={(x) => {
+                    if (typeof x === "string" || typeof x === "number") {
+                      return formatMoney(x);
+                    }
+                    return x.join("\n");
+                  }}
                   nameKey="key"
                 />
               }
