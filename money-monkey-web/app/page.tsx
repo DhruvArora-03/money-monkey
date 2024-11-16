@@ -3,9 +3,9 @@ import { db } from "@/lib/db";
 import { categoryTable, expenseTable } from "@/lib/db/schema";
 import CategoryList from "@/components/CategoryList";
 import ExpenseList from "@/components/ExpenseList";
-import MainSpendDisplay from "@/components/MainSpendDisplay";
 import NewExpenseButton from "@/components/NewExpenseButton";
 import { and, desc, eq, isNull, or, sql, sum } from "drizzle-orm";
+import { CategoryPieChart } from "@/components/CategoryPieChart";
 
 export default async function HomePage() {
   const userId = auth().userId!;
@@ -68,9 +68,9 @@ export default async function HomePage() {
         className="absolute right-0 p-3 md:pt-0 md:pr-6"
         userId={userId}
       />
-      <div className="overflow-hidden flex flex-col md:flex-row gap-8 pt-16 md:pb-6 md:pt-0 border-gray-300 max-w-7xl mx-auto">
-        <MainSpendDisplay sums={sums} />
-        <CategoryList sums={sums} />
+      <div className="overflow-hidden w-full pt-16 md:pb-6 md:pt-0 border-gray-300 max-w-7xl mx-auto">
+        <CategoryPieChart className="mx-auto min-h-fit" sums={sums} />
+        {/* <CategoryList sums={sums} /> */}
       </div>
       <div className="w-full md:w-2/3 overflow-hidden px-6">
         <ExpenseList expenses={expenses} />
