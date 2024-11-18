@@ -1,12 +1,3 @@
-// interface Expense {
-//   id: number;
-//   name: string;
-//   date: Date;
-//   amount_cents: number;
-//   category_id: number;
-// }
-
-
 interface ExpenseEdit {
   name: string;
   date: string;
@@ -19,16 +10,7 @@ interface CategorySum {
   total_cents: number;
 }
 
-// interface Category {
-//   id: number;
-//   name: string;
-//   color: string;
-// }
-
-// type NewCategory = Omit<Category, "id">;
-
 interface HomePageStats {
   totalCents: number;
   catagories: Record<string, number>;
 }
-
