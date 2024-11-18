@@ -11,6 +11,7 @@ export async function signIn(credential: string) {
   });
 
   if (error) {
+    console.error(error);
     redirect("/error");
   }
 

@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { categoryTable, expenseTable } from "@/lib/db/schema";
+import { SelectExpense, categories, expenses } from "@/lib/db/schema";
 import ExpenseList from "@/components/ExpenseList";
 import NewExpenseButton from "@/components/NewExpenseButton";
 import { and, desc, eq, isNull, or, sql, sum } from "drizzle-orm";
@@ -9,14 +9,15 @@ import { createClient } from "@/lib/supabase/server";
 export default async function HomePage() {
   const supabase = await createClient();
   const { data, error } = await supabase.auth.getUser();
+  if (error) {
+    console.error(error);
+  }
 
-  let expenses: Expense[] = [];
+  let userExpenses: SelectExpense[] = [];
   try {
-    expenses = await db
-      .select()
-      .from(expenseTable)
-      .where(eq(expenseTable.profile_id, data.user!.id))
-      .orderBy(desc(expenseTable.date));
+    userExpenses = await db.query.expenses.findMany({
+      orderBy: (expenses, { desc }) => [desc(expenses.date)],
+    });
   } catch (error) {
     console.error("Failed to fetch expenses:", error);
   }
@@ -25,33 +26,30 @@ export default async function HomePage() {
   try {
     const currDate = new Date(2024, 7, 1);
     const columns = {
-      category_id: categoryTable.id,
-      month: sql`extract(month from ${expenseTable.date})`.mapWith(Number),
-      year: sql`extract(year from ${expenseTable.date})`.mapWith(Number),
-      total_cents: sum(sql`coalesce(${expenseTable.amount_cents}, 0)`).mapWith(
+      category_id: categories.id,
+      month: sql`extract(month from ${expenses.date})`.mapWith(Number),
+      year: sql`extract(year from ${expenses.date})`.mapWith(Number),
+      total_cents: sum(sql`coalesce(${expenses.amount_cents}, 0)`).mapWith(
         Number
       ),
     };
     sums = await db
       .select(columns)
-      .from(categoryTable)
-      .leftJoin(
-        expenseTable,
-        and(eq(categoryTable.id, expenseTable.category_id))
-      )
+      .from(categories)
+      .leftJoin(expenses, and(eq(categories.id, expenses.category_id)))
       .where(
         and(
-          eq(categoryTable.profile_id, data.user!.id),
+          eq(categories.profile_id, data.user!.id),
           or(
             and(
               isNull(columns.month),
               isNull(columns.year),
-              isNull(expenseTable.profile_id)
+              isNull(expenses.profile_id)
             ),
             and(
               eq(columns.month, currDate.getMonth() + 1),
               eq(columns.year, currDate.getFullYear()),
-              eq(expenseTable.profile_id, data.user!.id)
+              eq(expenses.profile_id, data.user!.id)
             )
           )
         )
@@ -73,7 +71,7 @@ export default async function HomePage() {
         {/* <CategoryList sums={sums} /> */}
       </div>
       <div className="w-full md:w-2/3 overflow-hidden px-6">
-        <ExpenseList expenses={expenses} />
+        <ExpenseList expenses={userExpenses} />
       </div>
     </div>
   );

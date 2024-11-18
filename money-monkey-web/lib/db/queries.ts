@@ -1,14 +1,14 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { expenseTable } from "@/lib/db/schema";
+import { expenses } from "@/lib/db/schema";
 import { moneyToCents } from "@/lib/money";
 
 export async function createExpense(
   expense: ExpenseEdit,
   userId: string
 ): Promise<void> {
-  await db.insert(expenseTable).values({
+  await db.insert(expenses).values({
     profile_id: userId,
     category_id: expense.category_id,
     name: expense.name,

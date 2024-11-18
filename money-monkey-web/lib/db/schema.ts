@@ -2,6 +2,7 @@ import { sql } from "drizzle-orm";
 import {
   date,
   integer,
+  pgEnum,
   pgPolicy,
   pgSchema,
   pgTableCreator,
@@ -15,12 +16,13 @@ import {
 // edit this to create a table_prefix
 const createTable = pgTableCreator((name) => `${name}`);
 
-const getCreatedAtColumn = () => timestamp("created_at").defaultNow().notNull();
+const getCreatedAtColumn = () =>
+  timestamp("created_at", { withTimezone: true }).notNull().defaultNow();
 const getUpdatedAtColumn = () =>
-  timestamp("updated_at")
+  timestamp("updated_at", { withTimezone: true })
+    .notNull()
     .defaultNow()
-    .$onUpdate(() => sql`current_timestamp`)
-    .notNull();
+    .$onUpdateFn(() => sql`current_timestamp()`);
 
 const authSchema = pgSchema("auth");
 
@@ -28,8 +30,8 @@ const usersTable = authSchema.table("users", {
   id: uuid("id").primaryKey(),
 });
 
-export const profileTable = createTable(
-  "profile",
+export const profiles = createTable(
+  "profiles",
   {
     // Matches id from auth.users table in Supabase
     id: uuid("id")
@@ -46,16 +48,16 @@ export const profileTable = createTable(
   ]
 );
 
-export const expenseTable = createTable(
-  "expense",
+export const expenses = createTable(
+  "expenses",
   {
     id: serial("id").primaryKey(),
     profile_id: uuid("profile_id")
       .notNull()
-      .references(() => profileTable.id),
+      .references(() => profiles.id, { onDelete: "cascade" }),
     category_id: integer("category_id")
-      .references(() => categoryTable.id)
-      .notNull(),
+      .notNull()
+      .references(() => categories.id),
     name: text("name").notNull(),
     amount_cents: integer("amount_cents").notNull(),
     date: date("date", { mode: "date" }).notNull(),
@@ -72,15 +74,17 @@ export const expenseTable = createTable(
   ]
 );
 
-export const categoryTable = createTable(
-  "category",
+export const categories = createTable(
+  "categories",
   {
     id: serial("id").primaryKey(),
     profile_id: uuid("profile_id")
       .notNull()
-      .references(() => profileTable.id),
+      .references(() => profiles.id, { onDelete: "cascade" }),
     name: text("name").notNull(),
-    color: text("color").notNull(),
+    color: text("color")
+      .notNull()
+      .default(sql`(random_hex_color())`),
     created_at: getCreatedAtColumn(),
     updated_at: getUpdatedAtColumn(),
   },
@@ -95,7 +99,18 @@ export const categoryTable = createTable(
   ]
 );
 
-export type InsertExpense = typeof expenseTable.$inferInsert;
-export type SelectExpense = typeof expenseTable.$inferSelect;
-export type InsertCategory = typeof categoryTable.$inferInsert;
-export type SelectCategory = typeof categoryTable.$inferSelect;
+export const defaultCategories = pgEnum("default_categories", [
+  "Other",
+  "Housing",
+  "Groceries",
+  "Food",
+  "Transportation",
+  "Entertainment",
+  "Necessities",
+  "Clothes",
+]);
+
+export type InsertExpense = typeof expenses.$inferInsert;
+export type SelectExpense = typeof expenses.$inferSelect;
+export type InsertCategory = typeof categories.$inferInsert;
+export type SelectCategory = typeof categories.$inferSelect;
