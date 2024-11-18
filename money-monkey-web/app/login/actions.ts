@@ -1,8 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { revalidatePath } from "next/cache";
-import { redirect, RedirectType } from "next/navigation";
+import { redirect } from "next/navigation";
 
 export async function signIn(credential: string) {
   const supabase = await createClient();
@@ -16,12 +15,4 @@ export async function signIn(credential: string) {
   }
 
   redirect("/home");
-}
-
-export async function signOut() {
-  const supabase = await createClient();
-  await supabase.auth.signOut();
-
-  revalidatePath("/login", "page");
-  redirect("/login");
 }

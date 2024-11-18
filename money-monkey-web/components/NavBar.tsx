@@ -1,4 +1,4 @@
-import { signOut } from "@/app/login/actions";
+import SignOut from "@/components/SignOut";
 
 export default function NavBar() {
   return (
@@ -8,9 +8,7 @@ export default function NavBar() {
       </a>
       <a href="/">Home</a>
       <div className="flex-grow text-right">get a new profile icon</div>
-      <form>
-        <button formAction={signOut}>logout</button>
-      </form>
+      <SignOut />
     </nav>
   );
 }
