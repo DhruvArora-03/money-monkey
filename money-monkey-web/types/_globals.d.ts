@@ -6,4 +6,12 @@ declare global {
       onboardingComplete?: boolean;
     };
   }
+
+  interface Window {
+    handleSignInWithGoogle: (response: {
+      credential: string;
+      select_by: string;
+      state?: string;
+    }) => void;
+  }
 }

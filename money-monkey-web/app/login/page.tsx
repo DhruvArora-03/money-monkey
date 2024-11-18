@@ -1,14 +1,5 @@
-import { login, signup } from "@/app/login/actions";
+import GoogleSignInButton from "@/components/GoogleSignInButton";
 
 export default function LoginPage() {
-  return (
-    <form className="h-full w-full flex flex-col gap-2 justify-center items-center bg-slate-500 text-white">
-      <label htmlFor="email">Email:</label>
-      <input id="email" name="email" type="email" required />
-      <label htmlFor="password">Password:</label>
-      <input id="password" name="password" type="password" required />
-      <button formAction={login}>Log in</button>
-      <button formAction={signup}>Sign up</button>
-    </form>
-  );
+  return <GoogleSignInButton />;
 }

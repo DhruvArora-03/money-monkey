@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { categoryTable } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 
 export default async function HomeLayout({
   children,
@@ -12,6 +13,9 @@ export default async function HomeLayout({
 }) {
   const supabase = await createClient();
   const { data, error } = await supabase.auth.getUser();
+  if (!data.user) {
+    redirect("/login");
+  }
 
   const categories: Category[] = await db
     .select()
