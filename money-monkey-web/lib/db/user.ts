@@ -8,12 +8,12 @@ export async function createUser(userId: string): Promise<void> {
     await db
       .select({ name: categoryTable.name })
       .from(categoryTable)
-      .where(eq(categoryTable.user_id, userId))
+      .where(eq(categoryTable.profile_id, userId))
   ).map((e) => e.name);
 
   const categories = DEFAULT_CATEGORIES.filter(
     (cat) => !existing.includes(cat.name)
-  ).map((cat) => ({ ...cat, user_id: userId }));
+  ).map((cat) => ({ ...cat, profile_id: userId }));
 
   if (categories.length > 0) {
     await db.insert(categoryTable).values(categories);

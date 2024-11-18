@@ -4,9 +4,10 @@ import React, { useContext, useMemo, useState } from "react";
 import EditExpenseModal from "@/components/EditExpenseModal";
 import { UserSettingsContext } from "@/lib/userSettings";
 import { usdFormatter } from "@/lib/money";
+import { SelectExpense } from "@/lib/db/schema";
 
 interface ExpenseListProps {
-  expenses: Expense[];
+  expenses: SelectExpense[];
 }
 
 interface ExpenseMonth {
@@ -16,7 +17,7 @@ interface ExpenseMonth {
 
 interface ExpenseDate {
   date: string;
-  expenses: Expense[];
+  expenses: SelectExpense[];
 }
 
 const monthYearDateOptions: Intl.DateTimeFormatOptions = {
@@ -33,7 +34,9 @@ const dateOptions: Intl.DateTimeFormatOptions = {
 
 export default function ExpenseList({ expenses }: ExpenseListProps) {
   const { categories } = useContext(UserSettingsContext);
-  const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
+  const [selectedExpense, setSelectedExpense] = useState<SelectExpense | null>(
+    null
+  );
 
   const expenseMonths: ExpenseMonth[] = useMemo(() => {
     const months: ExpenseMonth[] = [];

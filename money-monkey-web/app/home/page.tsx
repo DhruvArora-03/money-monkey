@@ -15,7 +15,7 @@ export default async function HomePage() {
     expenses = await db
       .select()
       .from(expenseTable)
-      .where(eq(expenseTable.user_id, data.user!.id))
+      .where(eq(expenseTable.profile_id, data.user!.id))
       .orderBy(desc(expenseTable.date));
   } catch (error) {
     console.error("Failed to fetch expenses:", error);
@@ -41,17 +41,17 @@ export default async function HomePage() {
       )
       .where(
         and(
-          eq(categoryTable.user_id, data.user!.id),
+          eq(categoryTable.profile_id, data.user!.id),
           or(
             and(
               isNull(columns.month),
               isNull(columns.year),
-              isNull(expenseTable.user_id)
+              isNull(expenseTable.profile_id)
             ),
             and(
               eq(columns.month, currDate.getMonth() + 1),
               eq(columns.year, currDate.getFullYear()),
-              eq(expenseTable.user_id, data.user!.id)
+              eq(expenseTable.profile_id, data.user!.id)
             )
           )
         )

@@ -9,7 +9,7 @@ export async function createExpense(
   userId: string
 ): Promise<void> {
   await db.insert(expenseTable).values({
-    user_id: userId,
+    profile_id: userId,
     category_id: expense.category_id,
     name: expense.name,
     amount_cents: moneyToCents(expense.amount),
