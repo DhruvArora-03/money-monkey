@@ -8,9 +8,10 @@ import PopupModal from "@/components/PopupModal";
 import SelectField from "@/components/SelectField";
 import { Form, Formik, FormikHelpers } from "formik";
 import React, { useCallback, useContext, useMemo } from "react";
+import { SelectExpense } from "@/lib/db/schema";
 
 interface EditExpenseModalProps {
-  initialExpense: Expense | null;
+  initialExpense: SelectExpense | null;
   onClose: () => void;
 }
 

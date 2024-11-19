@@ -1,7 +1,10 @@
 "use client";
 
 import { createContext, useMemo } from "react";
-
+import { SelectCategory } from "@/lib/db/schema";
+interface UserSettings {
+  categories: Map<number, SelectCategory>;
+}
 export const UserSettingsContext = createContext<UserSettings>({
   categories: new Map(),
 });
@@ -11,7 +14,7 @@ export default function UserSettingsProvider({
   categories,
 }: {
   children: React.ReactNode;
-  categories: Category[];
+  categories: SelectCategory[];
 }) {
   const userSettings: UserSettings = useMemo(
     () => ({

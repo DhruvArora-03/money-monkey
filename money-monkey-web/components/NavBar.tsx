@@ -1,4 +1,4 @@
-import { SignedIn, UserButton } from "@clerk/nextjs";
+import SignOut from "@/components/SignOut";
 
 export default function NavBar() {
   return (
@@ -7,11 +7,8 @@ export default function NavBar() {
         Money Monkey
       </a>
       <a href="/">Home</a>
-      <div className="flex-grow text-right">
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
-      </div>
+      <div className="flex-grow text-right">get a new profile icon</div>
+      <SignOut />
     </nav>
   );
 }

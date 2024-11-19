@@ -1,15 +1,8 @@
 import type { Metadata } from "next";
-import { ClerkProvider } from "@clerk/nextjs";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import NavBar from "@/components/NavBar";
-import UserSettingsProvider from "@/lib/userSettings";
-import { db } from "@/lib/db";
-import { categoryTable } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
-import { auth } from "@clerk/nextjs/server";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,32 +11,16 @@ export const metadata: Metadata = {
   description: "Simple expense tracking",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const user_id = auth().userId!;
-
-  const categories: Category[] = await db
-    .select()
-    .from(categoryTable)
-    .where(eq(categoryTable.user_id, user_id));
-
   return (
     <html lang="en">
       <SpeedInsights />
       <Analytics />
-      <body className={`${inter.className} relative h-screen`}>
-        <ClerkProvider>
-          <UserSettingsProvider categories={categories}>
-            <NavBar />
-            <main className="flex-grow min-h-full bg-white text-black pb-16">
-              {children}
-            </main>
-          </UserSettingsProvider>
-        </ClerkProvider>
-      </body>
+      <body className={`${inter.className} relative h-screen`}>{children}</body>
     </html>
   );
 }
