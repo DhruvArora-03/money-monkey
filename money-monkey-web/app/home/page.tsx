@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { SelectExpense, categories, expenses } from "@/lib/db/schema";
+import { SelectExpense, dbCategories, dbExpenses } from "@/lib/db/schema";
 import ExpenseList from "@/components/ExpenseList";
 import NewExpenseButton from "@/components/NewExpenseButton";
 import { and, desc, eq, isNull, or, sql, sum } from "drizzle-orm";
@@ -15,7 +15,7 @@ export default async function HomePage() {
 
   let userExpenses: SelectExpense[] = [];
   try {
-    userExpenses = await db.query.expenses.findMany({
+    userExpenses = await db.query.dbExpenses.findMany({
       orderBy: (expenses, { desc }) => [desc(expenses.date)],
     });
   } catch (error) {
@@ -26,30 +26,30 @@ export default async function HomePage() {
   try {
     const currDate = new Date(2024, 7, 1);
     const columns = {
-      category_id: categories.id,
-      month: sql`extract(month from ${expenses.date})`.mapWith(Number),
-      year: sql`extract(year from ${expenses.date})`.mapWith(Number),
-      total_cents: sum(sql`coalesce(${expenses.amount_cents}, 0)`).mapWith(
+      category_id: dbCategories.id,
+      month: sql`extract(month from ${dbExpenses.date})`.mapWith(Number),
+      year: sql`extract(year from ${dbExpenses.date})`.mapWith(Number),
+      total_cents: sum(sql`coalesce(${dbExpenses.amount_cents}, 0)`).mapWith(
         Number
       ),
     };
     sums = await db
       .select(columns)
-      .from(categories)
-      .leftJoin(expenses, and(eq(categories.id, expenses.category_id)))
+      .from(dbCategories)
+      .leftJoin(dbExpenses, and(eq(dbCategories.id, dbExpenses.category_id)))
       .where(
         and(
-          eq(categories.profile_id, data.user!.id),
+          eq(dbCategories.profile_id, data.user!.id),
           or(
             and(
               isNull(columns.month),
               isNull(columns.year),
-              isNull(expenses.profile_id)
+              isNull(dbExpenses.profile_id)
             ),
             and(
               eq(columns.month, currDate.getMonth() + 1),
               eq(columns.year, currDate.getFullYear()),
-              eq(expenses.profile_id, data.user!.id)
+              eq(dbExpenses.profile_id, data.user!.id)
             )
           )
         )
