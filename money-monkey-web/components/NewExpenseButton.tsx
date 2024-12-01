@@ -52,11 +52,10 @@ export default function NewExpenseButton({
     <div className={className}>
       <Button
         Icon={MdAdd}
+        text="New Expense"
         disabled={isModalVisible}
         onClick={() => setIsModalVisible(true)}
-      >
-        New Expense
-      </Button>
+      />
 
       <Formik
         initialValues={{
@@ -98,12 +97,11 @@ export default function NewExpenseButton({
                 options={options}
               />
               <Button
-                className="self-center"
+                className="w-full text-center"
                 type="submit"
+                text="Create"
                 disabled={!props.dirty || !props.isValid}
-              >
-                Create
-              </Button>
+              />
             </Form>
           </PopupModal>
         )}

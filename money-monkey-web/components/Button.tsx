@@ -10,22 +10,23 @@ import { IconType } from "react-icons";
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   Icon?: IconType;
   iconColor?: string;
+  text: string;
 }
 
 export default function Button({
   Icon,
   iconColor,
   className,
-  children,
+  text,
   ...props
 }: ButtonProps) {
   return (
     <button
-      className={`flex items-center gap-1 border-2 rounded p-1.5 hover:bg-gray-100 active:bg-gray-200 disabled:bg-gray-300 disabled:text-gray-500 ${className}`}
+      className={`flex items-center gap-1 border-2 rounded p-1.5 bg-gray-50 hover:bg-gray-100 active:bg-gray-200 disabled:bg-gray-200 disabled:text-gray-500 ${className}`}
       {...props}
     >
       {Icon && <Icon color={iconColor} size={20} />}
-      {children}
+      <p className="w-full">{text}</p>
     </button>
   );
 }

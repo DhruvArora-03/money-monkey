@@ -1,12 +1,12 @@
 import NavBar from "@/components/NavBar";
 import UserSettingsProvider from "@/lib/userSettings";
 import { db } from "@/lib/db";
-import { SelectCategory } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import { SelectCategory, dbCategories } from "@/lib/db/schema";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { eq } from "drizzle-orm";
 
-export default async function HomeLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -17,7 +17,9 @@ export default async function HomeLayout({
     redirect("/login");
   }
 
-  const categories: SelectCategory[] = await db.query.dbCategories.findMany();
+  const categories: SelectCategory[] = await db.query.dbCategories.findMany({
+    where: eq(dbCategories.profile_id, data.user!.id),
+  });
 
   return (
     <UserSettingsProvider categories={categories} profileId={data.user!.id}>

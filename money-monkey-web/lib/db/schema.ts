@@ -48,7 +48,7 @@ export const profiles = createTable(
   ]
 );
 
-export const expenses = createTable(
+export const dbExpenses = createTable(
   "expenses",
   {
     id: serial("id").primaryKey(),
@@ -57,7 +57,7 @@ export const expenses = createTable(
       .references(() => profiles.id, { onDelete: "cascade" }),
     category_id: integer("category_id")
       .notNull()
-      .references(() => categories.id),
+      .references(() => dbCategories.id),
     name: text("name").notNull(),
     amount_cents: integer("amount_cents").notNull(),
     date: date("date", { mode: "date" }).notNull(),
@@ -74,7 +74,7 @@ export const expenses = createTable(
   ]
 );
 
-export const categories = createTable(
+export const dbCategories = createTable(
   "categories",
   {
     id: serial("id").primaryKey(),
@@ -110,7 +110,7 @@ export const defaultCategories = pgEnum("default_categories", [
   "Clothes",
 ]);
 
-export type InsertExpense = typeof expenses.$inferInsert;
-export type SelectExpense = typeof expenses.$inferSelect;
-export type InsertCategory = typeof categories.$inferInsert;
-export type SelectCategory = typeof categories.$inferSelect;
+export type InsertExpense = typeof dbExpenses.$inferInsert;
+export type SelectExpense = typeof dbExpenses.$inferSelect;
+export type InsertCategory = typeof dbCategories.$inferInsert;
+export type SelectCategory = typeof dbCategories.$inferSelect;
