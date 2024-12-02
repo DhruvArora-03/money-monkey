@@ -3,13 +3,13 @@
 import { createContext, useMemo, useState } from "react";
 import { SelectCategory, SelectExpense } from "@/lib/db/schema";
 interface UserSettings {
-  categories: Map<number, SelectCategory>;
+  categories: SelectCategory[];
   addCategory: (category: SelectCategory) => void;
   expenses: SelectExpense[];
   addExpense: (expense: SelectExpense) => void;
 }
 export const UserSettingsContext = createContext<UserSettings>({
-  categories: new Map(),
+  categories: [],
   addCategory: () => {},
   expenses: [],
   addExpense: () => {},
@@ -26,7 +26,7 @@ export default function UserSettingsProvider(props: {
   return (
     <UserSettingsContext.Provider
       value={{
-        categories: new Map(categories.map((c) => [c.id, c])),
+        categories: categories,
         addCategory: (category: SelectCategory) => {
           setCategories([...categories, category]);
         },

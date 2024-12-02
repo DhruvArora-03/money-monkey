@@ -23,14 +23,26 @@ import { UserSettingsContext } from "@/lib/userSettings";
 import { useContext, useMemo } from "react";
 import { cn } from "@/lib/utils";
 
-export function CategoryPieChart({
-  className,
-  sums,
-}: {
-  className: string;
-  sums: CategorySum[];
-}) {
-  const { categories } = useContext(UserSettingsContext);
+export function CategoryPieChart({ className }: { className: string }) {
+  const { categories, expenses } = useContext(UserSettingsContext);
+  const currDate = new Date();
+  const currExpensesByCategoryId = Object.groupBy(
+    expenses.filter((e) => e.date.getMonth() === currDate.getMonth()),
+    ({ category_id }) => category_id
+  );
+  const sums: CategorySum[] = Array.from(
+    categories.map(
+      (c) =>
+        ({
+          category_id: c.id,
+          total_cents:
+            currExpensesByCategoryId[c.id]?.reduce(
+              (acc, e) => acc + e.amount_cents,
+              0
+            ) ?? 0,
+        } satisfies CategorySum)
+    )
+  ).sort((a, b) => b.total_cents - a.total_cents);
 
   const total = useMemo(
     () =>
@@ -48,7 +60,7 @@ export function CategoryPieChart({
     const config = [];
 
     for (const sum of sums) {
-      const cat = categories.get(sum.category_id);
+      const cat = categories.find((c) => c.id == sum.category_id);
       if (!cat || sum.total_cents == 0) {
         continue;
       }

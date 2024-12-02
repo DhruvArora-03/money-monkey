@@ -34,6 +34,7 @@ export default function ExpenseList() {
     null
   );
 
+  expenses.sort((a, b) => b.date.getTime() - a.date.getTime());
   const expenseMonths: ExpenseMonth[] = useMemo(() => {
     const months: ExpenseMonth[] = [];
     for (const e of expenses) {
@@ -101,12 +102,12 @@ export default function ExpenseList() {
                         </td>
                         <td className="text-nowrap text-ellipsis overflow-hidden py-1">
                           <span className="text-sm text-gray-600 hidden md:inline">
-                            {`${categories.get(e.category_id)?.name} - `}
+                            {`${categories.find((c) => c.id == e.category_id)?.name} - `}
                           </span>
                           {e.name.trim()}
                           <br className="md:hidden" />
                           <span className="text-sm text-gray-600 md:hidden">
-                            {categories.get(e.category_id)?.name}
+                            {categories.find((c) => c.id == e.category_id)?.name}
                           </span>
                         </td>
                         <td className="text-right w-0 pl-2">
