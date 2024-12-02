@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { SelectExpense, dbCategories, dbExpenses } from "@/lib/db/schema";
+import { dbCategories, dbExpenses } from "@/lib/db/schema";
 import ExpenseList from "@/components/ExpenseList";
 import NewExpenseButton from "@/components/NewExpenseButton";
 import { and, desc, eq, isNull, or, sql, sum } from "drizzle-orm";
@@ -11,15 +11,6 @@ export default async function HomePage() {
   const { data, error } = await supabase.auth.getUser();
   if (error) {
     console.error(error);
-  }
-
-  let userExpenses: SelectExpense[] = [];
-  try {
-    userExpenses = await db.query.dbExpenses.findMany({
-      orderBy: (expenses, { desc }) => [desc(expenses.date)],
-    });
-  } catch (error) {
-    console.error("Failed to fetch expenses:", error);
   }
 
   let sums: CategorySum[] = [];
@@ -64,14 +55,13 @@ export default async function HomePage() {
     <div className="flex w-screen flex-col md:p-6 items-center justify-start">
       <NewExpenseButton
         className="absolute right-0 p-3 md:pt-0 md:pr-6"
-        userId={data.user!.id}
       />
       <div className="overflow-hidden w-full pt-16 md:pb-6 md:pt-0 border-gray-300 max-w-7xl mx-auto">
         <CategoryPieChart className="mx-auto min-h-fit" sums={sums} />
         {/* <CategoryList sums={sums} /> */}
       </div>
       <div className="w-full md:w-2/3 overflow-hidden px-6">
-        <ExpenseList expenses={userExpenses} />
+        <ExpenseList />
       </div>
     </div>
   );

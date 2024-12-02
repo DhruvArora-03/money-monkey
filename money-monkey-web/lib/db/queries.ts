@@ -4,18 +4,25 @@ import { db } from "@/lib/db";
 import { SelectExpense, dbExpenses } from "@/lib/db/schema";
 import { moneyToCents } from "@/lib/money";
 import { eq } from "drizzle-orm";
+import { createClient } from "../supabase/server";
 
 export async function createExpense(
   expense: ExpenseEdit,
-  userId: string
-): Promise<void> {
-  await db.insert(dbExpenses).values({
-    profile_id: userId,
+): Promise<SelectExpense> {
+  const supabase = await createClient();
+  const { data: {user}, error } = await supabase.auth.getUser();
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const insertedExpenses = await db.insert(dbExpenses).values({
+    profile_id: user.id,
     category_id: expense.category_id,
     name: expense.name,
     amount_cents: moneyToCents(expense.amount),
     date: new Date(expense.date),
-  });
+  }).returning();
+  return insertedExpenses[0];
 }
 
 export async function getExpenses(userId: string): Promise<SelectExpense[]> {

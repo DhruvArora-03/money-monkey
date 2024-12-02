@@ -14,25 +14,24 @@ import { MdAdd } from "react-icons/md";
 
 type NewExpenseButtonProps = {
   className?: string;
-  userId: string;
 };
 
 export default function NewExpenseButton({
   className = "",
-  userId,
 }: NewExpenseButtonProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const { categories } = useContext(UserSettingsContext);
+  const { categories, addExpense } = useContext(UserSettingsContext);
 
   const handleSubmit = useCallback(
-    (expense: ExpenseEdit, formikHelpers: FormikHelpers<ExpenseEdit>) => {
+    async (expense: ExpenseEdit, formikHelpers: FormikHelpers<ExpenseEdit>) => {
       console.log("New expense:", expense);
       console.log("Helpers: " + formikHelpers);
-      createExpense(expense, userId);
+      const inserted = await createExpense(expense);
+      addExpense(inserted);
       formikHelpers.resetForm();
       setIsModalVisible(false);
     },
-    [setIsModalVisible, userId]
+    [setIsModalVisible]
   );
   const options = useMemo(
     () => (

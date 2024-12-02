@@ -6,10 +6,6 @@ import { UserSettingsContext } from "@/lib/userSettings";
 import { usdFormatter } from "@/lib/money";
 import { SelectExpense } from "@/lib/db/schema";
 
-interface ExpenseListProps {
-  expenses: SelectExpense[];
-}
-
 interface ExpenseMonth {
   monthYear: string;
   dates: ExpenseDate[];
@@ -32,8 +28,8 @@ const dateOptions: Intl.DateTimeFormatOptions = {
   timeZone: "UTC",
 };
 
-export default function ExpenseList({ expenses }: ExpenseListProps) {
-  const { categories } = useContext(UserSettingsContext);
+export default function ExpenseList() {
+  const { categories, expenses } = useContext(UserSettingsContext);
   const [selectedExpense, setSelectedExpense] = useState<SelectExpense | null>(
     null
   );
