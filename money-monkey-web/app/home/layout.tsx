@@ -1,15 +1,9 @@
 import NavBar from "@/components/NavBar";
 import UserSettingsProvider from "@/lib/userSettings";
-import { db } from "@/lib/db";
-import {
-  SelectCategory,
-  SelectExpense,
-  dbCategories,
-  dbExpenses,
-} from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import { SelectCategory, SelectExpense } from "@/lib/db/schema";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { getCategories, getExpenses } from "@/lib/db/queries";
 
 export default async function HomeLayout({
   children,
@@ -25,15 +19,16 @@ export default async function HomeLayout({
     redirect("/login");
   }
 
-  const categories: SelectCategory[] = await db.query.dbCategories.findMany({
-    where: eq(dbCategories.profile_id, user!.id),
-  });
-  const expenses: SelectExpense[] = await db.query.dbExpenses.findMany({
-    where: eq(dbExpenses.profile_id, user!.id),
-  });
+  const categories: Promise<SelectCategory[]> = getCategories(user!.id);
+  const expenses: Promise<SelectExpense[]> = getExpenses(user!.id);
+
+  await Promise.all([categories, expenses]);
 
   return (
-    <UserSettingsProvider categories={categories} expenses={expenses}>
+    <UserSettingsProvider
+      categories={await categories}
+      expenses={await expenses}
+    >
       <NavBar />
       <main className="flex-grow min-h-full bg-white text-black pb-16">
         {children}

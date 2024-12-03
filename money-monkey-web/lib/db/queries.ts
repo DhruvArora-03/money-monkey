@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { SelectExpense, dbExpenses } from "@/lib/db/schema";
+import { SelectCategory, SelectExpense, dbCategories, dbExpenses } from "@/lib/db/schema";
 import { moneyToCents } from "@/lib/money";
 import { and, eq } from "drizzle-orm";
 import { createClient } from "../supabase/server";
@@ -53,4 +53,11 @@ export async function getExpenses(userId: string): Promise<SelectExpense[]> {
     where: eq(dbExpenses.profile_id, userId),
   });
   return expenses;
+}
+
+export async function getCategories(userId: string): Promise<SelectCategory[]> {
+  const categories = await db.query.dbCategories.findMany({
+    where: eq(dbCategories.profile_id, userId),
+  });
+  return categories;
 }
