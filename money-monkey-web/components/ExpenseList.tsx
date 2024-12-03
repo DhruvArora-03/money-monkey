@@ -100,15 +100,9 @@ export default function ExpenseList() {
                         <td className="text-lg w-0 pr-3">
                           {index == 0 ? d.date : ""}
                         </td>
-                        <td className="text-nowrap text-ellipsis overflow-hidden py-1">
-                          <span className="text-sm text-gray-600 hidden md:inline">
-                            {`${categories.find((c) => c.id == e.category_id)?.name} - `}
-                          </span>
+                        <td className="w-0 pr-2 text-sm text-right text-gray-600">{categories.find((c) => c.id == e.category_id)?.name}</td>
+                        <td className="py-1">
                           {e.name.trim()}
-                          <br className="md:hidden" />
-                          <span className="text-sm text-gray-600 md:hidden">
-                            {categories.find((c) => c.id == e.category_id)?.name}
-                          </span>
                         </td>
                         <td className="text-right w-0 pl-2">
                           {usdFormatter.format(e.amount_cents / 100)}
