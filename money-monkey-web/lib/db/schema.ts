@@ -17,9 +17,9 @@ import {
 const createTable = pgTableCreator((name) => `${name}`);
 
 const getCreatedAtColumn = () =>
-  timestamp("created_at", { withTimezone: true, mode: 'date' }).notNull().defaultNow();
+  timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow();
 const getUpdatedAtColumn = () =>
-  timestamp("updated_at", { withTimezone: true, mode: 'date' })
+  timestamp("updated_at", { withTimezone: true, mode: "date" })
     .notNull()
     .defaultNow()
     .$onUpdateFn(() => new Date());
