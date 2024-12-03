@@ -1,16 +1,17 @@
 "use client";
 
-import { createExpense } from "@/lib/db/queries";
-import { UserSettingsContext } from "@/lib/userSettings";
-import { ExpenseSchema } from "@/lib/validation";
 import BasicField from "@/components/BasicField";
-import Button from "@/components/Button";
 import MoneyField from "@/components/MoneyField";
 import PopupModal from "@/components/PopupModal";
 import SelectField from "@/components/SelectField";
+import { Button } from "@/components/ui/button";
+import { createExpense } from "@/lib/db/queries";
+import { UserSettingsContext } from "@/lib/userSettings";
+import { ExpenseSchema } from "@/lib/validation";
 import { Form, Formik, FormikHelpers } from "formik";
 import React, { useCallback, useContext, useMemo, useState } from "react";
 import { MdAdd } from "react-icons/md";
+
 
 type NewExpenseButtonProps = {
   className?: string;
@@ -50,11 +51,11 @@ export default function NewExpenseButton({
   return (
     <div className={className}>
       <Button
-        Icon={MdAdd}
-        text="New Expense"
         disabled={isModalVisible}
         onClick={() => setIsModalVisible(true)}
-      />
+      >
+        <MdAdd /> New Expense
+      </Button>
 
       <Formik
         initialValues={{
@@ -98,9 +99,10 @@ export default function NewExpenseButton({
               <Button
                 className="w-full text-center"
                 type="submit"
-                text="Create"
                 disabled={!props.dirty || !props.isValid}
-              />
+              >
+                Create
+              </Button>
             </Form>
           </PopupModal>
         )}

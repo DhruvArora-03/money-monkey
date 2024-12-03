@@ -1,14 +1,15 @@
-import { usdFormatter } from "@/lib/money";
-import { UserSettingsContext } from "@/lib/userSettings";
-import { ExpenseSchema } from "@/lib/validation";
 import BasicField from "@/components/BasicField";
-import Button from "@/components/Button";
 import MoneyField from "@/components/MoneyField";
 import PopupModal from "@/components/PopupModal";
 import SelectField from "@/components/SelectField";
+import { Button } from "@/components/ui/button";
+import { updateExpense } from "@/lib/db/queries";
+import { SelectExpense } from "@/lib/db/schema";
+import { usdFormatter } from "@/lib/money";
+import { UserSettingsContext } from "@/lib/userSettings";
+import { ExpenseSchema } from "@/lib/validation";
 import { Form, Formik, FormikHelpers } from "formik";
 import React, { useCallback, useContext, useMemo } from "react";
-import { SelectExpense } from "@/lib/db/schema";
 
 interface EditExpenseModalProps {
   initialExpense: SelectExpense | null;
@@ -19,7 +20,7 @@ export default function EditExpenseModal({
   initialExpense,
   onClose,
 }: EditExpenseModalProps) {
-  const { categories } = useContext(UserSettingsContext);
+  const { categories, setExpense } = useContext(UserSettingsContext);
   const initialValues = initialExpense && {
     name: initialExpense.name,
     amount: usdFormatter.format(initialExpense.amount_cents / 100),
@@ -28,9 +29,11 @@ export default function EditExpenseModal({
   };
 
   const handleSubmit = useCallback(
-    (expense: ExpenseEdit, formikHelpers: FormikHelpers<ExpenseEdit>) => {
-      console.log("New expense:", expense);
-      console.log(`Helpers: ${formikHelpers}`);
+    async (expense: ExpenseEdit, formikHelpers: FormikHelpers<ExpenseEdit>) => {
+      console.log("Edited expense:", expense);
+      console.log(`Helpers: ${formikHelpers} (in edit modal)`);
+      const updated = await updateExpense(initialExpense!.id, expense);
+      setExpense(updated.id, updated);
       formikHelpers.resetForm();
       onClose();
     },

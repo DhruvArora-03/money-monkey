@@ -1,7 +1,8 @@
 "use client";
 
-import { MdClose } from "react-icons/md";
+import { cn } from "@/lib/utils";
 import React, { useEffect } from "react";
+import { MdClose } from "react-icons/md";
 
 type PopupModalProps = {
   visible: boolean;
@@ -26,15 +27,17 @@ export default function PopupModal({
 
   return (
     <div
-      className={`z-50 transition w-screen h-screen fixed left-0 top-0 flex items-center justify-center ${
+      className={cn(
+        "z-50 transition w-screen h-screen fixed left-0 top-0 flex items-center justify-center",
         visible ? "bg-gray-200 bg-opacity-75" : "pointer-events-none"
-      }`}
+      )}
       onClick={onClose}
     >
       <div
-        className={`transition-all w-96 flex justify-center flex-col gap-1 pt-2 p-4 bg-white border-2 rounded-xl [&_label]:pr-2 ${
+        className={cn(
+          "transition-all w-96 flex justify-center flex-col gap-1 pt-2 p-4 bg-white border-2 rounded-xl [&_label]:pr-2",
           visible ? "scale-100" : "scale-0"
-        }`}
+        )}
         onClick={(e) => {
           e.stopPropagation();
         }}

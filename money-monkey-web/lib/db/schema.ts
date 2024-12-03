@@ -17,12 +17,12 @@ import {
 const createTable = pgTableCreator((name) => `${name}`);
 
 const getCreatedAtColumn = () =>
-  timestamp("created_at", { withTimezone: true }).notNull().defaultNow();
+  timestamp("created_at", { withTimezone: true, mode: 'date' }).notNull().defaultNow();
 const getUpdatedAtColumn = () =>
-  timestamp("updated_at", { withTimezone: true })
+  timestamp("updated_at", { withTimezone: true, mode: 'date' })
     .notNull()
     .defaultNow()
-    .$onUpdateFn(() => sql`current_timestamp()`);
+    .$onUpdateFn(() => new Date());
 
 const authSchema = pgSchema("auth");
 

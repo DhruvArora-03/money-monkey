@@ -7,12 +7,14 @@ interface UserSettings {
   addCategory: (category: SelectCategory) => void;
   expenses: SelectExpense[];
   addExpense: (expense: SelectExpense) => void;
+  setExpense: (id: number, expense: SelectExpense) => void;
 }
 export const UserSettingsContext = createContext<UserSettings>({
   categories: [],
   addCategory: () => {},
   expenses: [],
   addExpense: () => {},
+  setExpense: () => {},
 });
 
 export default function UserSettingsProvider(props: {
@@ -33,6 +35,16 @@ export default function UserSettingsProvider(props: {
         expenses: expenses,
         addExpense: (expense: SelectExpense) => {
           setExpenses([...expenses, expense]);
+        },
+        setExpense: (id: number, expense: SelectExpense) => {
+          setExpenses(
+            expenses.map((e) => {
+              if (e.id === id) {
+                return expense;
+              }
+              return e;
+            })
+          );
         },
       }}
     >

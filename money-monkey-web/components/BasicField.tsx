@@ -15,7 +15,6 @@ export default function BasicField(props: BasicFieldProps) {
   return (
     <div>
       <label htmlFor={field.name}>{props.label}</label>
-      <br />
       <input
         id={field.name}
         {...field}
