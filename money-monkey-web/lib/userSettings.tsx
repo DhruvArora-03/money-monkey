@@ -8,6 +8,7 @@ interface UserSettings {
   expenses: SelectExpense[];
   addExpense: (expense: SelectExpense) => void;
   setExpense: (id: number, expense: SelectExpense) => void;
+  removeExpense: (id: number) => void;
 }
 export const UserSettingsContext = createContext<UserSettings>({
   categories: [],
@@ -15,6 +16,7 @@ export const UserSettingsContext = createContext<UserSettings>({
   expenses: [],
   addExpense: () => {},
   setExpense: () => {},
+  removeExpense: () => {},
 });
 
 export default function UserSettingsProvider(props: {
@@ -45,6 +47,9 @@ export default function UserSettingsProvider(props: {
               return e;
             })
           );
+        },
+        removeExpense: (id: number) => {
+          setExpenses(expenses.filter((e) => e.id !== id));
         },
       }}
     >

@@ -6,6 +6,13 @@ import { moneyToCents } from "@/lib/money";
 import { and, eq } from "drizzle-orm";
 import { createClient } from "../supabase/server";
 
+export async function getExpenses(userId: string): Promise<SelectExpense[]> {
+  const expenses = await db.query.dbExpenses.findMany({
+    where: eq(dbExpenses.profile_id, userId),
+  });
+  return expenses;
+}
+
 export async function createExpense(
   expense: ExpenseEdit
 ): Promise<SelectExpense> {
@@ -48,11 +55,8 @@ export async function updateExpense(
   return updatedExpenses[0];
 }
 
-export async function getExpenses(userId: string): Promise<SelectExpense[]> {
-  const expenses = await db.query.dbExpenses.findMany({
-    where: eq(dbExpenses.profile_id, userId),
-  });
-  return expenses;
+export async function deleteExpense(id: number): Promise<void> {
+  await db.delete(dbExpenses).where(eq(dbExpenses.id, id));
 }
 
 export async function getCategories(userId: string): Promise<SelectCategory[]> {

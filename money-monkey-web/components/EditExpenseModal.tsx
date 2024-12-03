@@ -3,7 +3,7 @@ import MoneyField from "@/components/MoneyField";
 import PopupModal from "@/components/PopupModal";
 import SelectField from "@/components/SelectField";
 import { Button } from "@/components/ui/button";
-import { updateExpense } from "@/lib/db/queries";
+import { deleteExpense, updateExpense } from "@/lib/db/queries";
 import { SelectExpense } from "@/lib/db/schema";
 import { usdFormatter } from "@/lib/money";
 import { UserSettingsContext } from "@/lib/userSettings";
@@ -20,7 +20,7 @@ export default function EditExpenseModal({
   initialExpense,
   onClose,
 }: EditExpenseModalProps) {
-  const { categories, setExpense } = useContext(UserSettingsContext);
+  const { categories, setExpense, removeExpense } = useContext(UserSettingsContext);
   const initialValues = initialExpense && {
     name: initialExpense.name,
     amount: usdFormatter.format(initialExpense.amount_cents / 100),
@@ -81,13 +81,27 @@ export default function EditExpenseModal({
                 label="Category:"
                 options={options}
               />
-              <Button
-                className="self-center"
-                type="submit"
-                disabled={!props.dirty || !props.isValid}
-              >
-                Finish Editing
-              </Button>
+              <div className="w-full flex gap-2">
+                <Button
+                  variant="destructive"
+                  className="flex-grow"
+                  onClick={async () => {
+                    await deleteExpense(initialExpense!.id);
+                    removeExpense(initialExpense!.id);
+                    onClose();
+                    props.resetForm();
+                  }}
+                >
+                  Delete Expense
+                </Button>
+                <Button
+                  className="flex-grow"
+                  type="submit"
+                  disabled={!props.dirty || !props.isValid}
+                >
+                  Finish Editing
+                </Button>
+              </div>
             </Form>
           )}
         </Formik>
