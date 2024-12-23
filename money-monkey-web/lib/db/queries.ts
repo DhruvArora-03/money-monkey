@@ -62,6 +62,7 @@ export async function deleteExpense(id: number): Promise<void> {
 export async function getCategories(userId: string): Promise<SelectCategory[]> {
   const categories = await db.query.dbCategories.findMany({
     where: eq(dbCategories.profile_id, userId),
+    orderBy: dbCategories.name
   });
   return categories;
 }
