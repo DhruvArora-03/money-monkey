@@ -23,9 +23,10 @@ const monthYearDateOptions: Intl.DateTimeFormatOptions = {
 };
 
 const dateOptions: Intl.DateTimeFormatOptions = {
-  month: "2-digit",
-  day: "2-digit",
+  month: "short",
+  day: "numeric",
   timeZone: "UTC",
+  weekday: "long",
 };
 
 export default function ExpenseList() {
@@ -91,20 +92,20 @@ export default function ExpenseList() {
                 </tr>
                 {m.dates.map((d) => (
                   <React.Fragment key={d.date}>
-                    {d.expenses.map((e, index) => (
+                    <tr>
+                      <td className="text-sm pt-3 text-gray-600">{d.date}</td>
+                    </tr>
+                    {d.expenses.map((e) => (
                       <tr
                         key={e.id}
-                        className="text-md hover:bg-blue-100"
+                        className="hover:bg-blue-100"
                         onClick={() => setSelectedExpense(e)}
                       >
-                        <td className="text-lg w-0 pr-3">
-                          {index == 0 ? d.date : ""}
+                        <td className="text-sm pl-0">{e.name}</td>
+                        <td className="w-0 text-xs  text-gray-600">
+                          {categories.find((c) => c.id == e.category_id)?.name}
                         </td>
-                        <td className="w-0 pr-2 text-sm text-right text-gray-600">{categories.find((c) => c.id == e.category_id)?.name}</td>
-                        <td className="py-1">
-                          {e.name.trim()}
-                        </td>
-                        <td className="text-right w-0 pl-2">
+                        <td className="text-right w-0 pl-2 text-sm">
                           {usdFormatter.format(e.amount_cents / 100)}
                         </td>
                       </tr>
