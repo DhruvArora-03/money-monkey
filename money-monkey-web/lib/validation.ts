@@ -8,13 +8,9 @@ export const ExpenseSchema: Yup.ObjectSchema<ExpenseEdit> = Yup.object({
     .required("Required!")
     .min(1, "Too short!")
     .max(50, "Too long!"),
-  amount: Yup.string()
+  amount: Yup.number()
     .required("Required!")
-    .matches(/^\$((\d{1,3}(,\d{3})*|\d+))(\.\d{1,2})?$/, "Invalid format!")
-    .test("is-at-least-1-cent", "Amount must be at least $0.01!", (value) => {
-      const numericValue = value ? Number.parseFloat(value.slice(1)) : 0;
-      return !Number.isNaN(numericValue) && numericValue >= 0.01;
-    }),
+    .min(0.01, "Amount must be at least $0.01!"),
   date: Yup.string()
     .required("Required!")
     .matches(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format!")

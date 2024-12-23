@@ -1,7 +1,7 @@
 interface ExpenseEdit {
   name: string;
   date: string;
-  amount: string;
+  amount: number;
   category_id: number | null;
 }
 

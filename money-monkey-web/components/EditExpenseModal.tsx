@@ -1,5 +1,4 @@
 import BasicField from "@/components/BasicField";
-import MoneyField from "@/components/MoneyField";
 import PopupModal from "@/components/PopupModal";
 import SelectField from "@/components/SelectField";
 import { Button } from "@/components/ui/button";
@@ -23,7 +22,7 @@ export default function EditExpenseModal({
   const { categories, setExpense, removeExpense } = useContext(UserSettingsContext);
   const initialValues = initialExpense && {
     name: initialExpense.name,
-    amount: usdFormatter.format(initialExpense.amount_cents / 100),
+    amount: initialExpense.amount_cents / 100,
     date: initialExpense.date.toISOString().split("T")[0],
     category_id: initialExpense.category_id,
   };
@@ -68,7 +67,7 @@ export default function EditExpenseModal({
           {(props) => (
             <Form className="flex flex-col gap-2">
               <BasicField name="name" label="Name:" placeholder="Name" />
-              <MoneyField name="amount" label="Amount:" />
+              <BasicField name="amount" label="Amount:" type="number"/>
               <BasicField
                 name="date"
                 label="Date:"

@@ -31,7 +31,7 @@ export async function createExpense(
       profile_id: user.id,
       category_id: expense.category_id,
       name: expense.name,
-      amount_cents: moneyToCents(expense.amount),
+      amount_cents: expense.amount * 100,
       date: new Date(expense.date),
     })
     .returning();
@@ -47,7 +47,7 @@ export async function updateExpense(
     .set({
       category_id: expense.category_id,
       name: expense.name,
-      amount_cents: moneyToCents(expense.amount),
+      amount_cents: expense.amount * 100,
       date: new Date(expense.date),
     })
     .where(and(eq(dbExpenses.id, id)))

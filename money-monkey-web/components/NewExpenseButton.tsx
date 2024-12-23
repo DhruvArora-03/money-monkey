@@ -1,7 +1,6 @@
 "use client";
 
 import BasicField from "@/components/BasicField";
-import MoneyField from "@/components/MoneyField";
 import PopupModal from "@/components/PopupModal";
 import SelectField from "@/components/SelectField";
 import { Button } from "@/components/ui/button";
@@ -60,7 +59,7 @@ export default function NewExpenseButton({
       <Formik
         initialValues={{
           name: "",
-          amount: "",
+          amount: 0,
           date: new Date().toISOString().split("T")[0],
           category_id: null,
         } as ExpenseEdit}
@@ -83,7 +82,7 @@ export default function NewExpenseButton({
                 placeholder="Name"
                 aria-required="true"
               />
-              <MoneyField name="amount" label="Amount:" />
+              <BasicField name="amount" label="Amount:" type="number"/>
               <BasicField
                 name="date"
                 label="Date:"
