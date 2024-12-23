@@ -1,5 +1,6 @@
 import { sql } from "drizzle-orm";
 import {
+  boolean,
   date,
   integer,
   pgEnum,
@@ -58,8 +59,8 @@ export const dbExpenses = createTable(
       .notNull()
       .references(() => profiles.id, { onDelete: "cascade" }),
     category_id: integer("category_id")
-      .notNull()
       .references(() => dbCategories.id),
+    is_income: boolean("is_income").notNull().default(false),
     name: text("name").notNull(),
     amount_cents: integer("amount_cents").notNull(),
     date: date("date", { mode: "date" }).notNull(),

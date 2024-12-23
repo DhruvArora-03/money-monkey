@@ -5,6 +5,7 @@ import EditExpenseModal from "@/components/EditExpenseModal";
 import { UserSettingsContext } from "@/lib/userSettings";
 import { usdFormatter } from "@/lib/money";
 import { SelectExpense } from "@/lib/db/schema";
+import { cn } from "@/lib/utils";
 
 interface ExpenseMonth {
   monthYear: string;
@@ -105,7 +106,7 @@ export default function ExpenseList() {
                         <td className="w-0 text-xs  text-gray-600">
                           {categories.find((c) => c.id == e.category_id)?.name}
                         </td>
-                        <td className="text-right w-0 pl-2 text-sm">
+                        <td className={cn("text-right w-0 pl-2 text-sm", e.is_income ? "text-green-600" : "text-red-700")}>
                           {usdFormatter.format(e.amount_cents / 100)}
                         </td>
                       </tr>

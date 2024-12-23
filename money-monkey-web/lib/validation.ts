@@ -23,7 +23,6 @@ export const ExpenseSchema: Yup.ObjectSchema<ExpenseEdit> = Yup.object({
       const date = new Date(value);
       return date instanceof Date && !Number.isNaN(date.getTime());
     }),
-  category_id: Yup.number()
-    .required("Required!")
+  category_id: Yup.number().nullable()
     .min(0, "Must select a category!"),
 });
