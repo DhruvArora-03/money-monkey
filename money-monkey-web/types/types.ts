@@ -2,7 +2,7 @@ interface ExpenseEdit {
   name: string;
   date: string;
   amount: string;
-  category_id: number;
+  category_id: number | null;
 }
 
 interface CategorySum {

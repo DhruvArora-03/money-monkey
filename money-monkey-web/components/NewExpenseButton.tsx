@@ -62,8 +62,8 @@ export default function NewExpenseButton({
           name: "",
           amount: "",
           date: new Date().toISOString().split("T")[0],
-          category_id: -1,
-        }}
+          category_id: null,
+        } as ExpenseEdit}
         validationSchema={ExpenseSchema}
         onSubmit={handleSubmit}
       >
