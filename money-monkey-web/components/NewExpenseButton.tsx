@@ -1,8 +1,10 @@
 "use client";
 
 import BasicField from "@/components/BasicField";
+import DateField from "@/components/DateField";
 import PopupModal from "@/components/PopupModal";
 import SelectField from "@/components/SelectField";
+import SwitchField from "@/components/SwitchField";
 import { Button } from "@/components/ui/button";
 import { createExpense } from "@/lib/db/queries";
 import { UserSettingsContext } from "@/lib/userSettings";
@@ -10,8 +12,6 @@ import { ExpenseSchema } from "@/lib/validation";
 import { Form, Formik, FormikHelpers } from "formik";
 import React, { useCallback, useContext, useMemo, useState } from "react";
 import { MdAdd } from "react-icons/md";
-import DateField from "@/components/DateField";
-import CheckboxField from "@/components/SwitchField";
 
 type NewExpenseButtonProps = {
   className?: string;
@@ -62,7 +62,7 @@ export default function NewExpenseButton({ className }: NewExpenseButtonProps) {
             }}
           >
             <Form className="flex flex-col gap-2" aria-label="New expense form">
-              <CheckboxField name="isIncome" label="Recording Income" />
+              <SwitchField name="isIncome" label="Recording Income" />
               <BasicField name="name" placeholder="Name" aria-required="true" />
               <div className="flex gap-2">
                 {!props.values.isIncome && (

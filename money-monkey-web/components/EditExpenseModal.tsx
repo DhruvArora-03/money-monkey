@@ -1,14 +1,15 @@
 import BasicField from "@/components/BasicField";
+import SwitchField from "@/components/SwitchField";
+import DateField from "@/components/DateField";
 import PopupModal from "@/components/PopupModal";
 import SelectField from "@/components/SelectField";
 import { Button } from "@/components/ui/button";
 import { deleteExpense, updateExpense } from "@/lib/db/queries";
 import { SelectExpense } from "@/lib/db/schema";
-import { usdFormatter } from "@/lib/money";
 import { UserSettingsContext } from "@/lib/userSettings";
 import { ExpenseSchema } from "@/lib/validation";
 import { Form, Formik, FormikHelpers } from "formik";
-import React, { useCallback, useContext, useMemo } from "react";
+import React, { useCallback, useContext} from "react";
 
 interface EditExpenseModalProps {
   initialExpense: SelectExpense | null;
@@ -19,12 +20,15 @@ export default function EditExpenseModal({
   initialExpense,
   onClose,
 }: EditExpenseModalProps) {
-  const { categories, setExpense, removeExpense } = useContext(UserSettingsContext);
+  const { setExpense, removeExpense } =
+    useContext(UserSettingsContext);
+
   const initialValues = initialExpense && {
     name: initialExpense.name,
-    amount: initialExpense.amount_cents / 100,
-    date: initialExpense.date.toISOString().split("T")[0],
-    category_id: initialExpense.category_id,
+    amount: (initialExpense.amount_cents / 100).toFixed(2).toString() as unknown as number,
+    date: initialExpense.date,
+    categoryId: initialExpense.category_id,
+    isIncome: initialExpense.is_income,
   };
 
   const handleSubmit = useCallback(
@@ -37,19 +41,6 @@ export default function EditExpenseModal({
       onClose();
     },
     [onClose]
-  );
-
-  const options = useMemo(
-    () => (
-      <>
-        {Array.from(categories.values()).map((category) => (
-          <option key={category.id} value={category.id}>
-            {category.name}
-          </option>
-        ))}
-      </>
-    ),
-    [categories]
   );
 
   return (
@@ -66,19 +57,28 @@ export default function EditExpenseModal({
         >
           {(props) => (
             <Form className="flex flex-col gap-2">
-              <BasicField name="name" label="Name:" placeholder="Name" />
-              <BasicField name="amount" label="Amount:" type="number"/>
-              <BasicField
-                name="date"
-                label="Date:"
-                type="date"
-                min={"1970-01-01"}
-                max={new Date().toISOString().split("T")[0]}
-              />
-              <SelectField
-                name="category_id"
-                label="Category:"
-              />
+              <SwitchField name="isIncome" label="Recording Income" />
+              <BasicField name="name" placeholder="Name" aria-required="true" />
+              <div className="flex gap-2">
+                {!props.values.isIncome && (
+                  <SelectField
+                    name="categoryId"
+                    placeholder="Category"
+                    label="Category"
+                    disabled={props.values.isIncome}
+                    aria-required={!props.values.isIncome}
+                  />
+                )}
+                <BasicField
+                  className="w-full"
+                  name="amount"
+                  type="number"
+                  inputMode="decimal"
+                  placeholder="0.00"
+                  aria-required="true"
+                />
+              </div>
+              <DateField name="date" aria-required="true" />
               <div className="w-full flex gap-2">
                 <Button
                   variant="destructive"
