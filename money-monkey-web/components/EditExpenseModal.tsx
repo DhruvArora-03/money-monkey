@@ -78,7 +78,6 @@ export default function EditExpenseModal({
               <SelectField
                 name="category_id"
                 label="Category:"
-                options={options}
               />
               <div className="w-full flex gap-2">
                 <Button

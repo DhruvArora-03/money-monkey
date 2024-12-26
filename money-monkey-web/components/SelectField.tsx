@@ -12,10 +12,11 @@ import {
 import { SelectValue } from "@radix-ui/react-select";
 import { UserSettingsContext } from "@/lib/userSettings";
 
-interface SelectFieldProps extends Omit<BasicFieldProps, "type" | "label" | "placeholder"> {
-  options: React.ReactNode;
+interface SelectFieldProps {
+  name: string;
   label: string;
   placeholder: string;
+  disabled?: boolean;
 }
 
 export default function SelectField(props: SelectFieldProps) {
@@ -23,12 +24,13 @@ export default function SelectField(props: SelectFieldProps) {
   const { categories } = useContext(UserSettingsContext);
 
   return (
-    <div className={props.className}>
+    <div className="w-full">
       <Select
-        value={field.value}
+        value={field.value ? `${field.value}` : undefined}
         onValueChange={(value) => {
-          helper.setValue(value);
+          helper.setValue(Number.parseInt(value));
         }}
+        disabled={props.disabled}
       >
         <SelectTrigger>
           <SelectValue placeholder={props.placeholder} />
@@ -44,6 +46,7 @@ export default function SelectField(props: SelectFieldProps) {
           </SelectGroup>
         </SelectContent>
       </Select>
+
       {meta.touched && meta.error && (
         <p className="text-red-500 text-sm" role="alert">
           {meta.error}

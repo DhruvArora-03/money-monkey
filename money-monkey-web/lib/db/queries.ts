@@ -59,6 +59,7 @@ export async function createExpense(
       name: expense.name,
       amount_cents: Math.round(expense.amount * 100),
       date: new Date(expense.date),
+      is_income: expense.isIncome,
     })
     .returning();
   return insertedExpenses[0];

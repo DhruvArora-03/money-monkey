@@ -10,7 +10,8 @@ import { ExpenseSchema } from "@/lib/validation";
 import { Form, Formik, FormikHelpers } from "formik";
 import React, { useCallback, useContext, useMemo, useState } from "react";
 import { MdAdd } from "react-icons/md";
-import DateField from "./DateField";
+import DateField from "@/components/DateField";
+import CheckboxField from "@/components/SwitchField";
 
 type NewExpenseButtonProps = {
   className?: string;
@@ -18,7 +19,7 @@ type NewExpenseButtonProps = {
 
 export default function NewExpenseButton({ className }: NewExpenseButtonProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const { categories, addExpense } = useContext(UserSettingsContext);
+  const { addExpense } = useContext(UserSettingsContext);
 
   const handleSubmit = useCallback(
     async (expense: ExpenseEdit, formikHelpers: FormikHelpers<ExpenseEdit>) => {
@@ -30,19 +31,6 @@ export default function NewExpenseButton({ className }: NewExpenseButtonProps) {
       setIsModalVisible(false);
     },
     [setIsModalVisible]
-  );
-  const options = useMemo(
-    () => (
-      <>
-        <option value={-1}>Select a category</option>
-        {Array.from(categories.values()).map((category) => (
-          <option key={category.id} value={category.id}>
-            {category.name}
-          </option>
-        ))}
-      </>
-    ),
-    [categories]
   );
 
   return (
@@ -74,28 +62,32 @@ export default function NewExpenseButton({ className }: NewExpenseButtonProps) {
             }}
           >
             <Form className="flex flex-col gap-2" aria-label="New expense form">
+              <CheckboxField name="isIncome" label="Recording Income" />
               <BasicField name="name" placeholder="Name" aria-required="true" />
               <div className="flex gap-2">
-                <SelectField
-                  className="w-full"
-                  name="category_id"
-                  placeholder="Category"
-                  label="Category"
-                  options={options}
-                />
+                {!props.values.isIncome && (
+                  <SelectField
+                    name="categoryId"
+                    placeholder="Category"
+                    label="Category"
+                    disabled={props.values.isIncome}
+                    aria-required={!props.values.isIncome}
+                  />
+                )}
                 <BasicField
                   className="w-full"
                   name="amount"
                   type="number"
                   inputMode="decimal"
                   placeholder="0.00"
+                  aria-required="true"
                 />
               </div>
-              <DateField name="date" />
+              <DateField name="date" aria-required="true" />
               <Button
                 className="w-full text-center"
                 type="submit"
-                disabled={!props.dirty || !props.isValid}
+                disabled={!props.dirty || !props.isValid || props.isSubmitting}
               >
                 Create
               </Button>
