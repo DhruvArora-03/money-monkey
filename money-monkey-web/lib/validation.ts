@@ -10,17 +10,13 @@ export const ExpenseSchema: Yup.ObjectSchema<ExpenseEdit> = Yup.object({
     .max(50, "Too long!"),
   amount: Yup.number()
     .required("Required!")
-    .min(0.01, "Amount must be at least $0.01!"),
-  date: Yup.string()
+    .min(0.01, "Invalid amount!"),
+  date: Yup.date().required("Required!"),
+  categoryId: Yup.number()
     .required("Required!")
-    .matches(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format!")
-    .test("is-valid-date", "Invalid date!", (value) => {
-      if (!value) return false;
-      const date = new Date(value);
-      return date instanceof Date && !Number.isNaN(date.getTime());
-    }),
-  category_id: Yup.number()
-    .required("Required!")
-    .nullable()
+    .when("isIncome", (isIncome, schema) => {
+      return isIncome ? schema.notRequired() : schema;
+    })
     .min(0, "Must select a category!"),
+  isIncome: Yup.boolean().required("Required!"),
 });

@@ -10,15 +10,13 @@ import { ExpenseSchema } from "@/lib/validation";
 import { Form, Formik, FormikHelpers } from "formik";
 import React, { useCallback, useContext, useMemo, useState } from "react";
 import { MdAdd } from "react-icons/md";
-
+import DateField from "./DateField";
 
 type NewExpenseButtonProps = {
   className?: string;
 };
 
-export default function NewExpenseButton({
-  className = "",
-}: NewExpenseButtonProps) {
+export default function NewExpenseButton({ className }: NewExpenseButtonProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { categories, addExpense } = useContext(UserSettingsContext);
 
@@ -49,20 +47,20 @@ export default function NewExpenseButton({
 
   return (
     <div className={className}>
-      <Button
-        disabled={isModalVisible}
-        onClick={() => setIsModalVisible(true)}
-      >
+      <Button disabled={isModalVisible} onClick={() => setIsModalVisible(true)}>
         <MdAdd /> New Expense
       </Button>
 
       <Formik
-        initialValues={{
-          name: "",
-          amount: 0,
-          date: new Date().toISOString().split("T")[0],
-          category_id: null,
-        } as ExpenseEdit}
+        initialValues={
+          {
+            name: "",
+            date: new Date(),
+            amount: 0,
+            categoryId: null,
+            isIncome: false,
+          } satisfies ExpenseEdit as ExpenseEdit
+        }
         validationSchema={ExpenseSchema}
         onSubmit={handleSubmit}
       >
@@ -76,25 +74,24 @@ export default function NewExpenseButton({
             }}
           >
             <Form className="flex flex-col gap-2" aria-label="New expense form">
-              <BasicField
-                name="name"
-                label="Name:"
-                placeholder="Name"
-                aria-required="true"
-              />
-              <BasicField name="amount" label="Amount:" type="number"/>
-              <BasicField
-                name="date"
-                label="Date:"
-                type="date"
-                min={"1970-01-01"}
-                max={new Date().toISOString().split("T")[0]}
-              />
-              <SelectField
-                name="category_id"
-                label="Category:"
-                options={options}
-              />
+              <BasicField name="name" placeholder="Name" aria-required="true" />
+              <div className="flex gap-2">
+                <SelectField
+                  className="w-full"
+                  name="category_id"
+                  placeholder="Category"
+                  label="Category"
+                  options={options}
+                />
+                <BasicField
+                  className="w-full"
+                  name="amount"
+                  type="number"
+                  inputMode="decimal"
+                  placeholder="0.00"
+                />
+              </div>
+              <DateField name="date" />
               <Button
                 className="w-full text-center"
                 type="submit"

@@ -35,7 +35,7 @@ export default function PopupModal({
     >
       <div
         className={cn(
-          "transition-all w-96 flex justify-center flex-col gap-1 pt-2 p-4 bg-white border-2 rounded-xl [&_label]:pr-2",
+          "transition-all w-80 md:w-96 flex justify-center flex-col gap-1 p-[18px] pt-2 bg-white border-2 rounded-xl [&_label]:pr-2",
           visible ? "scale-100" : "scale-0"
         )}
         onClick={(e) => {
@@ -51,7 +51,7 @@ export default function PopupModal({
         aria-modal="true"
       >
         <div className="relative w-full h-10">
-          <h2 className="pl-2 py-2 text-xl font-semibold mb-2 ">{title}</h2>
+          <h2 className="pl-2 py-2 text-md font-semibold mb-2 ">{title}</h2>
           <button
             className="absolute top-0 right-[-0.5rem] rounded-full hover:bg-gray-400 p-0 hover:p-2 m-2 hover:m-0 transition-all "
             type="button"

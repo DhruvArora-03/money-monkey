@@ -1,10 +1,36 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { SelectCategory, SelectExpense, dbCategories, dbExpenses } from "@/lib/db/schema";
-import { moneyToCents } from "@/lib/money";
+import { SelectCategory, SelectExpense, SelectPlaidAccount, dbCategories, dbExpenses, dbPlaidAccounts } from "@/lib/db/schema";
 import { and, eq } from "drizzle-orm";
 import { createClient } from "../supabase/server";
+
+export async function getPlaidAccounts(userId: string): Promise<SelectPlaidAccount[]> {
+  const accounts = await db.query.dbPlaidAccounts.findMany({
+    where: eq(dbPlaidAccounts.profile_id, userId),
+  });
+  return accounts;
+}
+
+export async function createPlaidAccount(accessToken: string): Promise<SelectPlaidAccount> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const insertedAccounts = await db
+    .insert(dbPlaidAccounts)
+    .values({
+      profile_id: user.id,
+      access_token: accessToken,
+    })
+    .returning();
+  return insertedAccounts[0];
+}
 
 export async function getExpenses(userId: string): Promise<SelectExpense[]> {
   const expenses = await db.query.dbExpenses.findMany({
@@ -29,9 +55,9 @@ export async function createExpense(
     .insert(dbExpenses)
     .values({
       profile_id: user.id,
-      category_id: expense.category_id,
+      category_id: expense.categoryId,
       name: expense.name,
-      amount_cents: expense.amount * 100,
+      amount_cents: Math.round(expense.amount * 100),
       date: new Date(expense.date),
     })
     .returning();
@@ -45,7 +71,7 @@ export async function updateExpense(
   const updatedExpenses = await db
     .update(dbExpenses)
     .set({
-      category_id: expense.category_id,
+      category_id: expense.categoryId,
       name: expense.name,
       amount_cents: expense.amount * 100,
       date: new Date(expense.date),

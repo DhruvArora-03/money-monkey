@@ -1,8 +1,9 @@
 interface ExpenseEdit {
   name: string;
-  date: string;
+  date: Date;
   amount: number;
-  category_id: number | null;
+  categoryId: number | null;
+  isIncome: boolean;
 }
 
 interface CategorySum {
@@ -12,5 +13,5 @@ interface CategorySum {
 
 interface HomePageStats {
   totalCents: number;
-  catagories: Record<string, number>;
+  categories: Record<string, number>;
 }
