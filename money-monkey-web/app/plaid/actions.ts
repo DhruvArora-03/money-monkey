@@ -1,11 +1,9 @@
 "use server";
 
-import { createPlaidAccount } from "@/lib/db/queries";
-
 export async function getLinkToken(userId: string): Promise<string> {
   try {
     const response = await fetch(
-      "http://saving-supreme-grackle.ngrok-free.app/api/plaid/create-link-token",
+      "https://saving-supreme-grackle.ngrok-free.app/api/plaid/create-link-token",
       {
         cache: "no-store",
         method: "POST",
@@ -23,22 +21,28 @@ export async function getLinkToken(userId: string): Promise<string> {
   }
 }
 
-export async function exchangeToken(public_token: string): Promise<void> {
+export async function exchangeToken(
+  user_id: string,
+  public_token: string
+): Promise<void> {
   try {
-    const response = await fetch("http://saving-supreme-grackle.ngrok-free.app/api/plaid/exchange-token", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        public_token,
-      }),
-    });
+    const response = await fetch(
+      "https://saving-supreme-grackle.ngrok-free.app/api/plaid/exchange-token",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_id,
+          public_token,
+        }),
+      }
+    );
 
-    const json = await response.json();
-    console.log("Access Token:", json.access_token);
-
-    await createPlaidAccount(json.access_token);
+    if (response.status !== 201) {
+      throw new Error("Error exchanging public token");
+    }
   } catch (error) {
     console.error("Error exchanging public token:", error);
   }

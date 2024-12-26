@@ -8,23 +8,26 @@ import { createClient } from "@/lib/supabase/client";
 import { MdAdd } from "react-icons/md";
 
 export default function PlaidLinkButton({ className }: { className?: string }) {
+  const supabase = createClient();
+  const userIdPromise = supabase.auth.getUser();
   const [linkToken, setLinkToken] = useState<string | null>(null);
   useEffect(() => {
-    const supabase = createClient();
-    supabase.auth
-      .getUser()
+    userIdPromise
       .then((res) => getLinkToken(res.data.user!.id))
       .then((token) => setLinkToken(token));
   }, []);
 
   const { open, ready } = usePlaidLink({
     token: linkToken,
-    onSuccess: exchangeToken,
+    onSuccess: (public_token) =>
+      userIdPromise.then((res) =>
+        exchangeToken(res.data.user!.id, public_token)
+      ),
   });
 
   return (
     <div className={className}>
-      <Button onClick={() => open()} disabled={! linkToken|| !ready}>
+      <Button onClick={() => open()} disabled={!linkToken || !ready}>
         {linkToken && ready ? (
           <>
             <MdAdd /> Link New Account

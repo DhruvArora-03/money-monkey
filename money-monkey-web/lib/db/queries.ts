@@ -1,38 +1,44 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { SelectCategory, SelectExpense, SelectPlaidAccount, dbCategories, dbExpenses, dbPlaidAccounts } from "@/lib/db/schema";
+import {
+  SelectCategory,
+  SelectExpense,
+  SelectPlaidAccount,
+  dbCategories,
+  dbExpenses,
+  dbPlaidAccounts,
+} from "@/lib/db/schema";
 import { and, eq } from "drizzle-orm";
 import { createClient } from "../supabase/server";
 
-export async function getPlaidAccounts(userId: string): Promise<SelectPlaidAccount[]> {
+export async function getPlaidAccounts(
+  userId: string
+): Promise<SelectPlaidAccount[]> {
   const accounts = await db.query.dbPlaidAccounts.findMany({
     where: eq(dbPlaidAccounts.profile_id, userId),
   });
   return accounts;
 }
 
-export async function createPlaidAccounts(accessToken: string, accounts: PlaidAccountResponse[]): Promise<SelectPlaidAccount[]> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser();
-  if (!user) {
-    throw new Error("User not found");
-  }
-
+export async function createPlaidAccounts(
+  userId: string,
+  accessToken: string,
+  accounts: PlaidAccountResponse[]
+): Promise<SelectPlaidAccount[]> {
   const insertedAccounts = await db
     .insert(dbPlaidAccounts)
-    .values(accounts.map(a => ({
-      profile_id: user.id,
-      account_id: a.id,
-      access_token: accessToken,
-      cursor: null,
-      name: a.name,
-      mask: a.mask,
-      type: a.type,
-    })))
+    .values(
+      accounts.map((a) => ({
+        profile_id: userId,
+        account_id: a.id,
+        access_token: accessToken,
+        cursor: null,
+        name: a.name,
+        mask: a.mask,
+        type: a.type,
+      }))
+    )
     .returning();
   return insertedAccounts;
 }
@@ -94,7 +100,7 @@ export async function deleteExpense(id: number): Promise<void> {
 export async function getCategories(userId: string): Promise<SelectCategory[]> {
   const categories = await db.query.dbCategories.findMany({
     where: eq(dbCategories.profile_id, userId),
-    orderBy: dbCategories.name
+    orderBy: dbCategories.name,
   });
   return categories;
 }
