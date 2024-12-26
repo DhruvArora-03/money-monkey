@@ -15,3 +15,10 @@ interface HomePageStats {
   totalCents: number;
   categories: Record<string, number>;
 }
+
+interface PlaidAccountResponse {
+  id: string;
+  name: string;
+  mask: string | null;
+  type: string;
+}

@@ -3,6 +3,7 @@ import ExpenseList from "@/components/ExpenseList";
 import LoadTransactionsButton from "@/components/LoadTransactionsButton";
 import NewExpenseButton from "@/components/NewExpenseButton";
 import PlaidLinkButton from "@/components/PlaidLinkButton";
+import { Card, CardContent } from "@/components/ui/card";
 import { db } from "@/lib/db";
 import { dbPlaidAccounts } from "@/lib/db/schema";
 import { createClient } from "@/lib/supabase/server";
@@ -43,14 +44,19 @@ const PlaidAccounts = async () => {
     <div className="w-full md:w-2/3 overflow-hidden px-6">
       <br />
       Accounts:
-      {accounts.map(a => (
-        <div key={a.id}>
-          <p>{a.id}</p>
-          <p>{a.profile_id}</p>
-          <p>{a.access_token}</p>
-          <p>{a.cursor}</p>
-        </div>
+      {accounts.map((a) => (
+        <Card key={a.id}>
+          <CardContent>
+            <p>Id: {a.id}</p>
+            <p className="text-blue-800">AccessToken: {a.access_token}</p>
+            <p>Cursor: {a.cursor}</p>
+            <p>Name: {a.name}</p>
+            <p>Mask: {a.mask}</p>
+            <p>Type: {a.type}</p>
+            {/* <LoadTransactionsButton {...a} /> */}
+          </CardContent>
+        </Card>
       ))}
     </div>
   );
-}
+};

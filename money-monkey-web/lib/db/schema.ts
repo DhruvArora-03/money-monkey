@@ -58,8 +58,12 @@ export const dbPlaidAccounts = createTable(
     profile_id: uuid("profile_id")
       .notNull()
       .references(() => profiles.id, { onDelete: "cascade" }),
+    account_id: text("account_id").notNull(),
     access_token: text("access_token").notNull(),
     cursor: text("cursor"),
+    name: text("name").notNull(),
+    mask: text("mask"),
+    type: text("type").notNull(),
     created_at: getCreatedAtColumn(),
     updated_at: getUpdatedAtColumn(),
   },

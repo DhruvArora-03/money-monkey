@@ -12,7 +12,7 @@ export async function getPlaidAccounts(userId: string): Promise<SelectPlaidAccou
   return accounts;
 }
 
-export async function createPlaidAccount(accessToken: string): Promise<SelectPlaidAccount> {
+export async function createPlaidAccounts(accessToken: string, accounts: PlaidAccountResponse[]): Promise<SelectPlaidAccount[]> {
   const supabase = await createClient();
   const {
     data: { user },
@@ -24,12 +24,17 @@ export async function createPlaidAccount(accessToken: string): Promise<SelectPla
 
   const insertedAccounts = await db
     .insert(dbPlaidAccounts)
-    .values({
+    .values(accounts.map(a => ({
       profile_id: user.id,
+      account_id: a.id,
       access_token: accessToken,
-    })
+      cursor: null,
+      name: a.name,
+      mask: a.mask,
+      type: a.type,
+    })))
     .returning();
-  return insertedAccounts[0];
+  return insertedAccounts;
 }
 
 export async function getExpenses(userId: string): Promise<SelectExpense[]> {
