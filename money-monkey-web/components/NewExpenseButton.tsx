@@ -44,7 +44,7 @@ export default function NewExpenseButton({ className }: NewExpenseButtonProps) {
           {
             name: "",
             date: new Date(),
-            amount: 0,
+            amount: "0.00" as unknown as number, // trust.
             categoryId: null,
             isIncome: false,
           } satisfies ExpenseEdit as ExpenseEdit
