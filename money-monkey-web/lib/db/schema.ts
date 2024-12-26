@@ -51,6 +51,55 @@ export const profiles = createTable(
   ]
 );
 
+export const dbPlaidAccounts = createTable(
+  "plaid_accounts",
+  {
+    id: serial("id").primaryKey(),
+    profile_id: uuid("profile_id")
+      .notNull()
+      .references(() => profiles.id, { onDelete: "cascade" }),
+    access_token: text("access_token").notNull(),
+    cursor: text("cursor"),
+    created_at: getCreatedAtColumn(),
+    updated_at: getUpdatedAtColumn(),
+  },
+  () => [
+    pgPolicy("Users can do anything with their own plaid accounts", {
+      as: "permissive",
+      for: "all",
+      to: ["public"],
+      using: sql`(select auth.uid()) = profile_id`,
+    }),
+  ]
+);
+
+export const dbPlaidTransactions = createTable(
+  "plaid_transactions",
+  {
+    id: serial("id").primaryKey(),
+    profile_id: uuid("profile_id")
+      .notNull()
+      .references(() => profiles.id, { onDelete: "cascade" }),
+    plaid_account_id: integer("plaid_account_id")
+      .notNull()
+      .references(() => dbPlaidAccounts.id),
+    name: text("name").notNull(),
+    amount_cents: integer("amount_cents").notNull(),
+    date: date("date", { mode: "date" }).notNull(),
+    suggested_category: text("suggested_category"),
+    created_at: getCreatedAtColumn(),
+    updated_at: getUpdatedAtColumn(),
+  },
+  () => [
+    pgPolicy("Users can do anything with their own plaid transactions", {
+      as: "permissive",
+      for: "all",
+      to: ["public"],
+      using: sql`(select auth.uid()) = profile_id`,
+    }),
+  ]
+);
+
 export const dbExpenses = createTable(
   "expenses",
   {
@@ -113,7 +162,14 @@ export const defaultCategories = pgEnum("default_categories", [
   "Clothes",
 ]);
 
+export type InsertPlaidAccount = typeof dbPlaidAccounts.$inferInsert;
+export type SelectPlaidAccount = typeof dbPlaidAccounts.$inferSelect;
+
+export type InsertPlaidTransaction = typeof dbPlaidTransactions.$inferInsert;
+export type SelectPlaidTransaction = typeof dbPlaidTransactions.$inferSelect;
+
 export type InsertExpense = typeof dbExpenses.$inferInsert;
 export type SelectExpense = typeof dbExpenses.$inferSelect;
+
 export type InsertCategory = typeof dbCategories.$inferInsert;
 export type SelectCategory = typeof dbCategories.$inferSelect;
