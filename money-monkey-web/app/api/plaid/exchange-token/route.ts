@@ -1,12 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server'; 
-import { Configuration, PlaidApi, PlaidEnvironments, Products, CountryCode } from 'plaid';
+import { NextRequest, NextResponse } from "next/server";
+import { Configuration, PlaidApi, PlaidEnvironments } from "plaid";
 
 const plaidConfig = new Configuration({
-  basePath: PlaidEnvironments[process.env.PLAID_ENV as keyof typeof PlaidEnvironments],
+  basePath:
+    PlaidEnvironments[process.env.PLAID_ENV as keyof typeof PlaidEnvironments],
   baseOptions: {
     headers: {
-      'PLAID-CLIENT-ID': process.env.PLAID_CLIENT_ID || '',
-      'PLAID-SECRET': process.env.PLAID_SECRET || '',
+      "PLAID-CLIENT-ID": process.env.PLAID_CLIENT_ID || "",
+      "PLAID-SECRET": process.env.PLAID_SECRET || "",
     },
   },
 });
@@ -18,6 +19,9 @@ export async function POST(req: NextRequest) {
     const { access_token } = response.data;
     return NextResponse.json({ access_token });
   } catch (error) {
-    return NextResponse.json({ error: 'Error exchanging public token' }, { status: 500 });
+    return NextResponse.json(
+      { error: "Error exchanging public token" },
+      { status: 500 }
+    );
   }
 }

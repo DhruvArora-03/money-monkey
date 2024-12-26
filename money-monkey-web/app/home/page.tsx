@@ -1,10 +1,11 @@
-import ExpenseList from "@/components/ExpenseList";
-import NewExpenseButton from "@/components/NewExpenseButton";
 import { CategoryPieChart } from "@/components/CategoryPieChart";
+import ExpenseList from "@/components/ExpenseList";
+import LoadTransactionsButton from "@/components/LoadTransactionsButton";
+import NewExpenseButton from "@/components/NewExpenseButton";
 import PlaidLinkButton from "@/components/PlaidLinkButton";
-import { createClient } from "@/lib/supabase/server";
 import { db } from "@/lib/db";
 import { dbPlaidAccounts } from "@/lib/db/schema";
+import { createClient } from "@/lib/supabase/server";
 import { eq } from "drizzle-orm";
 
 export default async function HomePage() {
@@ -36,7 +37,7 @@ const PlaidAccounts = async () => {
 
   const accounts = await db.query.dbPlaidAccounts.findMany({
     where: eq(dbPlaidAccounts.profile_id, user!.id),
-  })
+  });
 
   return (
     <div className="w-full md:w-2/3 overflow-hidden px-6">
