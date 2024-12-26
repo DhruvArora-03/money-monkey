@@ -1,4 +1,5 @@
 import SignOut from "@/components/SignOut";
+import { MdSettings } from "react-icons/md";
 
 export default function NavBar() {
   return (
@@ -7,7 +8,8 @@ export default function NavBar() {
         Money Monkey
       </a>
       <a href="/">Home</a>
-      <div className="flex-grow text-right">get a new profile icon</div>
+      <div className="flex-grow"></div>
+      <MdSettings />
       <SignOut />
     </nav>
   );
