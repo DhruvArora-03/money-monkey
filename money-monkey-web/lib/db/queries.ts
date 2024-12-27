@@ -2,14 +2,17 @@
 
 import { db } from "@/lib/db";
 import {
+  InsertPlaidTransaction,
   SelectCategory,
   SelectExpense,
   SelectPlaidAccount,
+  SelectPlaidTransaction,
   dbCategories,
   dbExpenses,
   dbPlaidAccounts,
+  dbPlaidTransactions,
 } from "@/lib/db/schema";
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray, or } from "drizzle-orm";
 import { createClient } from "../supabase/server";
 
 export async function getPlaidAccounts(
@@ -17,6 +20,7 @@ export async function getPlaidAccounts(
 ): Promise<SelectPlaidAccount[]> {
   const accounts = await db.query.dbPlaidAccounts.findMany({
     where: eq(dbPlaidAccounts.profile_id, userId),
+    orderBy: dbPlaidAccounts.name,
   });
   return accounts;
 }
@@ -41,6 +45,80 @@ export async function createPlaidAccounts(
     )
     .returning();
   return insertedAccounts;
+}
+
+export async function getPlaidTransactions(
+  userId: string
+): Promise<SelectPlaidTransaction[]> {
+  throw Error("Not implemented");
+}
+
+export async function syncPlaidTransactions(
+  userId: string,
+  plaid_account_id: number,
+  added: PlaidTransactionResponse[],
+  modified: PlaidTransactionResponse[],
+  removed: string[],
+  new_cursor: string | null
+): Promise<void> {
+  console.log("syncing plaid transactions");
+  console.log(added);
+  console.log(modified);
+  console.log(removed);
+
+  db.transaction(async (tx) => {
+    if (added.length > 0) {
+      await tx.insert(dbPlaidTransactions).values(
+        added.map(
+          (t) =>
+            ({
+              profile_id: userId,
+              plaid_account_id: plaid_account_id,
+              transaction_id: t.id,
+              name: t.name,
+              merchant_name: t.merchant_name,
+              amount_cents: t.amount_cents,
+              date: t.date,
+              suggested_category: t.suggested_category,
+              pending: t.pending,
+            } satisfies InsertPlaidTransaction)
+        )
+      );
+    }
+
+    for (const t of modified) {
+      await tx
+        .update(dbPlaidTransactions)
+        .set({
+          name: t.name,
+          merchant_name: t.merchant_name,
+          amount_cents: t.amount_cents,
+          date: t.date,
+          suggested_category: t.suggested_category,
+          pending: t.pending,
+        })
+        .where(
+          and(
+            eq(dbPlaidTransactions.transaction_id, t.id),
+            eq(dbPlaidTransactions.plaid_account_id, plaid_account_id)
+          )
+        );
+    }
+
+    await tx
+      .delete(dbPlaidTransactions)
+      .where(
+        and(
+          eq(dbPlaidTransactions.plaid_account_id, plaid_account_id),
+          inArray(dbPlaidTransactions.transaction_id, removed)
+        )
+      );
+
+    await tx
+      .update(dbPlaidAccounts)
+      .set({ cursor: new_cursor })
+      .where(eq(dbPlaidAccounts.id, plaid_account_id));
+  });
 }
 
 export async function getExpenses(userId: string): Promise<SelectExpense[]> {

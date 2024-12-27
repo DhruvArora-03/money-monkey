@@ -87,10 +87,13 @@ export const dbPlaidTransactions = createTable(
     plaid_account_id: integer("plaid_account_id")
       .notNull()
       .references(() => dbPlaidAccounts.id),
+    transaction_id: text("transaction_id").notNull(),
     name: text("name").notNull(),
+    merchant_name: text("merchant_name"),
     amount_cents: integer("amount_cents").notNull(),
     date: date("date", { mode: "date" }).notNull(),
     suggested_category: text("suggested_category"),
+    pending: boolean("pending").notNull(),
     created_at: getCreatedAtColumn(),
     updated_at: getUpdatedAtColumn(),
   },
@@ -111,8 +114,7 @@ export const dbExpenses = createTable(
     profile_id: uuid("profile_id")
       .notNull()
       .references(() => profiles.id, { onDelete: "cascade" }),
-    category_id: integer("category_id")
-      .references(() => dbCategories.id),
+    category_id: integer("category_id").references(() => dbCategories.id),
     is_income: boolean("is_income").notNull().default(false),
     name: text("name").notNull(),
     amount_cents: integer("amount_cents").notNull(),

@@ -53,7 +53,7 @@ const PlaidAccounts = async () => {
             <p>Name: {a.name}</p>
             <p>Mask: {a.mask}</p>
             <p>Type: {a.type}</p>
-            {/* <LoadTransactionsButton {...a} /> */}
+            <LoadTransactionsButton {...a} />
           </CardContent>
         </Card>
       ))}

@@ -22,3 +22,13 @@ interface PlaidAccountResponse {
   mask: string | null;
   type: string;
 }
+
+interface PlaidTransactionResponse {
+  id: string;
+  name: string;
+  merchant_name: string | null;
+  amount_cents: number;
+  date: Date;
+  suggested_category: string | null;
+  pending: boolean;
+}
