@@ -86,7 +86,7 @@ export const dbPlaidTransactions = createTable(
       .references(() => profiles.id, { onDelete: "cascade" }),
     plaid_account_id: integer("plaid_account_id")
       .notNull()
-      .references(() => dbPlaidAccounts.id),
+      .references(() => dbPlaidAccounts.id, { onDelete: "cascade" }),
     transaction_id: text("transaction_id").notNull(),
     name: text("name").notNull(),
     merchant_name: text("merchant_name"),

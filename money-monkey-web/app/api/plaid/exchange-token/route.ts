@@ -14,7 +14,7 @@ const plaidConfig = new Configuration({
 });
 const client = new PlaidApi(plaidConfig);
 export async function POST(req: NextRequest) {
-  const { user_id, public_token } = await req.json();
+  const { userId, public_token } = await req.json();
   try {
     const exchangeResponse = await client.itemPublicTokenExchange({
       public_token,
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
     });
 
     await createPlaidAccounts(
-      user_id,
+      userId,
       exchangeResponse.data.access_token,
       accountsResponse.data.accounts.map((a) => ({
         id: a.account_id,

@@ -38,7 +38,7 @@ export async function getLinkToken(userId: string): Promise<string> {
 }
 
 export async function exchangeToken(
-  user_id: string,
+  userId: string,
   public_token: string
 ): Promise<void> {
   try {
@@ -50,7 +50,7 @@ export async function exchangeToken(
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          user_id,
+          userId,
           public_token,
         }),
       }
