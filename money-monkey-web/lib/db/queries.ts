@@ -54,10 +54,9 @@ export async function getPlaidTransactions(
 }
 
 export async function syncPlaidTransactions(
-  userId: string,
   plaid_account_id: number,
-  added: PlaidTransactionResponse[],
-  modified: PlaidTransactionResponse[],
+  added: InsertPlaidTransaction[],
+  modified: InsertPlaidTransaction[],
   removed: string[],
   new_cursor: string | null
 ): Promise<void> {
@@ -68,38 +67,16 @@ export async function syncPlaidTransactions(
 
   db.transaction(async (tx) => {
     if (added.length > 0) {
-      await tx.insert(dbPlaidTransactions).values(
-        added.map(
-          (t) =>
-            ({
-              profile_id: userId,
-              plaid_account_id: plaid_account_id,
-              transaction_id: t.id,
-              name: t.name,
-              merchant_name: t.merchant_name,
-              amount_cents: t.amount_cents,
-              date: t.date,
-              suggested_category: t.suggested_category,
-              pending: t.pending,
-            } satisfies InsertPlaidTransaction)
-        )
-      );
+      await tx.insert(dbPlaidTransactions).values(added);
     }
 
     for (const t of modified) {
       await tx
         .update(dbPlaidTransactions)
-        .set({
-          name: t.name,
-          merchant_name: t.merchant_name,
-          amount_cents: t.amount_cents,
-          date: t.date,
-          suggested_category: t.suggested_category,
-          pending: t.pending,
-        })
+        .set(t)
         .where(
           and(
-            eq(dbPlaidTransactions.transaction_id, t.id),
+            eq(dbPlaidTransactions.transaction_id, t.transaction_id),
             eq(dbPlaidTransactions.plaid_account_id, plaid_account_id)
           )
         );
