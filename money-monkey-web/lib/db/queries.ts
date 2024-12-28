@@ -2,6 +2,7 @@
 
 import { db } from "@/lib/db";
 import {
+  InsertPlaidAccount,
   InsertPlaidTransaction,
   SelectCategory,
   SelectExpense,
@@ -26,23 +27,11 @@ export async function getPlaidAccounts(
 }
 
 export async function createPlaidAccounts(
-  userId: string,
-  accessToken: string,
-  accounts: PlaidAccountResponse[]
+  accounts: InsertPlaidAccount[]
 ): Promise<SelectPlaidAccount[]> {
   const insertedAccounts = await db
     .insert(dbPlaidAccounts)
-    .values(
-      accounts.map((a) => ({
-        profile_id: userId,
-        account_id: a.id,
-        access_token: accessToken,
-        cursor: null,
-        name: a.name,
-        mask: a.mask,
-        type: a.type,
-      }))
-    )
+    .values(accounts)
     .returning();
   return insertedAccounts;
 }

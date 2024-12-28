@@ -1,8 +1,16 @@
 "use server";
 
-import { syncPlaidTransactions } from "@/lib/db/queries";
+import { createPlaidAccounts, syncPlaidTransactions } from "@/lib/db/queries";
 import { InsertPlaidTransaction, SelectPlaidAccount } from "@/lib/db/schema";
-import { Configuration, PlaidApi, PlaidEnvironments, Transaction } from "plaid";
+import { createClient } from "@/lib/supabase/server";
+import {
+  Configuration,
+  CountryCode,
+  PlaidApi,
+  PlaidEnvironments,
+  Products,
+  Transaction,
+} from "plaid";
 
 const plaidConfig = new Configuration({
   basePath:
@@ -16,49 +24,61 @@ const plaidConfig = new Configuration({
 });
 const client = new PlaidApi(plaidConfig);
 
-export async function getLinkToken(userId: string): Promise<string> {
+export async function getLinkToken(): Promise<string> {
   try {
-    const response = await fetch(
-      "https://saving-supreme-grackle.ngrok-free.app/api/plaid/create-link-token",
-      {
-        cache: "no-store",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ client_user_id: userId }),
-      }
-    );
-    const json = await response.json();
-    return json.link_token;
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      throw new Error("Error getting user");
+    }
+
+    const response = await client.linkTokenCreate({
+      user: { client_user_id: user.id },
+      client_name: "Money Monkey",
+      products: [Products.Transactions],
+      country_codes: [CountryCode.Us],
+      // webhook: "https://saving-supreme-grackle.ngrok-free.app/api/plaid/webhook",
+      language: "en",
+    });
+
+    return response.data.link_token;
   } catch (error) {
-    console.error("Error generating link token:", error);
-    throw error;
+    console.log(error);
+    return "";
   }
 }
 
-export async function exchangeToken(
-  userId: string,
-  public_token: string
-): Promise<void> {
+export async function exchangeToken(public_token: string): Promise<void> {
   try {
-    const response = await fetch(
-      "https://saving-supreme-grackle.ngrok-free.app/api/plaid/exchange-token",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId,
-          public_token,
-        }),
-      }
-    );
-
-    if (response.status !== 201) {
-      throw new Error("Error exchanging public token");
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      throw new Error("Error getting user");
     }
+
+    const exchangeResponse = await client.itemPublicTokenExchange({
+      public_token,
+    });
+
+    const accountsResponse = await client.accountsGet({
+      access_token: exchangeResponse.data.access_token,
+    });
+
+    await createPlaidAccounts(
+      accountsResponse.data.accounts.map((a) => ({
+        profile_id: user.id,
+        account_id: a.account_id,
+        access_token: exchangeResponse.data.access_token,
+        cursor: null,
+        name: a.name,
+        mask: a.mask,
+        type: a.subtype ?? a.type,
+      }))
+    );
   } catch (error) {
     console.error("Error exchanging public token:", error);
   }
@@ -70,7 +90,7 @@ export async function getTransactions(
   console.log("Getting transactions for access token:", account.access_token);
 
   try {
-    const convertTransaction = await createTransactionConverter(
+    const convertTransaction = createTransactionConverter(
       account.profile_id,
       account.id
     );

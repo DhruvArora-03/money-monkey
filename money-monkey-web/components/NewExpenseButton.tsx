@@ -34,8 +34,12 @@ export default function NewExpenseButton({ className }: NewExpenseButtonProps) {
   );
 
   return (
-    <div className={className}>
-      <Button disabled={isModalVisible} onClick={() => setIsModalVisible(true)}>
+    <>
+      <Button
+        className={className}
+        disabled={isModalVisible}
+        onClick={() => setIsModalVisible(true)}
+      >
         <MdAdd /> New Expense
       </Button>
 
@@ -95,6 +99,6 @@ export default function NewExpenseButton({ className }: NewExpenseButtonProps) {
           </PopupModal>
         )}
       </Formik>
-    </div>
+    </>
   );
 }

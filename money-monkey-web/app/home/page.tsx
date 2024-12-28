@@ -1,3 +1,4 @@
+import { getLinkToken } from "@/app/plaid/actions";
 import { CategoryPieChart } from "@/components/CategoryPieChart";
 import ExpenseList from "@/components/ExpenseList";
 import LoadTransactionsButton from "@/components/LoadTransactionsButton";
@@ -10,10 +11,15 @@ import { createClient } from "@/lib/supabase/server";
 import { eq } from "drizzle-orm";
 
 export default async function HomePage() {
+  const linkToken = await getLinkToken();
+
   return (
     <div className="flex w-screen flex-col md:p-6 items-center justify-start">
-      <NewExpenseButton className="absolute right-0 p-3 md:pt-0 md:pr-6" />
-      <PlaidLinkButton className="absolute left-0 p-3 md:pt-0 md:pr-6" />
+      <NewExpenseButton className="absolute right-0 m-3 md:mt-0 md:mr-6" />
+      <PlaidLinkButton
+        className="absolute left-0 m-3 md:mt-0 md:mr-6"
+        linkToken={linkToken}
+      />
       <div className="overflow-hidden w-full pt-10 md:pb-6 md:pt-0 border-gray-300 max-w-7xl mx-auto">
         {/* <CategoryPieChart className="mx-auto min-h-fit" /> */}
       </div>
