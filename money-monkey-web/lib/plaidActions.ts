@@ -1,6 +1,9 @@
 "use server";
 
-import { createPlaidAccounts, syncPlaidTransactions } from "@/lib/db/queries";
+import {
+  createPlaidAccounts,
+  syncPlaidTransactions,
+} from "@/lib/db/queryActions";
 import { InsertPlaidTransaction, SelectPlaidAccount } from "@/lib/db/schema";
 import { createClient } from "@/lib/supabase/server";
 import {

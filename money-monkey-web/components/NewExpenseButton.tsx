@@ -6,7 +6,7 @@ import PopupModal from "@/components/PopupModal";
 import SelectField from "@/components/SelectField";
 import SwitchField from "@/components/SwitchField";
 import { Button } from "@/components/ui/button";
-import { createExpense } from "@/lib/db/queries";
+import { createExpense } from "@/lib/db/queryActions";
 import { UserSettingsContext } from "@/lib/userSettings";
 import { ExpenseSchema } from "@/lib/validation";
 import { Form, Formik, FormikHelpers } from "formik";

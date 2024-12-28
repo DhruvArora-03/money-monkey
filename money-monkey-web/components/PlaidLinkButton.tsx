@@ -2,7 +2,7 @@
 
 import { usePlaidLink } from "react-plaid-link";
 import { Button } from "@/components/ui/button";
-import { exchangeToken } from "@/app/plaid/actions";
+import { exchangeToken } from "@/lib/plaidActions";
 import { MdAdd } from "react-icons/md";
 
 export default function PlaidLinkButton(props: {

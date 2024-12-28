@@ -3,7 +3,7 @@ import UserSettingsProvider from "@/lib/userSettings";
 import { SelectCategory, SelectExpense } from "@/lib/db/schema";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { getCategories, getExpenses } from "@/lib/db/queries";
+import { getCategories, getExpenses } from "@/lib/db/queryActions";
 
 export default async function HomeLayout({
   children,

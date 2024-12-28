@@ -1,4 +1,4 @@
-import { getLinkToken } from "@/app/plaid/actions";
+import { getLinkToken } from "@/lib/plaidActions";
 import { CategoryPieChart } from "@/components/CategoryPieChart";
 import ExpenseList from "@/components/ExpenseList";
 import LoadTransactionsButton from "@/components/LoadTransactionsButton";

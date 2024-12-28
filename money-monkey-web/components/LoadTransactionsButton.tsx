@@ -1,6 +1,6 @@
 "use client";
 
-import { getTransactions } from "@/app/plaid/actions";
+import { getTransactions } from "@/lib/plaidActions";
 import { Button } from "@/components/ui/button";
 import { SelectPlaidAccount } from "@/lib/db/schema";
 

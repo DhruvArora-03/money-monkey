@@ -4,12 +4,12 @@ import DateField from "@/components/DateField";
 import PopupModal from "@/components/PopupModal";
 import SelectField from "@/components/SelectField";
 import { Button } from "@/components/ui/button";
-import { deleteExpense, updateExpense } from "@/lib/db/queries";
+import { deleteExpense, updateExpense } from "@/lib/db/queryActions";
 import { SelectExpense } from "@/lib/db/schema";
 import { UserSettingsContext } from "@/lib/userSettings";
 import { ExpenseSchema } from "@/lib/validation";
 import { Form, Formik, FormikHelpers } from "formik";
-import React, { useCallback, useContext} from "react";
+import React, { useCallback, useContext } from "react";
 
 interface EditExpenseModalProps {
   initialExpense: SelectExpense | null;
@@ -20,12 +20,13 @@ export default function EditExpenseModal({
   initialExpense,
   onClose,
 }: EditExpenseModalProps) {
-  const { setExpense, removeExpense } =
-    useContext(UserSettingsContext);
+  const { setExpense, removeExpense } = useContext(UserSettingsContext);
 
   const initialValues = initialExpense && {
     name: initialExpense.name,
-    amount: (initialExpense.amount_cents / 100).toFixed(2).toString() as unknown as number,
+    amount: (initialExpense.amount_cents / 100)
+      .toFixed(2)
+      .toString() as unknown as number,
     date: initialExpense.date,
     categoryId: initialExpense.category_id,
     isIncome: initialExpense.is_income,
