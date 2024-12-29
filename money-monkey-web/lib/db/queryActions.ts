@@ -39,7 +39,11 @@ export async function createPlaidAccounts(
 export async function getPlaidTransactions(
   userId: string
 ): Promise<SelectPlaidTransaction[]> {
-  throw Error("Not implemented");
+  const transactions = await db.query.dbPlaidTransactions.findMany({
+    where: eq(dbPlaidTransactions.profile_id, userId),
+    orderBy: dbPlaidTransactions.date, 
+  });
+  return transactions;
 }
 
 export async function syncPlaidTransactions(
